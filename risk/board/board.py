@@ -3,19 +3,35 @@
 #
 import territory
 
+import risk.logger
+
 class RiskBoard(object):
     def __init__(self, continents):
         self.continents = continents
 
 def get_standard_risk_map():
-    return {
-        'north_america': territory.generate_america_continent(),
-        'south_america': {},
-        'europe': {},
-        'africa': {},
-        'asia': {},
-        'austrailia': {},
+    risk.logger.debug('Generating standard map...')
+    board = {
+        'north_america': territory.generate_north_america_continent(),
+        'south_america': territory.generate_south_america_continent(),
+        'europe': territory.generate_europe_continent(),
+        'africa': territory.generate_africa_continent(),
+        'asia': territory.generate_asia_continent(),
+        'australia': territory.generate_australia_continent(),
     }
+    risk.logger.debug('Continent generated, creating inter-continental paths')
+    board['north_america']['greenland'].add_neighbour(
+        board['europe']['iceland'])
+    board['south_america']['brazil'].add_neighbour(
+        board['africa']['north_africa'])
+    board['africa']['egypt'].add_neighbour(
+        board['europe']['southern_europe'])
+    board['asia']['southern_asia'].add_neighbour(
+        board['australia']['indonesia'])
+    board['africa']['east_africa'].add_neighbour(
+        board['asia']['middle_east'])
+    risk.logger.debug('Map generated!')
+    return board
     
 def generate_empty_board():
     return RiskBoard(get_standard_risk_map())
