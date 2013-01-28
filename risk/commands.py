@@ -1,33 +1,34 @@
+import risk.logger
+
 #Constants
 _INVALID_INITIAL_INPUT = None
 
-def help_info():
+def help_info(game_master):
     print 'Available commands:'
     print '%s'%user_commands.keys()
     
-def status_info():
+def status_info(game_master):
     print 'status'
-    return
 
-def next_info():
+def next_info(game_master):
+    risk.logger.debug('User finished turn')
     print 'next'
-    return
 
-def territories_info():
+def territories_info(game_master):
     print 'territories'
-    return
 
-def attack_info():
+def attack_info(game_master):
     print 'attack!'
-    return
 
-def fortify_info():
+def fortify_info(game_master):
     print 'fortify!'
-    return
 
-def print_info():
+def print_info(game_master):
     print 'print'
-    return
+
+def quit_game(game_master):
+    risk.logger.debug('User wants to quit game')
+    game_master.end_game()
 
 user_commands = {
     'help':         help_info,           
@@ -37,14 +38,18 @@ user_commands = {
     'attack':       attack_info,
     'fortify':      fortify_info,
     'print':        print_info,
-    'quit':         lambda: None
+    'quit':         quit_game,
     }
 
-def prompt_user():
+def prompt_user(game_master):
     user_input = _INVALID_INITIAL_INPUT
-    while user_input != 'quit':
+    while not user_input_finished(user_input):
         try:    # verifies that it is a valid command in the list
-            user_input = raw_input('Please type a command\n')
-            user_commands[user_input]()  
+            user_input = raw_input('[Please type a command]: ')
+            user_commands[user_input](game_master)  
         except KeyError:
             print 'invalid command'
+
+def user_input_finished(user_input):
+    quit_commands = ['quit', 'next']
+    return user_input in quit_commands
