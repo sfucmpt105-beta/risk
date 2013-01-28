@@ -40,10 +40,11 @@ user_commands = {
     'quit':         lambda: None
     }
 
-user_input = _INVALID_INITIAL_INPUT
-while user_input != 'quit':
-    try:    # verifies that it is a valid command in the list
-        user_input = raw_input('Please type a command\n')
-        user_commands[user_input]()  
-    except KeyError:
-        print 'invalid command'
+def prompt_user():
+    user_input = _INVALID_INITIAL_INPUT
+    while user_input != 'quit':
+        try:    # verifies that it is a valid command in the list
+            user_input = raw_input('Please type a command\n')
+            user_commands[user_input]()  
+        except KeyError:
+            print 'invalid command'
