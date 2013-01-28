@@ -32,7 +32,7 @@ def game_setup(settings):
 
 def run_game(board, settings):
     print 'Game ran!'
-    return commands.prompt_user()
+    return risk.commands.prompt_user()
 
 if __name__ == '__main__':
     settings = app_setup()
