@@ -5,6 +5,7 @@ import sys
 # user
 import risk
 import risk.logger
+import risk.commands
 from risk import board
 
 # exit codes
@@ -31,6 +32,7 @@ def game_setup(settings):
 
 def run_game(board, settings):
     print 'Game ran!'
+    return commands.prompt_user()
 
 if __name__ == '__main__':
     settings = app_setup()
