@@ -5,8 +5,9 @@ import sys
 # user
 import risk
 import risk.logger
-import risk.commands
+import risk.game_master
 from risk import board
+from risk.game_master import GameMaster
 
 # exit codes
 _EXIT_BAD_ARGS = -1
@@ -28,14 +29,19 @@ def app_setup():
 ## Main game functions
 #
 def game_setup(settings):
-    return board.generate_empty_board()
+    game_board = board.generate_empty_board()
+    return risk.game_master.GameMaster(game_board, settings)
 
-def run_game(board, settings):
-    print 'Game ran!'
-    return risk.commands.prompt_user()
+def run_game(game_master):
+    risk.logger.debug('Starting risk game...')
+    game_master.choose_territories()
+    while not game_master.ended:
+        game_master.handle_user()
+        game_master.end_turn()
+    risk.logger.debug('User quit the game!') 
 
 if __name__ == '__main__':
     settings = app_setup()
     risk.logger.debug(settings)
-    board = game_setup(settings)
-    run_game(board, settings)
+    master = game_setup(settings)
+    run_game(master)
