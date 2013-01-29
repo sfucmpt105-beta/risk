@@ -1,24 +1,41 @@
-###############################################################################
-## logging utilities
-#
-_LEVEL_DEBUG=3
-_LEVEL_WARN=2
-_LEVEL_ERR=1
-_LEVEL_NORMAL=_LEVEL_ERR
+import logging
 
-LOG_LEVEL = _LEVEL_NORMAL
+OUTPUT_CONSOLE = 0
+OUTPUT_FILE = 1
 
+log_format = '%(asctime)s - %(message)s'
+logging.basicConfig(format = log_format)
+
+logger = logging.getLogger('risk')
+file_handler = logging.FileHandler('log.txt')
+
+def set_output(destination):
+    if destination == OUTPUT_FILE:
+        logger.addHandler(file_handler)
+    else:
+        logger.removeHandler(file_handler)
+
+def set_verbosity_level(level):
+    logger.setLevel(level)
+		
 def debug(msg):
-    if LOG_LEVEL >= _LEVEL_DEBUG:
-        print "[DEBUG] %s" % msg
-
+    logging.debug('%s' %msg)
+		
 def warn(msg):
-    if LOG_LEVEL >= _LEVEL_WARN:
-        print "[WARN] %s" % msg
+    logging.warn('%s' %msg)
 
 def error(msg):
-    if LOG_LEVEL >= _LEVEL_ERR:
-        print "[ERROR] %s" % msg
+    logging.error('%s' %msg)
 
 def critical(msg):
-    print "[CRITICAL] %s" % msg
+    logging.critical('%s' %msg)
+	
+if __name__ == '__main__':
+    debug('test')
+    warn('test')
+    set_output(1)
+    debug('test')
+    warn('test')
+    set_output(0)
+    debug('test')
+    warn('test')
