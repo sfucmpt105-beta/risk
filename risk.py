@@ -19,7 +19,7 @@ def app_setup():
     parser = argparse.ArgumentParser(description='Risk game with Python')
     # dev build defaults to debug for now
     parser.add_argument('--verbose', '-v', action='count',
-                        help='extra output', default=risk.logger._LEVEL_DEBUG)
+                        help='extra output', default=risk.logger.LEVEL_DEBUG)
     settings = parser.parse_args()
     risk.logger.LOG_LEVEL = settings.verbose
     return settings
