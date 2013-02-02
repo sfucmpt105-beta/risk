@@ -27,18 +27,30 @@ def app_setup():
 
 
 ###############################################################################
+## Debug functions
+#
+def end_turn_debug_print(game_master):
+    risk.logger.debug('Ending turn...')
+
+###############################################################################
 ## Main game functions
 #
 def game_setup(settings):
+    _DEV_HUMAN_PLAYERS = 6
     game_board = board.generate_empty_board()
-    return risk.game_master.GameMaster(game_board, settings)
+    game_master = risk.game_master.GameMaster(game_board, settings)
+    game_master.generate_human_players(_DEV_HUMAN_PLAYERS)
+    game_master.add_end_turn_callback(end_turn_debug_print)
+    return game_master
 
 def run_game(game_master):
     risk.logger.debug('Starting risk game...')
     game_master.choose_territories()
+    player = 0
     while not game_master.ended:
-        game_master.handle_user()
-        game_master.end_turn()
+        game_master.player_take_turn(player)
+        game_master.call_end_turn_callbacks()
+        player = (player + 1) % game_master.number_of_players()
     risk.logger.debug('User quit the game!') 
 
 if __name__ == '__main__':
