@@ -12,17 +12,14 @@ def status_info(player, game_master):
 	print 'Player %s:\n' % player 
 	print 'Territories:'
 	territories = game_master.player_territories(player)
-	cavalries   = 0
-	infantries  = 0
-	artilleries = 0
-	for territory in territories:
-		cavalries   += territory.cavalries
-		infantries  += territory.infantries
-		artilleries += territory.artilleries
-		print '%s:Cavlries: %sInfantries: %sArtilleries: %s' % (territory, calvaries, infantries, artilleries)
-		cavalries   = 0
-		infantries  = 0
-		artilleries = 0
+ 	cavalries   = 0
+ 	infantries  = 0
+ 	artilleries = 0
+ 	for territory in territories:
+		cavalries   = territory.cavalries
+		infantries  = territory.infantries
+		artilleries = territory.artilleries
+		print '[%s]:Cavlries: %sInfantries: %sArtilleries: %s' % (territory, calvaries, infantries, artilleries)
 
 def next_info(player, game_master):
     risk.logger.debug('User finished turn')
