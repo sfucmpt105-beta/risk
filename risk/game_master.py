@@ -61,7 +61,7 @@ class GameMaster(object):
         # TODO implement
         return []
 
-    def player_attack(self, player, territory):
+    def player_attack(self, player, origin, target):
         # TODO implement
         return 0, 0
 
