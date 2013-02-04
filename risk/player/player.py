@@ -1,4 +1,5 @@
 from risk import commands
+from risk.printer import risk_input
 
 class AbstractRiskPlayer(object):
     def __init__(self, name):
@@ -16,3 +17,7 @@ class HumonRiskPlayer(AbstractRiskPlayer):
 
     def take_turn(self, game_master):
         commands.prompt_user(self, game_master)
+
+    def pick_territory(self, choices):
+        risk_input("Choose a territory...")
+        print choices
