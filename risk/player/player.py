@@ -2,6 +2,7 @@ from risk import commands
 
 class AbstractRiskPlayer(object):
     def __init__(self, name):
+        self.name = name
         self.is_bot = False
 
     def take_turn(self, game_master):
