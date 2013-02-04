@@ -6,9 +6,9 @@ from sets import Set
 import risk.logger
 
 class Territory(object):
-    def __init__(self, name, neighbours=[]):
+    def __init__(self, name, neighbours={}):
         self.name = name
-        self.neighbours = Set(neighbours)
+        self.neighbours = neighbours
         self.reset(True)
 
     def reset(self, reset_owner=False):
@@ -20,8 +20,8 @@ class Territory(object):
             self.owner = None
 
     def add_neighbour(self, neighbour):
-        self.neighbours.add(neighbour)
-        neighbour.neighbours.add(self)
+        self.neighbours[neighbour.name] = neighbour
+        neighbour.neighbours[self.name] = self
 
     def __str__(self):
         return  "[%s]\n" \
@@ -77,12 +77,12 @@ class ContinentBuilder(object):
     def flood_graph(graph):
         start = graph[graph.keys()[0]]
         visited = Set([start])
-        targets = Set(start.neighbours)
+        targets = Set(start.neighbours.values())
         while len(targets) > 0:
             current = targets.pop()
             if not current in visited:
                 visited.add(current)
-                for neighbour in current.neighbours:
+                for neighbour in current.neighbours.values():
                     targets.add(neighbour)
                     targets -= visited
             if len(current.neighbours) <= 1:
