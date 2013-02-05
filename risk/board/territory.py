@@ -12,10 +12,7 @@ class Territory(object):
         self.reset(True)
 
     def reset(self, reset_owner=False):
-        self.infantries = 0
-        self.artilleries = 0
-        self.cavalries = 0
-        self.fortification = 0
+        self.armies = 0
         if reset_owner:
             self.owner = None
 
@@ -27,12 +24,8 @@ class Territory(object):
         return  "[%s]\n" \
                 "Owner: %s\n" \
                 "Neighbours: %s\n" \
-                "Infantries: %s\n" \
-                "Cavalries: %s\n" \
-                "Artilleries: %s\n" \
-                "Fortification: %s" % \
-                (self.name, self.owner, self.neighbours, self.infantries, 
-                self.cavalries, self.artilleries, self.fortification)
+                "Armies: %s\n" % \
+                (self.name, self.owner, self.neighbours, self.armies)
 
     def __repr__(self):
         return self.name

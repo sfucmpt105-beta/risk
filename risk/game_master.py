@@ -1,5 +1,7 @@
 import risk.logger
 import risk.commands
+import risk.errors
+
 from risk.ai import RiskBot
 from risk.errors.game_master import *
 from risk.player import HumonRiskPlayer
@@ -14,20 +16,39 @@ class GameMaster(object):
         self.ended = False
         self.end_turn_callbacks = []
         self.players = []
+        self._current_player = 0
 
     
+    ###########################################################################
+    ## Internal actions
+    #
+    def _select_next_player(self):
+        self._current_player += 1
+        self._current_player %= len(self.players)
+
     ###########################################################################
     ## Setup actions
     #
     def choose_territories(self):
         pass
+        #self._print_available_territories()
 
     def add_end_turn_callback(self, callback):
         self.end_turn_callbacks.append(callback)
 
     def generate_human_players(self, number_of_players):
+        MIN_PLAYERS = 2
+        MAX_PLAYERS = 6
+        if not MIN_PLAYERS <= number_of_players <= MAX_PLAYERS:
+            raise risk.errors.RiskGameError('Invalid number of players: %s' %
+                                            number_of_players)
         for i in xrange(number_of_players):
             self.players.append(HumonRiskPlayer("Human %s" % i))
+
+    def _print_available_territories(self):
+        territories = self.board.territories()
+        while len(territories) > 0:
+            choice = self.current_player().pick_territory(territories)
     
     ###########################################################################
     ## Run time events/hooks
@@ -37,7 +58,10 @@ class GameMaster(object):
         if not self.ended:
             for callback in self.end_turn_callbacks:
                 callback(self)
-    
+
+    def end_turn(self):
+        self._select_next_player()
+
     ###########################################################################
     ## Game state queries
     #
@@ -48,15 +72,22 @@ class GameMaster(object):
         risk.logger.debug('Ending game!')
         self.ended = True
 
+    def current_player(self):
+        return self._get_player_with_index(self._current_player)
+
+    def _get_player_with_index(self, index):
+        try:
+            return self.players[index]
+        except IndexError:
+            raise NoSuchPlayerError(index, self.number_of_players)
+
+
     ###########################################################################
     ## Player actions
     #
-    def player_take_turn(self, player_index):
-        try:
-            self.players[player_index].take_turn(self)
-        except IndexError:
-            raise NoSuchPlayerError(player_index, self.number_of_players)
-
+    def player_take_turn(self):
+        self._get_player_with_index(self._current_player).take_turn(self)
+    
     def player_territories(self, player):
         # TODO implement
         return []
