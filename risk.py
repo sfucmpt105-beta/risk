@@ -24,6 +24,28 @@ def app_setup():
     risk.logger.LOG_LEVEL = settings.verbose
     return settings
 
+###############################################################################
+## CLI functions
+#
+def print_banner():
+    print \
+"""
+    --==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+    ||                              PyRisk                             ||
+    ||-----------------------------------------------------------------||
+    || Risk is a turn-based game for two to six players. The standard  ||
+    || version is played on a board depicting a political map of the   ||
+    || Earth, divided into forty-two territories, which are grouped    ||
+    || into six continents. The primary object of the game is "world   ||
+    || domination," or "to occupy every territory on the board and in  ||
+    || so doing, eliminate all other players." Players control         ||
+    || armies with which they attempt to capture territories from      ||
+    || other players, with results determined by dice rolls.           ||
+    ||-----------------------------------------------------------------||
+    ||                     By: CMPT106 Group Beta                      ||
+    --==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+"""
+
 
 ###############################################################################
 ## Debug functions
@@ -43,13 +65,15 @@ def game_setup(settings):
     return game_master
 
 def run_game(game_master):
+    print_banner()
     risk.logger.debug('Starting risk game...')
     game_master.choose_territories()
-    player = 0
     while not game_master.ended:
-        game_master.player_take_turn(player)
+        risk.logger.debug('Current player is: %s' % 
+                          game_master.current_player().name)
+        game_master.player_take_turn()
         game_master.call_end_turn_callbacks()
-        player = (player + 1) % game_master.number_of_players()
+        game_master.end_turn()
     risk.logger.debug('User quit the game!') 
 
 if __name__ == '__main__':

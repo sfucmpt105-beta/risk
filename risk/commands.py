@@ -1,5 +1,7 @@
 import risk.logger
 
+from risk.printer import risk_input
+
 #Constants
 _INVALID_INITIAL_INPUT = None
 
@@ -8,21 +10,15 @@ def help_info(player, game_master):
     print '%s'%user_commands.keys()
     
 def status_info(player, game_master):
-    print 'status'
-    print 'Player %s:\n' % player 
+    print 'Player %s:\n' % player.name
+    print '----------------------'
     print 'Territories:'
     territories = game_master.player_territories(player)
-    cavalries   = 0
-    infantries  = 0
-    artilleries = 0
     for territory in territories:
-	cavalries   = territory.cavalries
-	infantries  = territory.infantries
-	artilleries = territory.artilleries
-	print '[%s]:\n' \
-	'Cavlries: %s\n' \
-	'Infantries: %s\n' \
-	'Artilleries: %s\n' % (territory, calvaries, infantries, artilleries)
+        print '[%s]:\n' \
+              'Cavlries: %s\n' \
+              'Infantries: %s\n' \
+              'Artilleries: %s\n' % (territory, territory.armies)
 
 def next_info(player, game_master):
     risk.logger.debug('User finished turn')
@@ -60,7 +56,7 @@ def prompt_user(player, game_master):
     user_input = _INVALID_INITIAL_INPUT
     while not user_input_finished(user_input):
         try:    # verifies that it is a valid command in the list
-            user_input = raw_input('[Please type a command]: ')
+            user_input = risk_input('Please type a command')
             user_commands[user_input](player, game_master)  
         except KeyError:
             print 'invalid command'

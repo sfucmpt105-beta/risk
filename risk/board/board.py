@@ -9,6 +9,10 @@ class RiskBoard(object):
     def __init__(self, continents):
         self.continents = continents
 
+    def territories(self):
+        return dict([territory for continent in self.continents.values() 
+                for territory in continent.items()])
+
 def get_standard_risk_map():
     risk.logger.debug('Generating standard map...')
     board = {
