@@ -1,6 +1,7 @@
 import risk.logger
 import risk.commands
 import risk.errors
+import risk.board
 
 from risk.ai import RiskBot
 from risk.errors.game_master import *
@@ -30,8 +31,8 @@ class GameMaster(object):
     ## Setup actions
     #
     def choose_territories(self):
-        pass
         #self._print_available_territories()
+        pass
 
     def add_end_turn_callback(self, callback):
         self.end_turn_callbacks.append(callback)
@@ -89,21 +90,17 @@ class GameMaster(object):
         self._get_player_with_index(self._current_player).take_turn(self)
     
     def player_territories(self, player):
-        # TODO implement
-        return []
+        # O(n) lookup
+        player_territories = []
+        for territory in self.board.territories().values():
+            if territory.owner == player:
+                player_terriories.append(territory)
+        return player_territories
 
     def player_attack(self, player, origin, target):
         # TODO implement
         return 0, 0
 
-    def player_add_infantry(self, player, territory):
-        # TODO implement
-        return 0, 0
-
-    def player_add_cavalry(self, player, territory):
-        # TODO implement
-        return 0, 0
-
-    def player_add_artilery(self, player, territory):
+    def player_add_army(self, player, territory):
         # TODO implement
         return 0, 0
