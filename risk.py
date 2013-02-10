@@ -58,7 +58,8 @@ def end_turn_debug_print(game_master):
 #
 def game_setup(settings):
     _DEV_HUMAN_PLAYERS = 6
-    game_board = board.generate_empty_board()
+    #game_board = board.generate_empty_board()
+    game_board = board.generate_mini_board()
     game_master = risk.game_master.GameMaster(game_board, settings)
     game_master.generate_human_players(_DEV_HUMAN_PLAYERS)
     game_master.add_end_turn_callback(end_turn_debug_print)
@@ -69,12 +70,18 @@ def run_game(game_master):
     risk.logger.debug('Starting risk game...')
     game_master.choose_territories()
     while not game_master.ended:
-        risk.logger.debug('Current player is: %s' % 
-                          game_master.current_player().name)
-        game_master.player_take_turn()
-        game_master.call_end_turn_callbacks()
-        game_master.end_turn()
+        try:
+            run_turn(game_master)
+        except risk.errors.input.UserQuitInput:
+            game_master.end_game()
     risk.logger.debug('User quit the game!') 
+
+def run_turn(game_master):
+    risk.logger.debug('Current player is: %s' % 
+                      game_master.current_player().name)
+    game_master.player_take_turn()
+    game_master.call_end_turn_callbacks()
+    game_master.end_turn()
 
 if __name__ == '__main__':
     settings = app_setup()
