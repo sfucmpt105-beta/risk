@@ -39,3 +39,6 @@ def get_standard_risk_map():
     
 def generate_empty_board():
     return RiskBoard(get_standard_risk_map())
+
+def generate_mini_board():
+    return RiskBoard({'mini': territory.generate_australia_continent()})

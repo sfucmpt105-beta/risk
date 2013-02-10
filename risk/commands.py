@@ -7,7 +7,7 @@ _INVALID_INITIAL_INPUT = None
 
 def help_info(player, game_master):
     print 'Available commands:'
-    print '%s'%user_commands.keys()
+    print '%s' % user_commands.keys()
     
 def status_info(player, game_master):
     print 'Player %s:\n' % player.name
@@ -16,9 +16,7 @@ def status_info(player, game_master):
     territories = game_master.player_territories(player)
     for territory in territories:
         print '[%s]:\n' \
-              'Cavlries: %s\n' \
-              'Infantries: %s\n' \
-              'Artilleries: %s\n' % (territory, territory.armies)
+              'Armies: %s\n' % (territory.name, territory.armies)
 
 def next_info(player, game_master):
     risk.logger.debug('User finished turn')
@@ -39,7 +37,7 @@ def print_info(player, game_master):
 
 def quit_game(player, game_master):
     risk.logger.debug('User wants to quit game')
-    game_master.end_game()
+    #game_master.end_game()
 
 user_commands = {
     'help':         help_info,           
@@ -60,6 +58,13 @@ def prompt_user(player, game_master):
             user_commands[user_input](player, game_master)  
         except KeyError:
             print 'invalid command'
+
+def prompt_choose_territory(availables):
+    print "Available territories: "
+    print "---------------------------------------------------"
+    print availables.keys()
+    print "---------------------------------------------------"
+    return risk_input('Choose from availables [empty input to reprint availables]: ')
 
 def user_input_finished(user_input):
     quit_commands = ['quit', 'next']

@@ -9,6 +9,9 @@ class AbstractRiskPlayer(object):
     def take_turn(self, game_master):
         raise NotImplementedError
 
+    def choose_territory(self, available):
+        raise NotImplementedError
+
 # Qwerrrrrrk
 class HumonRiskPlayer(AbstractRiskPlayer):
     def __init__(self, name):
@@ -18,6 +21,6 @@ class HumonRiskPlayer(AbstractRiskPlayer):
     def take_turn(self, game_master):
         commands.prompt_user(self, game_master)
 
-    def pick_territory(self, choices):
-        risk_input("Choose a territory...")
-        print choices
+    def choose_territory(self, availables):
+        print "%s's turn..." % self.name
+        return commands.prompt_choose_territory(availables)

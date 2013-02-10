@@ -1,3 +1,5 @@
+from sets import Set
+
 import risk.logger
 import risk.commands
 import risk.errors
@@ -31,8 +33,21 @@ class GameMaster(object):
     ## Setup actions
     #
     def choose_territories(self):
-        #self._print_available_territories()
-        pass
+        risk.logger.debug('Starting territory pick phase...')
+        availables = self.board.territories()
+        current = 0
+        while len(availables) > 0:
+            try:
+                player = self.players[current]
+                choice = player.choose_territory(availables)
+                availables[choice].owner = player
+                availables[choice].armies = 1
+                del(availables[choice])
+                current = (current + 1) % len(self.players)
+            except KeyError:
+                if len(choice) > 0:
+                    risk.logger.warn("%s is not a valid choice" % choice)
+        risk.logger.debug('Territory pick complete!')
 
     def add_end_turn_callback(self, callback):
         self.end_turn_callbacks.append(callback)
@@ -94,7 +109,7 @@ class GameMaster(object):
         player_territories = []
         for territory in self.board.territories().values():
             if territory.owner == player:
-                player_terriories.append(territory)
+                player_territories.append(territory)
         return player_territories
 
     def player_attack(self, player, origin, target):
