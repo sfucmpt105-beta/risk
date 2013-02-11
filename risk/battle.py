@@ -38,7 +38,7 @@ class Battle():
         
         #--calculate losses--
         #find number of pairs of dice to compare (lowest of choices to roll)
-        if (att_dice_num > def_dice_num):
+        if (att_dice_num >= def_dice_num):
             pairs_to_compare = def_dice_num
         elif (def_dice_num > att_dice_num):
             pairs_to_compare = att_dice_num
@@ -61,8 +61,8 @@ class Battle():
             return False
         
         
-        att_troop_num= self.origin.army_total
-        def_troop_num= self.target.army_total
+        att_troop_num= self.origin.armies
+        def_troop_num= self.target.armies
         
         #can't attack with only 1 army
         if (att_troop_num < 2):
