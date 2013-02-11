@@ -2,6 +2,7 @@ from sets import Set
 
 import risk.logger
 import risk.commands
+import risk.battle
 import risk.errors
 import risk.board
 
@@ -130,7 +131,9 @@ class GameMaster(object):
         return player_territories
 
     def player_attack(self, player, origin, target):
-        # TODO implement
+        battle= risk.battle.Battle(origin,target)
+        risk.battle.Battle.attack(battle)
+
         return 0, 0
 
     def player_add_army(self, player, territory_name, number_of_armies=1):
