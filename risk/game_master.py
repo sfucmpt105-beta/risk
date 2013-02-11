@@ -10,6 +10,9 @@ from risk.errors.game_master import *
 from risk.player import HumonRiskPlayer
 
 class GameMaster(object):
+    _RISK_RULE_STARTING_RESERVES = 40
+    _DEPLOYS_PER_TURN = 5
+
     def __init__(self, board, settings, num_ai=7):
         self.board = board
         # need to setup with settings later
@@ -35,33 +38,32 @@ class GameMaster(object):
     def choose_territories(self):
         risk.logger.debug('Starting territory pick phase...')
         availables = self.board.territories()
-        current = 0
+        old_current = self._current_player
+        self._current_player = 0
         while len(availables) > 0:
             try:
-                player = self.players[current]
+                player = self.current_player()
                 choice = player.choose_territory(availables)
                 availables[choice].owner = player
                 availables[choice].armies = 1
                 del(availables[choice])
-                current = (current + 1) % len(self.players)
+                self._select_next_player()
             except KeyError:
                 if len(choice) > 0:
                     risk.logger.warn("%s is not a valid choice" % choice)
+        self._current_player = old_current
         risk.logger.debug('Territory pick complete!')
 
     def deploy_troops(self):
-        _RISK_RULE_STARTING_RESERVES = 40
-        _DEPLOYS_PER_TURN = 5
         risk.logger.debug('Starting troop deploy phase...')
         scaling = (len(self.players) - 2) * 5
-        starting_reserves = _RISK_RULE_STARTING_RESERVES - scaling
+        starting_reserves = self._RISK_RULE_STARTING_RESERVES - scaling
         for player in self.players:
             player.reserves = starting_reserves
-        for _ in xrange(starting_reserves / _DEPLOYS_PER_TURN):
+        for _ in xrange(starting_reserves / self._DEPLOYS_PER_TURN):
             for player in self.players:
-                for _ in xrange(_DEPLOYS_PER_TURN):
-                    if player.reserves > 0:
-                        player.deploy_reserve(self)
+                if player.reserves > 0:
+                    player.deploy_reserve(self, self._DEPLOYS_PER_TURN)
         risk.logger.debug('Troop deplyoment phase complete!')
 
     def add_end_turn_callback(self, callback):
@@ -131,13 +133,13 @@ class GameMaster(object):
         # TODO implement
         return 0, 0
 
-    def player_add_army(self, player, territory_name):
+    def player_add_army(self, player, territory_name, number_of_armies=1):
         territory = self.board[territory_name]
         if territory.owner != player:
             raise TerritoryNotOwnedByPlayer(territory, player)
-        elif player.reserves < 1:
+        elif player.reserves < number_of_armies:
             raise NotEnoughReserves(player)
         else:
-            player.reserves -= 1
-            territory.armies += 1
+            player.reserves -= number_of_armies
+            territory.armies += number_of_armies
             return territory.armies, player.reserves

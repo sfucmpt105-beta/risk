@@ -72,7 +72,7 @@ def run_game(game_master):
         game_master.choose_territories()
         game_master.deploy_troops()
         while not game_master.ended:
-                run_turn(game_master)
+            run_turn(game_master)
     except risk.errors.input.UserQuitInput:
         game_master.end_game()
     risk.logger.debug('User quit the game!') 
