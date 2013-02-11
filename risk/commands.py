@@ -79,24 +79,17 @@ def prompt_deploy_reserves(player, game_master, max_deploys):
     while not _USER_INPUT_VALID:
         try:
             user_input = risk_input(
-                'Choose territory to reinforce [empty input to print', 
+                'Choose territory to reinforce [empty input to print' \
                 'territories]: ').split()
             choice = user_input[0]
             number_of_deploys = 1
             if len(user_input) > 1:
                 number_of_deploys = int(user_input[1])
-            if number_of_deploys > max_deploys:
-                risk.logger.error(
-                    "%s is not a valid number of deploys, max is %s" % 
-                    (number_of_deploys, max_deploys))
-            elif number_of_deploys < 1:
-                risk.logger.error(
-                    "%s is not valid, number of deploys must be greater than" \
-                    " 1" % number_of_deploys)
-            else:
-                return choice, number_of_deploys
+            return choice, number_of_deploys
         except TypeError:
             risk.logger.error('%s is not a valid int string' % user_input[1])
+        except IndexError:
+            display_user_armies(player, player_territories)
 
 def user_input_finished(user_input):
     quit_commands = ['quit', 'next']
