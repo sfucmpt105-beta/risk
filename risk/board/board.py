@@ -4,6 +4,7 @@
 import territory
 
 import risk.logger
+from risk.errors.board import *
 
 class RiskBoard(object):
     def __init__(self, continents):
@@ -12,6 +13,12 @@ class RiskBoard(object):
     def territories(self):
         return dict([territory for continent in self.continents.values() 
                 for territory in continent.items()])
+
+    def __getitem__(self, territory_name):
+        try:
+            return self.territories()[territory_name]
+        except KeyError:
+            raise NoSuchTerritory(territory_name)
 
 def get_standard_risk_map():
     risk.logger.debug('Generating standard map...')
