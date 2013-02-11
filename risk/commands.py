@@ -10,20 +10,16 @@ _INVALID_INITIAL_INPUT = None
 def help_info(player, game_master):
     print 'Available commands:'
     print '%s' % user_commands.keys()
-    
+
 def status_info(player, game_master):
     print "Player %s: " % player.name
     print '----------------------'
     print "Reserves: %s" % player.reserves
     print 'Territories:'
-    
     territories = game_master.player_territories(player)
-    armies = 0
-    
-    for territory in territories:
-        armies      = territory.armies
+    for territory in territories.values():
         print '[%s]:\n' \
-            'Armies: %s\n' % (territory, armies)
+              'Armies: %s\n' % (territory.name, territory.armies)
 
 def next_info(player, game_master):
     risk.logger.debug('User finished turn')
