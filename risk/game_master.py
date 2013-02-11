@@ -142,6 +142,8 @@ class GameMaster(object):
             raise TerritoryNotOwnedByPlayer(territory, player)
         elif player.reserves < number_of_armies:
             raise NotEnoughReserves(player)
+        elif number_of_armies < 1:
+            raise DeployRangeError(number_of_armies)
         else:
             player.reserves -= number_of_armies
             territory.armies += number_of_armies

@@ -40,9 +40,20 @@ class HumonRiskPlayer(AbstractRiskPlayer):
         while deploys > 0:
             choice, number_of_deploys = \
                 commands.prompt_deploy_reserves(self, game_master, deploys)
-            try:
-                game_master.player_add_army(self, choice, number_of_deploys)
-                deploys -= number_of_deploys
-            except (TerritoryNotOwnedByPlayer, NotEnoughReserves, 
-                NoSuchTerritory) as e:
-                risk.logger.error(str(e))
+            if number_of_deploys > deploys:
+                risk.logger.error(
+                    "cannot deploy %s armies, %s is the max" % \
+                    (number_of_deploys, deploys))
+            else:
+                deploys -= self._deploy_reserves_helper(
+                    game_master, choice, number_of_deploys)
+
+    def _deploy_reserves_helper(self,game_master, choice, number_of_deploys):
+        _FAILED = 0
+        try:
+            game_master.player_add_army(self, choice, number_of_deploys)
+            return number_of_deploys
+        except (TerritoryNotOwnedByPlayer, NotEnoughReserves, 
+            NoSuchTerritory) as e:
+            risk.logger.error(str(e))
+        return _FAILED
