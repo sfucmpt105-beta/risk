@@ -1,10 +1,19 @@
 from risk import commands
+from risk.printer import risk_input
 
 class AbstractRiskPlayer(object):
     def __init__(self, name):
+        self.name = name
         self.is_bot = False
+        self.reserves = 0
 
     def take_turn(self, game_master):
+        raise NotImplementedError
+
+    def choose_territory(self, available):
+        raise NotImplementedError
+    
+    def deploy_reserve(self, game_master):
         raise NotImplementedError
 
 # Qwerrrrrrk
@@ -15,3 +24,10 @@ class HumonRiskPlayer(AbstractRiskPlayer):
 
     def take_turn(self, game_master):
         commands.prompt_user(self, game_master)
+
+    def choose_territory(self, availables):
+        print "%s's turn..." % self.name
+        return commands.prompt_choose_territory(availables)
+
+    def deploy_reserve(self, game_master):
+        commands.prompt_deploy_reserves(self, game_master)
