@@ -11,18 +11,20 @@ def status_info(player, game_master):
     print 'status'
     print 'Player %s:\n' % player 
     print 'Territories:'
+    
     territories = game_master.player_territories(player)
     cavalries   = 0
     infantries  = 0
     artilleries = 0
+    
     for territory in territories:
-	cavalries   = territory.cavalries
-	infantries  = territory.infantries
-	artilleries = territory.artilleries
-	print '[%s]:\n' \
-	'Cavlries: %s\n' \
-	'Infantries: %s\n' \
-	'Artilleries: %s\n' % (territory, calvaries, infantries, artilleries)
+        cavalries   = territory.cavalries
+        infantries  = territory.infantries
+        artilleries = territory.artilleries
+        print '[%s]:\n' \
+            'Cavalries: %s\n' \
+            'Infantries: %s\n' \
+            'Artilleries: %s\n' % (territory, cavalries, infantries, artilleries)
 
 def next_info(player, game_master):
     risk.logger.debug('User finished turn')
@@ -31,10 +33,16 @@ def next_info(player, game_master):
 def territories_info(player, game_master):
     print 'territories'
     # list of territories
-	
+
 def attack_info(player, game_master):
     print 'attack!'
-	
+    #test values
+    origin= game_master.board.continents['north_america']['alberta']
+    target= game_master.board.continents['north_america']['ontario']
+    game_master.player_attack(player,origin,target)
+    print('battle over')
+
+
 def fortify_info(player, game_master):
     print 'fortify!'
 

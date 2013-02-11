@@ -1,5 +1,8 @@
 import risk.logger
 import risk.commands
+import risk.board.territory
+import risk.battle
+
 from risk.ai import RiskBot
 from risk.errors.game_master import *
 from risk.player import HumonRiskPlayer
@@ -20,6 +23,8 @@ class GameMaster(object):
     ## Setup actions
     #
     def choose_territories(self):
+        # define two territories with troops to test battle.
+        
         pass
 
     def add_end_turn_callback(self, callback):
@@ -62,7 +67,9 @@ class GameMaster(object):
         return []
 
     def player_attack(self, player, origin, target):
-        # TODO implement
+        battle= risk.battle.Battle(origin,target)
+        risk.battle.Battle.attack(battle)
+
         return 0, 0
 
     def player_add_infantry(self, player, territory):
@@ -76,3 +83,4 @@ class GameMaster(object):
     def player_add_artilery(self, player, territory):
         # TODO implement
         return 0, 0
+

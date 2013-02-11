@@ -12,6 +12,7 @@ class Territory(object):
         self.reset(True)
 
     def reset(self, reset_owner=False):
+        self.army_total = 0
         self.infantries = 0
         self.artilleries = 0
         self.cavalries = 0
@@ -22,6 +23,23 @@ class Territory(object):
     def add_neighbour(self, neighbour):
         self.neighbours[neighbour.name] = neighbour
         neighbour.neighbours[self.name] = self
+        
+    def set_ownership(self,player):
+        self.owner = player
+    
+    def set_troops(self, troop_num):
+        self.army_total = troop_num
+        
+    def adjust_troops(self, troop_num):
+        self.army_total += troop_num
+
+    
+    def is_neighbour(self, territory):
+        try:
+            temp= self.neighbours[territory.name]
+            return True;
+        except:
+            return False; 
 
     def __str__(self):
         return  "[%s]\n" \
