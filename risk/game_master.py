@@ -49,6 +49,21 @@ class GameMaster(object):
                     risk.logger.warn("%s is not a valid choice" % choice)
         risk.logger.debug('Territory pick complete!')
 
+    def deploy_troops(self):
+        _RISK_RULE_STARTING_RESERVES = 40
+        _DEPLOYS_PER_TURN = 5
+        risk.logger.debug('Starting troop deploy phase...')
+        scaling = (len(self.players) - 2) * 5
+        starting_reserves = _RISK_RULE_STARTING_RESERVES - scaling
+        for player in self.players:
+            player.reserves = starting_reserves
+        for _ in xrange(starting_reserves / _DEPLOYS_PER_TURN):
+            for player in self.players:
+                for _ in xrange(_DEPLOYS_PER_TURN):
+                    if player.reserves > 0:
+                        player.deploy_reserve(self)
+        risk.logger.debug('Troop deplyoment phase complete!')
+
     def add_end_turn_callback(self, callback):
         self.end_turn_callbacks.append(callback)
 
@@ -106,16 +121,23 @@ class GameMaster(object):
     
     def player_territories(self, player):
         # O(n) lookup
-        player_territories = []
-        for territory in self.board.territories().values():
+        player_territories = {}
+        for name, territory in self.board.territories().iteritems():
             if territory.owner == player:
-                player_territories.append(territory)
+                player_territories[name] = territory
         return player_territories
 
     def player_attack(self, player, origin, target):
         # TODO implement
         return 0, 0
 
-    def player_add_army(self, player, territory):
-        # TODO implement
-        return 0, 0
+    def player_add_army(self, player, territory_name):
+        territory = self.board[territory_name]
+        if territory.owner != player:
+            raise TerritoryNotOwnedByPlayer(territory, player)
+        elif player.reserves < 1:
+            raise NotEnoughReserves(player)
+        else:
+            player.reserves -= 1
+            territory.armies += 1
+            return territory.armies, player.reserves

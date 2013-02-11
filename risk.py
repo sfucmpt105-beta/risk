@@ -70,6 +70,7 @@ def run_game(game_master):
     risk.logger.debug('Starting risk game...')
     try:
         game_master.choose_territories()
+        game_master.deploy_troops()
         while not game_master.ended:
                 run_turn(game_master)
     except risk.errors.input.UserQuitInput:
