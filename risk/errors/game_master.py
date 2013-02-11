@@ -18,3 +18,8 @@ class TerritoryNotOwnedByPlayer(GameMasterError):
     def __init__(self, territory, player):
         GameMasterError.__init__(
             "%s does not own territory %s" % (player.name, territory.name))
+
+class DeployRangeError(GameMasterError):
+    def __init__(self, number_of_armies):
+        GameMasterError.__init__(
+            "%s is not a valid number of armies to deploy" % number_of_armies)

@@ -37,6 +37,5 @@ nosetests.xml
 # vim
 *.swp
 
-risk/board/territory.py
-
-risk/board/territory.py
+# argh, evil OSX!
+.DS_Store
