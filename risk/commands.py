@@ -79,24 +79,34 @@ def prompt_choose_territory(availables):
     print "---------------------------------------------------"
     return risk_input('Choose from availables [empty input to reprint availables]: ')
 
-def prompt_deploy_reserves(player, game_master):
-    player_picked = False
+def prompt_deploy_reserves(player, game_master, max_deploys):
+    _USER_INPUT_VALID = False
     player_territories = game_master.player_territories(player)
     print "%s's territories: " % player.name
     print "---------------------------------------------------"
     print player_territories.keys()
-    while not player_picked:
+    display_user_armies(player, player_territories)
+    while not _USER_INPUT_VALID:
         try:
-            display_user_armies(player, player_territories)
-            choice = risk_input(
+            user_input = risk_input(
                 'Choose territory to reinforce [empty input to print', 
-                'territories]: ')
-            game_master.player_add_army(player, choice)
-            player_picked = True
-        except (TerritoryNotOwnedByPlayer, NotEnoughReserves, NoSuchTerritory):
-            if choice != '':
-                risk.logger.warn(
-                    "%s is not owned by %s" % (choice, player.name))
+                'territories]: ').split()
+            choice = user_input[0]
+            number_of_deploys = 1
+            if len(user_input) > 1:
+                number_of_deploys = int(user_input[1])
+            if number_of_deploys > max_deploys:
+                risk.logger.error(
+                    "%s is not a valid number of deploys, max is %s" % 
+                    (number_of_deploys, max_deploys))
+            elif number_of_deploys < 1:
+                risk.logger.error(
+                    "%s is not valid, number of deploys must be greater than" \
+                    " 1" % number_of_deploys)
+            else:
+                return choice, number_of_deploys
+        except TypeError:
+            risk.logger.error('%s is not a valid int string' % user_input[1])
 
 def user_input_finished(user_input):
     quit_commands = ['quit', 'next']
