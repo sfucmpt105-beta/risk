@@ -57,9 +57,9 @@ def end_turn_debug_print(game_master):
 ## Main game functions
 #
 def game_setup(settings):
-    _DEV_HUMAN_PLAYERS = 6
-    game_board = board.generate_empty_board()
-    #game_board = board.generate_mini_board()
+    _DEV_HUMAN_PLAYERS = 4
+    #game_board = board.generate_empty_board()
+    game_board = board.generate_mini_board()
     game_master = risk.game_master.GameMaster(game_board, settings)
     game_master.generate_human_players(_DEV_HUMAN_PLAYERS)
     game_master.add_end_turn_callback(end_turn_debug_print)
