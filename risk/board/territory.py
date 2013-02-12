@@ -6,9 +6,9 @@ from sets import Set
 import risk.logger
 
 class Territory(object):
-    def __init__(self, name, neighbours={}):
+    def __init__(self, name, neighbours=None):
         self.name = name
-        self.neighbours = neighbours
+        self.neighbours = {} if not neighbours else neighbours
         self.reset(True)
 
     def reset(self, reset_owner=False):
@@ -19,6 +19,13 @@ class Territory(object):
     def add_neighbour(self, neighbour):
         self.neighbours[neighbour.name] = neighbour
         neighbour.neighbours[self.name] = self
+
+    def is_neighbour(self, neighbour):
+        return self.neighbours.has_key(neighbour.name)
+
+    def set_troops(self, number_of_armies):
+        # TODO check for valid number of armies
+        self.armies = number_of_armies
 
     def __str__(self):
         return  "[%s]\n" \
