@@ -49,3 +49,23 @@ def generate_empty_board():
 
 def generate_mini_board():
     return RiskBoard({'mini': territory.generate_australia_continent()})
+
+###############################################################################
+## dev functions
+#
+def dev_random_assign_owners(game_master):
+    current = 0
+    for name, territory in game_master.board.territories().iteritems():
+        territory.owner = game_master.players[current]
+        territory.armies = 1
+        current = (current + 1) % len(game_master.players)
+    # evenly distributes troops
+    game_master._assign_player_reserves()
+    for player in game_master.players:
+        territories = game_master.player_territories(player).values()
+        while player.reserves > 0:
+            for territory in territories:
+                territory.armies += 1
+                player.reserves -= 1
+                if not player.reserves > 0:
+                    break
