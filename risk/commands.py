@@ -1,6 +1,7 @@
 import risk.logger
 
 from risk.printer import risk_input
+from risk.printer import map_printer
 from risk.errors.game_master import *
 from risk.errors.board import *
 
@@ -47,6 +48,11 @@ def fortify_info(player, game_master):
 def print_info(player, game_master):
     print 'print'
 
+def map_info(player, game_master):
+    continent = risk_input('enter continent to print')
+    risk.logger.debug('printing risk map!')
+    map_printer(continent, player, game_master)
+
 def quit_game(player, game_master):
     risk.logger.debug('User wants to quit game')
     #game_master.end_game()
@@ -60,6 +66,7 @@ user_commands = {
     'fortify':      fortify_info,
     'print':        print_info,
     'quit':         quit_game,
+    'map':          map_info,
     }
 
 def prompt_user(player, game_master):
