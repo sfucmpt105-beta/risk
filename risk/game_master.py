@@ -54,13 +54,10 @@ class GameMaster(object):
                     risk.logger.warn("%s is not a valid choice" % choice)
         self._current_player = old_current
         risk.logger.debug('Territory pick complete!')
+        self._assign_player_reserves()
 
     def deploy_troops(self):
         risk.logger.debug('Starting troop deploy phase...')
-        scaling = (len(self.players) - 2) * 5
-        starting_reserves = self._RISK_RULE_STARTING_RESERVES - scaling
-        for player in self.players:
-            player.reserves = starting_reserves
         for _ in xrange(starting_reserves / self._DEPLOYS_PER_TURN):
             for player in self.players:
                 if player.reserves > 0:
@@ -83,6 +80,17 @@ class GameMaster(object):
         territories = self.board.territories()
         while len(territories) > 0:
             choice = self.current_player().pick_territory(territories)
+
+    def _assign_player_reserves(self):
+        risk.logger.debug('Giving each player reserves...')
+        scaling = (len(self.players) - 2) * 5
+        starting_reserves = self._RISK_RULE_STARTING_RESERVES - scaling
+        for player in self.players:
+            player.reserves = \
+                starting_reserves - len(self.player_territories(player))
+            risk.logger.debug(
+                'Gave [%s] %s reserves' % (player.name, player.reserves))
+
     
     ###########################################################################
     ## Run time events/hooks
@@ -130,11 +138,11 @@ class GameMaster(object):
                 player_territories[name] = territory
         return player_territories
 
-    def player_attack(self, player, origin, target):
-        battle= risk.battle.Battle(origin,target)
-        risk.battle.Battle.attack(battle)
-
-        return 0, 0
+    def player_attack(self, player, origin_name, target_name):
+        origin = self.player_territories(player)[origin_name]
+        target = self.board.territories()[target_name]
+        success = risk.battle.attack(origin, target)
+        return success
 
     def player_add_army(self, player, territory_name, number_of_armies=1):
         territory = self.board[territory_name]
