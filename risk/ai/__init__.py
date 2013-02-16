@@ -1,1 +1,1 @@
-from risk.ai.bots import RiskBot
+from risk.ai.bots import BasicRiskBot

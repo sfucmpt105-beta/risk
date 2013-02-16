@@ -6,7 +6,7 @@ import risk.battle
 import risk.errors
 import risk.board
 
-from risk.ai import RiskBot
+from risk.ai import BasicRiskBot
 from risk.errors.game_master import *
 from risk.player import HumonRiskPlayer
 
@@ -14,16 +14,20 @@ class GameMaster(object):
     _RISK_RULE_STARTING_RESERVES = 40
     _DEPLOYS_PER_TURN = 5
 
-    def __init__(self, board, settings, num_ai=7):
+    def __init__(self, board, settings, num_players=5):
+        MIN_PLAYERS = 2
+        MAX_PLAYERS = 6
+        if not MIN_PLAYERS <= num_players <= MAX_PLAYERS:
+            raise risk.errors.RiskGameError('Invalid number of players: %s' %
+                num_players)
+ 
         self.board = board
         # need to setup with settings later
-        self.bots = [RiskBot() for i in xrange(num_ai)]
-        risk.logger.debug(
-            'Game master instance created with %s bots!' % num_ai)
         self.ended = False
         self.end_turn_callbacks = []
         self.players = []
         self._current_player = 0
+        self._num_players = num_players
 
     
     ###########################################################################
@@ -67,14 +71,18 @@ class GameMaster(object):
     def add_end_turn_callback(self, callback):
         self.end_turn_callbacks.append(callback)
 
-    def generate_human_players(self, number_of_players):
-        MIN_PLAYERS = 2
-        MAX_PLAYERS = 6
-        if not MIN_PLAYERS <= number_of_players <= MAX_PLAYERS:
-            raise risk.errors.RiskGameError('Invalid number of players: %s' %
-                                            number_of_players)
-        for i in xrange(number_of_players):
+    def generate_players(self, number_of_human_players):
+        risk.logger.debug("Generating %s human players" % \
+            number_of_human_players)
+
+        for i in xrange(number_of_human_players):
             self.players.append(HumonRiskPlayer("Human %s" % i))
+
+        risk.logger.debug("Generating %s bots" % \
+            (self._num_players - number_of_human_players))
+
+        for i in xrange(self._num_players - number_of_human_players):
+            self.players.append(BasicRiskBot(str(i)))
 
     def _print_available_territories(self):
         territories = self.board.territories()
