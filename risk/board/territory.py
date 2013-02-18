@@ -169,11 +169,9 @@ def generate_europe_continent():
         ('scandinavia', 'northern_europe'),
         ('scandinavia', 'russia'),
         ('northern_europe', 'western_europe'),
-        ('northern_europe', 'eastern_europe'),
         ('northern_europe', 'southern_europe'),
-        ('western_europe', 'eastern_europe'),
+        ('northern_europe', 'russia'),
         ('western_europe', 'southern_europe'),
-        ('russia', 'eastern_europe'),
         ('russia', 'southern_europe'),
     ])
     risk.logger.debug('Generated Europe!')

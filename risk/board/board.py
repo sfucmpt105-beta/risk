@@ -31,16 +31,40 @@ def get_standard_risk_map():
         'australia': territory.generate_australia_continent(),
     }
     risk.logger.debug('Continent generated, creating inter-continental paths')
+    # NA <> Europe
     board['north_america']['greenland'].add_neighbour(
         board['europe']['iceland'])
+    # NA <> SA
+    board['north_america']['central_america'].add_neighbour(
+        board['south_america']['venezuela'])
+    # NA <> Asia
+    board['north_america']['alaska'].add_neighbour(
+        board['asia']['kamchatka'])
+    # SA <> Africa
     board['south_america']['brazil'].add_neighbour(
         board['africa']['north_africa'])
+    # Africa <> Europe
     board['africa']['egypt'].add_neighbour(
         board['europe']['southern_europe'])
-    board['asia']['southern_asia'].add_neighbour(
-        board['australia']['indonesia'])
+    board['europe']['western_europe'].add_neighbour(
+        board['africa']['north_africa']) 
+    # Africa <> Asia
+    board['africa']['egypt'].add_neighbour(
+        board['asia']['middle_east'])
     board['africa']['east_africa'].add_neighbour(
         board['asia']['middle_east'])
+    # Europe <> Asia
+    board['europe']['russia'].add_neighbour(
+        board['asia']['ural'])
+    board['europe']['russia'].add_neighbour(
+        board['asia']['afghanistan'])
+    board['europe']['russia'].add_neighbour(
+        board['asia']['middle_east'])
+    board['europe']['southern_europe'].add_neighbour(
+        board['asia']['middle_east'])
+    # Asia <> Australia
+    board['asia']['southern_asia'].add_neighbour(
+        board['australia']['indonesia'])
     risk.logger.debug('Map generated!')
     return board
     
