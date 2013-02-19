@@ -22,7 +22,7 @@ def map_printer(continent, player, game_master):
         if territory.owner == player:
             ascii_map = re.sub(symbol, '*', ascii_map)
         else:
-            ascii_map = re.sub(symbol, '.', ascii_map)
+            ascii_map = re.sub(symbol, '\'', ascii_map)
     print ascii_map
         
 
@@ -46,19 +46,163 @@ r"""
     ~~   G western_united_states GH eastern_united_states   H            ~~
     ~~   G         !G            GH         !H              H            ~~
     ||   GGGGGGGGGGGGGGGGGGGGGGGGGHHHHHHHHHHHHHHHHHHHHHHHHHHH            ||
-    ||           IIIIIIIIIIIIIIIIIII                                     ||
-    ~~           I central_america I                                     ~~
-    ~~           I       !I        I                                     ~~
-    ||           IIIIIIIIIIIIIIIIIII                                     ||
-    ||                  \                                               ||
-    ~~               [south_america]                                     ~~
-    ~~                  venezuela                                        ~~
-    ||                     |                                            ||
-    ||                     \/                                            ||
+    ||                   IIIIIIIIIIIIIIIIIII                             ||
+    ~~                   I central_america I                             ~~
+    ~~                   I       !I        I                             ~~
+    ||                   IIIIIIIIIIIIIIIIIII                             ||
+    ||                          \                                        ||
+    ~~                       [south_america]                             ~~
+    ~~                          venezuela                                ~~
+    ||                             |                                     ||
+    ||                             \/                                    ||
     ~~                                                                   ~~
     =======================================================================
 """,
-    'europe': ""
+    'europe': 
+r"""
+    =======================================================================
+    ||                                                                   ||
+    ~~ [north_america]  AAAAAAAAAAA      FFFFFFFFFFFFFFFGGGGGGGGGG       ~~      
+    ~~ <==== greenland--A iceland A------F scandinavia FG        G       ~~
+    ||                  A   !A    A     /F     !F      FG russia G       ||
+    ||                  AAAAAAAAAAA    / FFFFFFFFFFFFFFFG   !G   G       ||
+    ~~                      |         /         |       G        G       ~~
+    ~~               BBBBBBBBBBBBBBBBB          |       G       G        ~~
+    ||               B great_britain B          |       G      G [asia]  ||
+    ||               B      !B       B          |       G     G--ural => ||
+    ~~               BBBBBBBBBBBBBBBBB          |       G    G           ~~
+    ~~                        \                 |       G   G            ~~
+    || CCCCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDG  G            ||
+    || C western_europe  CD        northern_europe      DG  G            ||
+    ~~ C                 CD              !D             DG  G            ~~
+    ~~ C                 CDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDG  G            ~~
+    || C                 CEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEG  G             ||
+    || C                 CE       southern_europe    E G  G   [asia]     ||
+    ~~ C                 CE            !E            EG  G-afghanistan =>~~
+    ~~ CCCCCCCCCCCCCCCCCCCEEEEEEEEEEEEEEEEEEEEEEEEEEEEGGGG               ~~
+    ||         |                        |                 \              ||
+    ||      [africa]                 [africa]              \ [asia]      ||
+    ~~    north_africa                egypt               middle_east => ~~       
+    ~~         |                         |                               ~~
+    ||         \/                        \/                              ||
+    =======================================================================
+""",
+    'africa':
+r"""
+    =======================================================================
+    ||                                                                   ||
+    ~~                        /\               /\                        ~~
+    ~~                        |                |                         ~~
+    ||                      [europe]        [europe]                     ||
+    ||                    western_europe  southern_europe                ||
+    ~~                        |                |                         ~~
+    ~~ [south_america]  AAAAAAAAAAAAAAAA    BBBBBBBBB      [asia]        ~~
+    || <== brazil-------A north_africa A----B egypt B----middle_east ==> ||
+    ||                  A     !A       A    B  !B   B                    ||
+    ~~                  AAAAAAAAAAAAAAAA    BBBBBBBBB                    ~~
+    ~~                      |    CCCCCCCCCCCCCCC         [asia]          ~~
+    ||                      |    C east_africa C-------middle-east ====> || 
+    ||                      |    C     !C      C                         ||
+    ~~                      |    CCCCCCCCCCCCCCC                         ~~
+    ~~                  DDDDDDDDDDDDDDDDDD  |  \                         ~~
+    ||                  D central_africa D  |   \                        ||
+    ||                  D      !D        D  |    \___                    ||
+    ~~                  DDDDDDDDDDDDDDDDDD  |        |                   ~~
+    ~~                           EEEEEEEEEEEEEEEE  FFFFFFFFFFFFFF        ~~
+    ||                           E south_africa E--F madagascar F        ||
+    ||                           E      !E      E  F     !F     F        ||
+    ~~                           EEEEEEEEEEEEEEEE  FFFFFFFFFFFFFF        ~~
+    ~~                                                                   ~~
+    =======================================================================
+""",
+    'south_america':
+r"""
+    =======================================================================
+    ||                                                                   ||
+    ~~                            /\                                     ~~
+    ~~                            |                                      ~~
+    ||                      [north_america]                              ||
+    ||                      central_america                              ||
+    ~~                            |                                      ~~
+    ~~                      AAAAAAAAAAAAA                                ~~
+    ||                      A venezuela A                                ||
+    ||                      A     !A    A                                ||
+    ~~                      AAAAAAAAAAAAA                                ~~
+    ~~                   CCCCCCCCBBBBBBBBBB             [africa]         ~~
+    ||                   C peru CB brazil B-----------north_africa ===>  ||
+    ||                   C  !C  CB   !B   B                              ||
+    ~~                   CCCCCCCCBBBBBBBBBB                              ~~
+    ~~                      DDDDDDDDDDDDD                                ~~
+    ||                      D argentina D                                ||
+    ||                      D    !D     D                                ||
+    ~~                      DDDDDDDDDDDDD                                ~~
+    ~~                                                                   ~~
+    =======================================================================
+""",
+    'australia':
+r"""
+    =======================================================================
+    ||                                                                   ||
+    ~~            /\                                                     ~~
+    ~~            |                                                      ~~
+    ||           [asia]                                                  ||
+    ||        southern_asia                                              ||
+    ~~            |                                                      ~~
+    ~~      AAAAAAAAAAAAA                      BBBBBBBBBBBBBB            ~~
+    ||      A indonesia A----------------------B new_guinea B            ||
+    ||      A    !A     A     _________________B     !B     B            ||
+    ~~      AAAAAAAAAAAAA    |                 BBBBBBBBBBBBBB            ~~
+    ~~            |          |                      |                    ~~
+    ||            |          |                      |                    ||
+    ||         CCCCCCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDDDDDD                ||
+    ~~         C western_australia CD eastern_australia D                ~~
+    ~~         C       !C          CD       !D          D                ~~
+    ||         CCCCCCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDDDDDD                ||
+    ||                                                                   ||
+    =======================================================================
+""",
+    # shit just got real
+    'asia':
+r"""
+    =======================================================================
+    ||                                                                   ||
+    ~~                                                   [north_america] ~~
+    ~~                                                     ___ alaska => ~~
+    ||                                                     \             ||
+    ||            [europe] DDDDDDDDCCCCCCCCCCCBBBBBBBBBBB   |            ||
+    ~~          <= russia--D ural DC siberia CB yakutsk B   |            ~~
+    ~~                     D  !D  DC    !C  CB   !B     BAAAAAAAAAAAAA   ~~
+    ||                     DDDDDDDDC       CBBBBBBBBBBBBBA kamchatka A   ||
+    ||            EEEEEEEEEEEEEEEIIIC     CKKKKKKKKKKKKKKA    !A     A   ||
+    ~~            E afghanistan EI  IC   CK  irkutsk    KAAAAAAAAAAAAA   ~~
+    ~~  [europe]  E     !E      EI   IC CK      !K      K    |           ~~
+    || <= russia--E      EEEEEEEEI   IC  CKKKKKKKKKKKKKKK    |           ||
+    ||            E      EIIIIIIII   ICCCCJJJJJJJJJJJJ       |           ||
+    ~~            E      EI          IIIIIJ mongolia J       |           ~~
+    ~~            E      EI   china      IJ    !J    J-----LLLLLLLLL     ~~
+    ||            E      EI    !I        IJJJJJJJJJJJJ     L japan L     ||
+    ||            E      EI              IIIIIIIIIIIIIII   L   !L  L     ||
+    ~~            E      EI                             I  LLLLLLLLL     ~~
+    ~~            E      EIIIIIIIIIIIIIIIIIIIIIIIIIIIIII                 ~~
+    ||            EEEEEEEEGGGGGGGGGGGGGGGGGGHHHHHHHHHHHHHHHHH            ||
+    ||            F       G     india      GH southern_asia H            ||
+    ~~  [europe]  F       G       !G       GH      !H       H            ~~
+    ~~ <= russia--F       GGGGGGGGGGGGGGGGGGHHHHHHHHHHHHHHHHH            ~~
+    ||            F     middle_east    F            |                    ||
+    ||             F        !F         F            |                    ||
+    ~~              F                  F            |                    ~~
+    ~~               FFFFFFFFFF        F            |                    ~~
+    ||         [europe]        F       F            |                    ||
+    || <==== southern_europe---FFFFFFFFF            |                    ||
+    ~~         [africa]        /     |              |                    ~~
+    ~~ <======= egypt ________/   [africa]     [australia]               ~~
+    ||                           east_africa    indonesia                ||
+    ||                               |              |                    ||
+    ~~                               \/             \/                   ~~
+    ~~                                                                   ~~
+    =======================================================================
+"""
+
 }
 
 SYMBOL_MAPPING = {
