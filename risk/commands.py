@@ -1,4 +1,5 @@
 import risk.logger
+import risk.printer
 
 from risk.printer import risk_input
 from risk.printer import map_printer
@@ -49,9 +50,13 @@ def print_info(player, game_master):
     print 'print'
 
 def map_info(player, game_master):
-    continent = risk_input('enter continent to print')
+    continent = risk_input('enter continent to print (empty for all)')
     risk.logger.debug('printing risk map!')
-    map_printer(continent, player, game_master)
+    if len(continent) == 0:
+        for continent in risk.printer.ASCII_MAPS.keys():
+            map_printer(continent, player, game_master)
+    else:
+        map_printer(continent, player, game_master)
 
 def quit_game(player, game_master):
     risk.logger.debug('User wants to quit game')
