@@ -10,8 +10,15 @@ from risk.errors.board import *
 _INVALID_INITIAL_INPUT = None
 
 def help_info(player, game_master):
+    """
+    help                            - prints help
+    """
+    risk.logger.debug(user_commands.keys())
     print 'Available commands:'
-    print '%s' % user_commands.keys()
+    for command in user_commands.values():
+        if command.__doc__:
+            print command.__doc__,
+    print
 
 def status_info(player, game_master):
     print "Player %s: " % player.name
@@ -24,17 +31,24 @@ def status_info(player, game_master):
               'Armies: %s' % (territory.name, territory.armies)
 
 def next_info(player, game_master):
+    """
+    next                            - ends player turn
+    """
     risk.logger.debug('User finished turn')
     print 'next'
 
 def territories_info(player, game_master):
+    """
+    territories                     - prints territories
+    """
     print 'territories'
     # list of territories
 
-def attack_info(player, game_master):
-    origin_name = risk_input('Enter a territory to attack from')
-    target_name = risk_input('Enter a territory to attack')
-    
+def attack_info(player, game_master, target_name, _, origin_name):
+    """
+    attack [target] from [origin]   - attack [target] from [origin], "from" is
+                                      needed in the command
+    """
     success = game_master.player_attack(player, origin_name, target_name)
     if success:
         print "successfully attacked %s!" % target_name
@@ -44,19 +58,25 @@ def attack_info(player, game_master):
 
 
 def fortify_info(player, game_master):
+    """
+    fortify                         - fortify territory
+    """
     print 'fortify!'
 
 def print_info(player, game_master):
     print 'print'
 
-def map_info(player, game_master):
-    continent = risk_input('enter continent to print (empty for all)')
+def map_info(player, game_master, continent=None):
+    """
+    map                             - print ascii map for entire board
+    map [continent]                 - print ascii map for continent
+    """
     risk.logger.debug('printing risk map!')
-    if len(continent) == 0:
+    if continent:
+        map_printer(continent, player, game_master)
+    else:
         for continent in risk.printer.ASCII_MAPS.keys():
             map_printer(continent, player, game_master)
-    else:
-        map_printer(continent, player, game_master)
 
 def quit_game(player, game_master):
     risk.logger.debug('User wants to quit game')
@@ -77,18 +97,32 @@ user_commands = {
 def prompt_user(player, game_master):
     user_input = _INVALID_INITIAL_INPUT
     while not user_input_finished(user_input):
+        command = None
+        user_input = None
+        args = None
         try:    # verifies that it is a valid command in the list
-            user_input = risk_input('Please type a command')
-            user_commands[user_input](player, game_master)  
+            user_input, args = risk_input('Please type a command')
+            command = user_commands[user_input]
+            command(player, game_master, *args)
         except KeyError:
             print 'invalid command'
+        except TypeError:
+            if command.__doc__:
+                print "usage: %s" % command.__doc__
+            else:
+                print command
+                print user_input
+                print args
+                risk.logger.warn("%s syntax error and no usage. "\
+                    "User input: '%s', args: '%s'" % 
+                    (command, user_input, args))
 
 def prompt_choose_territory(availables):
     print "Available territories: "
     print "---------------------------------------------------"
     print availables.keys()
     print "---------------------------------------------------"
-    return risk_input('Choose from availables [empty input to reprint availables]: ')
+    return risk_ll_input('Choose from availables [empty input to reprint availables]: ')
 
 def prompt_deploy_reserves(player, game_master, max_deploys):
     _USER_INPUT_VALID = False
@@ -99,7 +133,7 @@ def prompt_deploy_reserves(player, game_master, max_deploys):
     display_user_armies(player, player_territories)
     while not _USER_INPUT_VALID:
         try:
-            user_input = risk_input(
+            user_input = risk_ll_input(
                 'Choose territory to reinforce [empty input to print' \
                 'territories]: ').split()
             choice = user_input[0]

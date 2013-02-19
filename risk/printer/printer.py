@@ -4,17 +4,27 @@ import risk.errors.input
 
 FORMAT="[%s: %s] >>> "
 
-def risk_input(msg, stage="RISK"):
+def risk_ll_input(msg, stage="RISK"):
+    """
+    low-level input handler
+    """
     user_input = raw_input(FORMAT % (stage, msg))
     if user_input == 'quit':
         raise risk.errors.input.UserQuitInput()
     else:
         return user_input
 
-def map_printer(continent, player, game_master):
-    ascii_map = ASCII_MAPS[continent]
+def risk_input(msg, stage="RISK"):
+    user_input = risk_ll_input(msg, stage)
+    processed = user_input.split()
+    command = processed[0]
+    args = processed[1:]
+    return command, args
+
+def map_printer(continent_name, player, game_master):
+    ascii_map = ASCII_MAPS[continent_name]
     # regex magic... sigh :(
-    continent = game_master.board.continents[continent]
+    continent = game_master.board.continents[continent_name]
     for name, territory in continent.iteritems():
         symbol = SYMBOL_MAPPING[name]
         ascii_map = re.sub(
@@ -23,6 +33,8 @@ def map_printer(continent, player, game_master):
             ascii_map = re.sub(symbol, '*', ascii_map)
         else:
             ascii_map = re.sub(symbol, '\'', ascii_map)
+    print continent_name
+    print '-' * len(continent_name),
     print ascii_map
         
 
