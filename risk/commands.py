@@ -78,6 +78,15 @@ def map_info(player, game_master, continent=None):
         for continent in risk.printer.ASCII_MAPS.keys():
             map_printer(continent, player, game_master)
 
+def add_armies(player, game_master, number_of_armies, _, territory_name):
+    """ 
+    add [#units] to [territory]     - add [#units] to [territory], "to" is
+                                      needed in the command
+    """
+    armies, reserves = game_master.player_add_army(player, number_of_armies, territory_name)
+    print "[%s] now has : [%s] units" %(territory_name, armies)
+    print "[%s] unit(s) on reserve" % (player.reserves)
+
 def quit_game(player, game_master):
     risk.logger.debug('User wants to quit game')
     #game_master.end_game()
@@ -92,6 +101,7 @@ user_commands = {
     'print':        print_info,
     'quit':         quit_game,
     'map':          map_info,
+    'add':          add_armies,
     }
 
 def prompt_user(player, game_master):
