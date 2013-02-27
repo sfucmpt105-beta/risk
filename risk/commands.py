@@ -116,7 +116,7 @@ def prompt_user(player, game_master):
             command(player, game_master, *args)
         except KeyError:
             print 'invalid command'
-        except (TypeError, GameMasterError) as e:
+        except Exception as e:
             risk.logger.error(str(e))
             if command.__doc__:
                 print "usage: %s" % command.__doc__
