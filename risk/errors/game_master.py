@@ -1,5 +1,6 @@
 from risk.errors.base import RiskGameError
 
+
 class GameMasterError(RiskGameError):
     def __init__(self, msg):
         RiskGameError.__init__(self, msg)
@@ -12,7 +13,7 @@ class NoSuchPlayerError(GameMasterError):
 class NotEnoughReserves(GameMasterError):
     def __init__(self, player):
         GameMasterError.__init__(self,
-            "%s has only [%s] more reserve troops to deploy" % player.name, player.reserves)
+            "%s has only [%s] more reserve troops to deploy" % (player.name, player.reserves))
 
 class TerritoryNotOwnedByPlayer(GameMasterError):
     def __init__(self, territory, player):
