@@ -10,7 +10,7 @@ from pygame.locals import *
 import risk
 import risk.logger
 
-picasso_instance = None
+from risk.graphics.assets import PicassoAsset
 
 def get_picasso(*args, **kwargs):
     if not hasattr(get_picasso, 'picasso_instance'):
@@ -53,7 +53,11 @@ class Picasso(threading.Thread):
         self.window.blit(self.background, (0, 0))
         for level in self.canvas:
             for asset in level:
-                asset.draw
+                if isinstance(asset, PicassoAsset):
+                    self.window.blit(asset, asset.get_coordinate())
+                else:
+                    risk.logger.warn("None asset detected in canvas, ",
+                        "skipping...[%s]" % asset)
         pygame.display.flip()
 
     def end(self):
