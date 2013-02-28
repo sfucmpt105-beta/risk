@@ -20,6 +20,8 @@ def app_setup():
     # dev build defaults to debug for now
     parser.add_argument('--verbose', '-v', action='count',
                         help='extra output', default=risk.logger.LEVEL_DEBUG)
+    parser.add_argument('--gui', '-g', action='store_true',
+                        help='gui version of game', default=False)
     settings = parser.parse_args()
     risk.logger.LOG_LEVEL = settings.verbose
     return settings
@@ -90,4 +92,8 @@ if __name__ == '__main__':
     settings = app_setup()
     risk.logger.debug(settings)
     master = game_setup(settings)
+    if settings.gui:
+        import risk.graphics
+        risk.graphics.init()
+        master.add_end_game_callback(risk.graphics.shutdown)
     run_game(master)

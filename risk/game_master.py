@@ -25,6 +25,7 @@ class GameMaster(object):
         # need to setup with settings later
         self.ended = False
         self.end_turn_callbacks = []
+        self.end_game_callbacks = []
         self.players = []
         self._current_player = 0
         self._num_players = num_players
@@ -70,6 +71,9 @@ class GameMaster(object):
 
     def add_end_turn_callback(self, callback):
         self.end_turn_callbacks.append(callback)
+
+    def add_end_game_callback(self, callback):
+        self.end_game_callbacks.append(callback)
 
     def generate_players(self, number_of_human_players):
         risk.logger.debug("Generating %s human players" % \
@@ -121,6 +125,8 @@ class GameMaster(object):
     def end_game(self):
         risk.logger.debug('Ending game!')
         self.ended = True
+        for callback in self.end_game_callbacks:
+            callback(self)
 
     def current_player(self):
         return self._get_player_with_index(self._current_player)
