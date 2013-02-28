@@ -29,6 +29,14 @@ class GameMaster(object):
         self.players = []
         self._current_player = 0
         self._num_players = num_players
+        self.callbacks = {
+            'start_game': [],
+            'start_action': [],
+            'start_turn': [],
+            'end_action': [],
+            'end_turn': [],
+            'end_game': [],
+        }
 
     
     ###########################################################################
@@ -70,10 +78,13 @@ class GameMaster(object):
         risk.logger.debug('Troop deplyoment phase complete!')
 
     def add_end_turn_callback(self, callback):
-        self.end_turn_callbacks.append(callback)
+        self.callbacks['end_turn'].append(callback)
 
     def add_end_game_callback(self, callback):
-        self.end_game_callbacks.append(callback)
+        self.callbacks['end_game'].append(callback)
+
+    def add_start_turn_callback(self, callback):
+        self.callbacks['start_turn'].append(callback)
 
     def generate_players(self, number_of_human_players):
         risk.logger.debug("Generating %s human players" % \
@@ -110,10 +121,17 @@ class GameMaster(object):
     def call_end_turn_callbacks(self):
         risk.logger.debug('Calling end of turn callbacks')
         if not self.ended:
-            for callback in self.end_turn_callbacks:
+            for callback in self.callbacks['end_turn']:
+                callback(self)
+
+    def call_start_turn_callbacks(self):
+        risk.logger.debug('Calling start of turn callback')
+        if not self.ended:
+            for callback in self.callbacks['start_turn']:
                 callback(self)
 
     def end_turn(self):
+        self.call_end_turn_callbacks()
         self._select_next_player()
 
     ###########################################################################
@@ -125,7 +143,7 @@ class GameMaster(object):
     def end_game(self):
         risk.logger.debug('Ending game!')
         self.ended = True
-        for callback in self.end_game_callbacks:
+        for callback in self.callbacks['end_game']:
             callback(self)
 
     def current_player(self):
@@ -142,6 +160,7 @@ class GameMaster(object):
     ## Player actions
     #
     def player_take_turn(self):
+        self.call_start_turn_callbacks()
         player = self._get_player_with_index(self._current_player)
         player.reserves += len(self.player_territories(player))
         player.take_turn(self)

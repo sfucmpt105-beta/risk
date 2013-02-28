@@ -1,5 +1,6 @@
 import time
 import threading
+import sets
 
 from datetime import timedelta
 from datetime import datetime
@@ -10,7 +11,7 @@ from pygame.locals import *
 import risk
 import risk.logger
 
-from risk.graphics.assets import PicassoAsset
+from risk.graphics.assets.base import PicassoAsset
 
 def get_picasso(*args, **kwargs):
     if not hasattr(get_picasso, 'picasso_instance'):
@@ -31,7 +32,7 @@ class Picasso(threading.Thread):
             pygame.transform.scale(self.background, (width, height))
 
         self.fps = fps
-        self.canvas = []
+        self.canvas = {}
         self.ended = False
 
         threading.Thread.__init__(self)
@@ -44,21 +45,43 @@ class Picasso(threading.Thread):
             while not self.ended:
                 next_frame = datetime.now() + _sleep_delta
                 self.draw_canvas()
-                time.sleep((next_frame - datetime.now()).total_seconds())
+                time_until_next_frame = \
+                    (next_frame - datetime.now()).total_seconds()
+                if time_until_next_frame > 0:
+                    time.sleep(time_until_next_frame)
         except Exception as e:
             risk.logger.critical(
                 "shit happened in the picasso subsystem! %s" % e)
 
     def draw_canvas(self):
         self.window.blit(self.background, (0, 0))
-        for level in self.canvas:
-            for asset in level:
+        for level in sorted(self.canvas.keys()):
+            for asset in self.canvas[level]:
                 if isinstance(asset, PicassoAsset):
-                    self.window.blit(asset, asset.get_coordinate())
+                    self.window.blit(asset.surface, asset.get_coordinate())
                 else:
                     risk.logger.warn("None asset detected in canvas, ",
                         "skipping...[%s]" % asset)
         pygame.display.flip()
+
+    def add_asset(self, layer, asset):
+        try:
+            self.canvas[layer].add(asset)
+        except KeyError:
+            self.canvas[layer] = sets.Set()
+        except:
+            pass
+        finally:
+            self.canvas[layer].add(asset)
+
+    def remove_asset(self, layer, asset):
+        try:
+            self.canvas[layer].remove(asset)
+        except KeyError:
+            pass
+        except:
+            pass
+
 
     def end(self):
         risk.logger.debug("received request to terminate graphics subsystem!")
