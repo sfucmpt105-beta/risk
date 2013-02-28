@@ -57,12 +57,15 @@ def attack_info(player, game_master, target_name, _, origin_name):
             (target_name, origin_name)
 
 
-def fortify_info(player, game_master):
+def fortify_info(player, game_master, destination_territory_name, _, armies, _2, origin_territory_name):
     """
-    fortify                         - fortify territory
+    fortify [destination] with [number] from [origin]   - fortify territory
+                                    
     """
-    print 'fortify!'
-
+    origin_armies, destination_armies = game_master.player_move_armies(player, origin_territory_name, destination_territory_name, int(armies))
+    print "%s now has: %s armies" %(origin_territory_name, origin_armies)
+    print "%s now has: %s armies" %(destination_territory_name, destination_armies)
+    
 def print_info(player, game_master):
     print 'print'
 
