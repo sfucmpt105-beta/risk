@@ -77,7 +77,9 @@ def run_game(game_master):
             run_turn(game_master)
     except (risk.errors.input.UserQuitInput, KeyboardInterrupt):
         game_master.end_game()
-    risk.logger.debug('User quit the game!') 
+    risk.logger.debug('User quit the game!')
+
+    # im stupid
 
 def run_turn(game_master):
     risk.logger.debug('Current player is: %s' % 
