@@ -136,7 +136,9 @@ class GameMaster(object):
     ## Player actions
     #
     def player_take_turn(self):
-        self._get_player_with_index(self._current_player).take_turn(self)
+        player = self._get_player_with_index(self._current_player)
+        player.reserves += len(self.player_territories(player))
+        player.take_turn(self)
     
     def player_territories(self, player):
         # O(n) lookup
@@ -153,6 +155,7 @@ class GameMaster(object):
         return success
 
     def player_add_army(self, player, territory_name, number_of_armies=1):
+        number_of_armies = number_of_armies
         territory = self.board[territory_name]
         if territory.owner != player:
             raise TerritoryNotOwnedByPlayer(territory, player)
@@ -160,7 +163,13 @@ class GameMaster(object):
             raise NotEnoughReserves(player)
         elif number_of_armies < 1:
             raise DeployRangeError(number_of_armies)
+        if False:
+            pass
         else:
             player.reserves -= number_of_armies
             territory.armies += number_of_armies
             return territory.armies, player.reserves
+
+    def player_fortify(self, player, origin_name, target_name):
+        origin = self.player_territories(player)[origin_name]
+        return 0,0  
