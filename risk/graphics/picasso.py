@@ -1,6 +1,7 @@
 import time
 import threading
 import sets
+import sys
 
 from datetime import timedelta
 from datetime import datetime
@@ -12,18 +13,22 @@ import risk
 import risk.logger
 
 from risk.graphics.assets.base import PicassoAsset
+from risk.graphics.assets.text import TextAsset
 
 def get_picasso(*args, **kwargs):
     if not hasattr(get_picasso, 'picasso_instance'):
-        setattr(get_picasso, 'picasso_instance', Picasso(*args, **kwargs))
-    return getattr(get_picasso, 'picasso_instance')
+        get_picasso.picasso_instance = Picasso(*args, **kwargs)
+        get_picasso.picasso_instance.daemon = True
+    return get_picasso.picasso_instance
   
 
 class Picasso(threading.Thread):
     def __init__(self, background='', width=1920, 
-                height=1080, fps=30, caption='RiskPy'):
+                height=1080, fps=100, caption='RiskPy'):
         pygame.init()
-        self.window = pygame.display.set_mode((width, height))
+        flags = 0x0
+        flags |= pygame.RESIZABLE
+        self.window = pygame.display.set_mode((width, height), flags)
         pygame.display.set_caption(caption)
             
         # convert background for faster draw
@@ -34,6 +39,7 @@ class Picasso(threading.Thread):
         self.fps = fps
         self.canvas = {}
         self.ended = False
+        self.game_master = None
 
         threading.Thread.__init__(self)
 
@@ -54,14 +60,17 @@ class Picasso(threading.Thread):
                 "shit happened in the picasso subsystem! %s" % e)
 
     def draw_canvas(self):
+        pygame.event.pump()
         self.window.blit(self.background, (0, 0))
         for level in sorted(self.canvas.keys()):
             for asset in self.canvas[level]:
                 if isinstance(asset, PicassoAsset):
-                    self.window.blit(asset.surface, asset.get_coordinate())
+                    self.window.blit(asset.draw(), asset.get_coordinate())
                 else:
                     risk.logger.warn("None asset detected in canvas, ",
                         "skipping...[%s]" % asset)
+        fps_asset = self.get_fps_asset()
+        self.window.blit(fps_asset.draw(), fps_asset.get_coordinate())
         pygame.display.flip()
 
     def add_asset(self, layer, asset):
@@ -69,8 +78,6 @@ class Picasso(threading.Thread):
             self.canvas[layer].add(asset)
         except KeyError:
             self.canvas[layer] = sets.Set()
-        except:
-            pass
         finally:
             self.canvas[layer].add(asset)
 
@@ -79,10 +86,24 @@ class Picasso(threading.Thread):
             self.canvas[layer].remove(asset)
         except KeyError:
             pass
-        except:
-            pass
 
 
     def end(self):
         risk.logger.debug("received request to terminate graphics subsystem!")
         self.ended = True
+
+    def get_fps_asset(self):
+        if not hasattr(Picasso, '_fps_start_time'):
+            Picasso._fps_start_time = datetime.now()
+        if not hasattr(Picasso, '_fps_frames'):
+            Picasso._fps_frames = 0
+
+        Picasso._fps_frames += 1
+        total_elapsed = (datetime.now() - \
+            Picasso._fps_start_time).total_seconds()
+        if total_elapsed < 1:
+            total_elapsed = 1
+        average_fps = float(Picasso._fps_frames) / total_elapsed
+        asset = TextAsset(1050, 16, "%s FPS" % int(average_fps), 
+                (255, 255, 0), 32)
+        return asset

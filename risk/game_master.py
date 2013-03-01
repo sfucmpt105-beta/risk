@@ -1,5 +1,6 @@
 from sets import Set
 
+import risk
 import risk.logger
 import risk.commands
 import risk.battle
@@ -86,12 +87,20 @@ class GameMaster(object):
     def add_start_turn_callback(self, callback):
         self.callbacks['start_turn'].append(callback)
 
-    def generate_players(self, number_of_human_players):
+    def add_end_action_callback(self, callback):
+        self.callbacks['end_action'].append(callback)
+
+    def generate_players(self, number_of_human_players, gui=False):
         risk.logger.debug("Generating %s human players" % \
             number_of_human_players)
 
         for i in xrange(number_of_human_players):
-            self.players.append(HumonRiskPlayer("Human %s" % i))
+            if gui:
+                from risk.graphics import player
+                self.players.append(
+                    risk.graphics.player.HumonGuiRiskPlayer("GHuman %s" % i))
+            else:
+                self.players.append(HumonRiskPlayer("Human %s" % i))
 
         risk.logger.debug("Generating %s bots" % \
             (self._num_players - number_of_human_players))
@@ -134,6 +143,15 @@ class GameMaster(object):
         self.call_end_turn_callbacks()
         self._select_next_player()
 
+    def event_action(function):
+        risk.logger.debug('Calling end action %s callback' % function)
+        def function_with_callback(self, *args):
+            result = function(self, *args)
+            for callback in self.callbacks['end_action']:
+                callback(self, function, result)
+            return result
+        return function_with_callback
+
     ###########################################################################
     ## Game state queries
     #
@@ -159,12 +177,14 @@ class GameMaster(object):
     ###########################################################################
     ## Player actions
     #
+    @event_action
     def player_take_turn(self):
         self.call_start_turn_callbacks()
         player = self._get_player_with_index(self._current_player)
         player.reserves += len(self.player_territories(player))
         player.take_turn(self)
     
+    @event_action
     def player_territories(self, player):
         # O(n) lookup
         player_territories = {}
@@ -173,12 +193,14 @@ class GameMaster(object):
                 player_territories[name] = territory
         return player_territories
 
+    @event_action
     def player_attack(self, player, origin_name, target_name):
         origin = self.player_territories(player)[origin_name]
         target = self.board.territories()[target_name]
         success = risk.battle.attack(origin, target)
         return success
 
+    @event_action
     def player_add_army(self, player, territory_name, number_of_armies=1):
         number_of_armies = number_of_armies
         territory = self.board[territory_name]
@@ -195,6 +217,7 @@ class GameMaster(object):
             territory.armies += number_of_armies
             return territory.armies, player.reserves
 
+    @event_action
     def player_fortify(self, player, origin_name, target_name):
         origin = self.player_territories(player)[origin_name]
         return 0,0  

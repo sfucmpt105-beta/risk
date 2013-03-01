@@ -63,7 +63,7 @@ def game_setup(settings):
     game_board = board.generate_empty_board()
     #game_board = board.generate_mini_board()
     game_master = risk.game_master.GameMaster(game_board, settings)
-    game_master.generate_players(_DEV_HUMAN_PLAYERS)
+    game_master.generate_players(_DEV_HUMAN_PLAYERS, settings.gui)
     game_master.add_end_turn_callback(end_turn_debug_print)
     # dev
     board.dev_random_assign_owners(game_master)
