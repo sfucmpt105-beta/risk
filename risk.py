@@ -84,7 +84,9 @@ def run_game(game_master):
         risk.logger.critical('unknown error occured, attempting perform'\
             ' graceful shutdown...')
         game_master.end_game()
-    risk.logger.debug('User quit the game!') 
+    risk.logger.debug('User quit the game!')
+
+    # im stupid
 
 def run_turn(game_master):
     risk.logger.debug('Current player is: %s' % 
