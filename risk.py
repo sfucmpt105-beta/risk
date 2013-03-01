@@ -20,6 +20,8 @@ def app_setup():
     # dev build defaults to debug for now
     parser.add_argument('--verbose', '-v', action='count',
                         help='extra output', default=risk.logger.LEVEL_DEBUG)
+    parser.add_argument('--gui', '-g', action='store_true',
+                        help='gui version of game', default=False)
     settings = parser.parse_args()
     risk.logger.LOG_LEVEL = settings.verbose
     return settings
@@ -61,7 +63,7 @@ def game_setup(settings):
     game_board = board.generate_empty_board()
     #game_board = board.generate_mini_board()
     game_master = risk.game_master.GameMaster(game_board, settings)
-    game_master.generate_players(_DEV_HUMAN_PLAYERS)
+    game_master.generate_players(_DEV_HUMAN_PLAYERS, settings.gui)
     game_master.add_end_turn_callback(end_turn_debug_print)
     # dev
     board.dev_random_assign_owners(game_master)
@@ -75,7 +77,12 @@ def run_game(game_master):
         #game_master.deploy_troops()
         while not game_master.ended:
             run_turn(game_master)
-    except (risk.errors.input.UserQuitInput, KeyboardInterrupt):
+    except (risk.errors.input.UserQuitInput, KeyboardInterrupt, EOFError):
+        game_master.end_game()
+    except BaseException as e:
+        risk.logger.critical(repr(e))
+        risk.logger.critical('unknown error occured, attempting perform'\
+            ' graceful shutdown...')
         game_master.end_game()
     risk.logger.debug('User quit the game!')
 
@@ -92,4 +99,8 @@ if __name__ == '__main__':
     settings = app_setup()
     risk.logger.debug(settings)
     master = game_setup(settings)
+    if settings.gui:
+        import risk.graphics
+        risk.graphics.init(master)
+        master.add_end_game_callback(risk.graphics.shutdown)
     run_game(master)
