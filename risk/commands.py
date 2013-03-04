@@ -81,6 +81,15 @@ def map_info(player, game_master, continent=None):
         for continent in risk.printer.ASCII_MAPS.keys():
             map_printer(continent, player, game_master)
 
+def add_armies(player, game_master, number_of_armies, _, territory_name):
+    """ 
+    add [#units] to [territory]     - add [#units] to [territory], "to" is
+                                      needed in the command
+    """
+    armies, reserves = game_master.player_add_army(player, territory_name, int(number_of_armies))
+    print "[%s] now has : [%s] units" %(territory_name, armies)
+    print "[%s] unit(s) on reserve" % (player.reserves)
+
 def quit_game(player, game_master):
     risk.logger.debug('User wants to quit game')
     #game_master.end_game()
@@ -95,6 +104,7 @@ user_commands = {
     'print':        print_info,
     'quit':         quit_game,
     'map':          map_info,
+    'add':          add_armies,
     }
 
 def prompt_user(player, game_master):
@@ -109,7 +119,8 @@ def prompt_user(player, game_master):
             command(player, game_master, *args)
         except KeyError:
             print 'invalid command'
-        except TypeError:
+        except Exception as e:
+            risk.logger.error(str(e))
             if command.__doc__:
                 print "usage: %s" % command.__doc__
             else:
@@ -119,7 +130,7 @@ def prompt_user(player, game_master):
                 risk.logger.warn("%s syntax error and no usage. "\
                     "User input: '%s', args: '%s'" % 
                     (command, user_input, args))
-
+            
 def prompt_choose_territory(availables):
     print "Available territories: "
     print "---------------------------------------------------"

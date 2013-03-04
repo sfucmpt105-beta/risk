@@ -25,7 +25,7 @@ def app_setup():
     return settings
 
 ###############################################################################
-## CLI functions
+## CLI functionsr
 #
 def print_banner():
     print \
