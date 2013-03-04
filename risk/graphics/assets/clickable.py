@@ -23,9 +23,9 @@ class ClickableAsset(PicassoAsset):
 
     def draw(self):
         if self.mouse_hovering():
-            return self.highlighted
+            return self._highlighted_surface()
         else:
-            return self.normal
+            return self._normal_surface()
 
     def clicked(self):
         return self.mouse_hovering() and pygame.mouse.get_pressed()[0]
@@ -34,3 +34,9 @@ class ClickableAsset(PicassoAsset):
         # srsly???
         return self.surface.get_rect().move(self.x, self.y).collidepoint(
             pygame.mouse.get_pos())
+
+    def _normal_surface(self):
+        return self.normal
+
+    def _highlighted_surface(self):
+        return self.highlighted

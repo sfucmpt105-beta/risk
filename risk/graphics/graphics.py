@@ -9,9 +9,12 @@ import risk.graphics
 import risk.graphics.picasso
 import risk.graphics.assets.text
 import risk.graphics.assets.clickable
+import risk.graphics.assets.territory
 from risk.logger import *
 from risk.graphics import assets
 from risk.graphics.picasso import get_picasso
+from risk.graphics.assets.territory import build_territory_asset
+from risk.graphics.assets.territory import build_player_colour_mapping
 
 DEFAULT_WIDTH  = 1152
 DEFAULT_HEIGHT = 720
@@ -27,6 +30,8 @@ def init(game_master):
     picasso = risk.graphics.picasso.get_picasso(width=DEFAULT_WIDTH, 
             height=DEFAULT_HEIGHT, background=DEFAULT_BACKGROUND)
     debug("obtained picasso instance")
+    debug("building risk board")
+    initialize_territories(picasso, game_master)
     debug("starting picasso graphics subsystem")
     picasso.start()
     debug("picasso subsystem successfully launched!")
@@ -47,6 +52,16 @@ def add_graphic_hooks(game_master):
     game_master.add_start_turn_callback(check_gui_quit_event)
     game_master.add_end_turn_callback(check_gui_quit_event)
     game_master.add_end_action_callback(release_control)
+
+def initialize_territories(picasso, game_master):
+    territory = game_master.board['alaska']
+    asset = build_territory_asset('north_america', territory, 64, 80)
+    picasso.add_asset('3_territories', asset)
+    territory = game_master.board['central_america']
+    asset = build_territory_asset('north_america', territory, 150, 300)
+    picasso.add_asset('3_territories', asset)
+    risk.logger.debug("assigning player colours")
+    build_player_colour_mapping(game_master.players)
 
 def add_buttons(picasso):
     global buttons
