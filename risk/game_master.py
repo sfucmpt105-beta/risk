@@ -218,6 +218,18 @@ class GameMaster(object):
             return territory.armies, player.reserves
 
     @event_action
-    def player_fortify(self, player, origin_name, target_name):
-        origin = self.player_territories(player)[origin_name]
-        return 0,0  
+    def player_move_armies(self, player, origin_territory_name, destination_territory_name, number_of_armies):
+        origin_territory = self.board[origin_territory_name]
+        destination_territory = self.board[destination_territory_name]
+            if origin_territory.owner != player:
+                raise TerritoryNotOwnedByPlayer(origin_territory, player)
+            elif destination_territory.owner != player:
+                raise TerritoryNotOwnedByPlayer(destination_territory, player)
+            elif number_of_armies >= origin_territory or number_of_armies < 1:
+                raise MoveRangeError(number_of_armies)
+            elif not origin_territory.is_neighbour(destination_territory):
+                raise NotNeighbours(origin_territory, destination_territory)
+            else:
+                origin_territory.armies -= number_of_armies
+                destination_territory.armies += number_of_armies
+                return origin_territory.armies, destination_territory.armies
