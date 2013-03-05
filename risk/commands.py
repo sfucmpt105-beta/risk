@@ -92,7 +92,6 @@ attack_commands = {
     'print':        print_info,
     'quit':         quit_game,
     'map':          map_info,
-    'add':          add_armies,
     }
 
 reinforce_commands = {
