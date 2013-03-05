@@ -28,7 +28,9 @@ class HumonRiskPlayer(AbstractRiskPlayer):
         AbstractRiskPlayer.__init__(self, name)
 
     def take_turn(self, game_master):
+        commands.prompt_deploy_reserves(self, game_master)
         commands.prompt_user(self, game_master)
+        
 
     def choose_territory(self, availables):
         print "%s's turn..." % self.name
