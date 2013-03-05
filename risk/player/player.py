@@ -6,6 +6,9 @@ from risk.printer import risk_input
 from risk.errors.board import *
 from risk.errors.game_master import *
 
+from risk.commands import reinforce_commands
+from risk.commands import attack_commands
+
 class AbstractRiskPlayer(object):
     def __init__(self, name):
         self.name = name
@@ -28,9 +31,16 @@ class HumonRiskPlayer(AbstractRiskPlayer):
         AbstractRiskPlayer.__init__(self, name)
 
     def take_turn(self, game_master):
-        commands.prompt_deploy_reserves(self, game_master)
-        commands.prompt_user(self, game_master)
-        
+        while self.reserves > 0:
+            print 'player has armies to deploy'
+            print "%s's territories: " % self.name
+            print "---------------------------------------------------"
+            print game_master.player_territories(self).keys()
+            risk.printer.display_user_armies(self, 
+                    game_master.player_territories(self))
+            commands.prompt_user(self, game_master, 
+                    reinforce_commands)
+        commands.prompt_user(self, game_master, attack_commands)
 
     def choose_territory(self, availables):
         print "%s's turn..." % self.name
