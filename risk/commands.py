@@ -3,6 +3,7 @@ import risk.printer
 
 from risk.printer import risk_input
 from risk.printer import map_printer
+from risk.printer import display_user_armies
 from risk.errors.game_master import *
 from risk.errors.board import *
 
@@ -13,9 +14,9 @@ def help_info(player, game_master):
     """
     help                            - prints help
     """
-    risk.logger.debug(user_commands.keys())
+    risk.logger.debug(prompt_user.available_commands.keys())
     print 'Available commands:'
-    for command in user_commands.values():
+    for command in prompt_user.available_commands.values():
         if command.__doc__:
             print command.__doc__,
     print
@@ -27,9 +28,9 @@ def status_info(player, game_master):
 
 def next_info(player, game_master):
     """
-    next                            - ends player turn
+    next                            - ends current phase
     """
-    risk.logger.debug('User finished turn')
+    risk.logger.debug('User finished phase')
     print 'next'
 
 def attack_info(player, game_master, target_name, _, origin_name):
@@ -82,7 +83,7 @@ def quit_game(player, game_master):
     risk.logger.debug('User wants to quit game')
     #game_master.end_game()
 
-user_commands = {
+attack_commands = {
     'help':         help_info,           
     'status':       status_info,
     'next':         next_info,
@@ -91,7 +92,6 @@ user_commands = {
     'print':        print_info,
     'quit':         quit_game,
     'map':          map_info,
-    'add':          add_armies,
     }
 
 reinforce_commands = {
@@ -99,10 +99,12 @@ reinforce_commands = {
     'status':       status_info,
     'map':          map_info,
     'add':          add_armies,
+    'next':         next_info,
     'quit':         quit_game,
     }
 
-def prompt_user(player, game_master):
+def prompt_user(player, game_master, available_commands):
+    prompt_user.available_commands = available_commands
     user_input = _INVALID_INITIAL_INPUT
     while not user_input_finished(user_input):
         command = None
@@ -110,13 +112,19 @@ def prompt_user(player, game_master):
         args = None
         try:    # verifies that it is a valid command in the list
             user_input, args = risk_input('Please type a command')
-            command = user_commands[user_input]
+            command = available_commands[user_input]
             command(player, game_master, *args)
         except KeyError:
+            risk.logger.error('%s is not a valid command in the ' \
+                    'reinforcement stage' % user_input)
+        
+            risk.logger.debug(available_commands.keys())
             print 'invalid command'
         except (RiskGameError, ValueError, TypeError, IndexError) as e:
             risk.logger.error(str(e))
-            if command.__doc__:
+            if not command:
+                help_info(player, game_master)
+            elif command.__doc__:
                 print "usage: %s" % command.__doc__
             else:
                 print command
@@ -133,50 +141,7 @@ def prompt_choose_territory(availables):
     print "---------------------------------------------------"
     return risk_ll_input('Choose from availables [empty input to reprint availables]: ')
 
-def prompt_deploy_reserves(player, game_master):
-    _USER_INPUT_VALID = False
-    player_territories = game_master.player_territories(player)
-    while player.reserves > 0:
-        print "%s's territories: " % player.name
-        print "---------------------------------------------------"
-        print player_territories.keys()
-        display_user_armies(player, player_territories)
-        try:
-            user_input, args = risk_input('Please add all reserves to territories')
-            command = reinforce_commands[user_input]
-            command(player, game_master, *args)
-        except KeyError:
-            risk.logger.error('%s is not a valid command in the reinforcement stage' % user_input)
-            risk.logger.debug(user_commands.keys())
-            print 'Available commands:'
-            for command in reinforce_commands.values():
-                if command.__doc__:
-                    print command.__doc__,
-            print
-        except (RiskGameError, ValueError, TypeError) as e:
-            risk.logger.error(str(e))
-            if command.__doc__:
-                print "usage: %s" % command.__doc__
-            else:
-                print command
-                print user_input
-                print args
-                risk.logger.warn("%s syntax error and no usage. "\
-                    "User input: '%s', args: '%s'" % 
-                    (command, user_input, args))
-        except IndexError:
-            print
-                
-
 def user_input_finished(user_input):
     quit_commands = ['quit', 'next']
     return user_input in quit_commands
 
-def display_user_armies(player, player_territories):
-    print "---------------------------------------------------"
-    for name, territory in player_territories.iteritems():
-        print "%s: %s armies" % (name, territory.armies)
-    
-    print "---------------------------------------------------"
-    print "%s reserves left" % player.reserves
-    print "---------------------------------------------------"

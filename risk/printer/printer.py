@@ -21,6 +21,15 @@ def risk_input(msg, stage="RISK"):
     args = processed[1:]
     return command, args
 
+def display_user_armies(player, territories):
+    print "---------------------------------------------------"
+    for name, territory in territories.iteritems():
+        print "%s: %s armies" % (name, territory.armies)
+    
+    print "---------------------------------------------------"
+    print "%s reserves left" % player.reserves
+    print "---------------------------------------------------"
+
 def map_printer(continent_name, player, game_master):
     ascii_map = ASCII_MAPS[continent_name]
     # regex magic... sigh :(
