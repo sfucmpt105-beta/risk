@@ -11,9 +11,8 @@ class BasicRiskBot(AbstractRiskPlayer):
         raise NotImplementedError
 
     def take_turn(self, game_master):
-        # _deploy_reserves
+        self._deploy_reserves(game_master)
         self._attack_all_possible_targets(game_master)
-        # _fortify
 
     def deploy_reserves(self, game_master):
         # evenly distributes
@@ -22,6 +21,15 @@ class BasicRiskBot(AbstractRiskPlayer):
         while self.reserves > 0:
             game_master.player_add_army(self, territories[idx], 1)
             idx = (idx + 1) % len(territories)
+
+    def _deploy_reserves(self, game_master):
+        # simple uniform distribution of armies
+        territories = game_master.player_territories(self).values()
+        while self.reserves > 0:
+            for territory in territories:
+                if self.reserves > 0:
+                    game_master.player_add_army(self, territory.name)
+                
 
     def _attack_all_possible_targets(self, game_master):
         territories = game_master.player_territories(self)
