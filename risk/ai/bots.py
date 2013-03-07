@@ -29,7 +29,19 @@ class BasicRiskBot(AbstractRiskPlayer):
             for territory in territories:
                 if self.reserves > 0:
                     game_master.player_add_army(self, territory.name)
-                
+
+    def move_after_attack(self, game_master, origin_name, target_name):
+        origin = game_master.player_territories(self)[origin_name]
+        #split armies into 2
+        moveable_armies = origin.armies - 1
+        armies_to_move = (moveable_armies / 2) +1
+        if armies_to_move == 0:
+            armies_to_move = 1
+        origin_armies, destination_armies = game_master.player_move_armies(self, origin_name, target_name, int(armies_to_move))
+        risk.logger.debug("%s now has: %s armies" %(origin_name, origin_armies))
+        risk.logger.debug("%s now has: %s armies" %(target_name, destination_armies))
+
+               
 
     def _attack_all_possible_targets(self, game_master):
         territories = game_master.player_territories(self)
@@ -42,7 +54,9 @@ class BasicRiskBot(AbstractRiskPlayer):
                 targets = [t.name for t in targets]
                 if len(targets) > 0:
                     choice = random.randint(0, len(targets) - 1)
-                    game_master.player_attack(self, name, targets[choice])
+                    success = game_master.player_attack(self, name, targets[choice])
+                    if success:
+                        self.move_after_attack(game_master, name, targets[choice])
                 else:
                     risk.logger.debug("nowhere to attack!")
             else:

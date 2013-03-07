@@ -38,20 +38,11 @@ def attack_info(player, game_master, target_name, _, origin_name):
     attack [target] from [origin]   - attack [target] from [origin], "from" is
                                       needed in the command
     """
+    print player.name
     success = game_master.player_attack(player, origin_name, target_name)
     if success:
         print "successfully attacked %s!" % target_name
-        origin = game_master.player_territories(player)[origin_name]
-        move_after_attack = None
-        while move_after_attack <= 0 or move_after_attack >= origin.armies:
-            move_after_attack = input("How many armies will you move to %s? >>> " % target_name)
-            if move_after_attack <= 0 or move_after_attack > origin.armies:
-                print "You can't move %s armies!" % move_after_attack
-            else:
-                origin_armies, destination_armies = game_master.player_move_armies(player, origin_name, target_name, int(move_after_attack))
-                print "%s now has: %s armies" %(origin_name, origin_armies)
-                print "%s now has: %s armies" %(target_name, destination_armies)
-                break
+        player.move_after_attack(game_master, origin_name, target_name)
     else:
         print "failed to attack %s... %s reduced to 1 army" % \
             (target_name, origin_name)
