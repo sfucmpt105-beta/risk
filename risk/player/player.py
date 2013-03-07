@@ -39,7 +39,7 @@ class HumonRiskPlayer(AbstractRiskPlayer):
             risk.printer.display_user_armies(self, 
                     game_master.player_territories(self))
             commands.prompt_user(self, game_master, 
-                    reinforce_commands)
+                    reinforce_commands, HumonRiskPlayer._no_more_reserves)
         commands.prompt_user(self, game_master, attack_commands)
 
     def choose_territory(self, availables):
@@ -69,3 +69,7 @@ class HumonRiskPlayer(AbstractRiskPlayer):
             NoSuchTerritory) as e:
             risk.logger.error(str(e))
         return _FAILED
+    
+    @staticmethod
+    def _no_more_reserves(player, game_master):
+        return player.reserves <= 0
