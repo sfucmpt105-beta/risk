@@ -24,3 +24,12 @@ class DeployRangeError(GameMasterError):
     def __init__(self, number_of_armies):
         GameMasterError.__init__(self,
             "%s is not a valid number of armies to deploy" % number_of_armies)
+
+class MoveRangeError(GameMasterError):
+    def __init__(self, number_of_armies):
+        GameMasterError.__init__(self,
+            "%s is not a valid number of armies to move" % number_of_armies)
+class NotNeighbours(GameMasterError):
+    def __init__(self, origin, target):
+        GameMasterError.__init__(self,
+            "%s and %s are not neighbours" %(origin, target))
