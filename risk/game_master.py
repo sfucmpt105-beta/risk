@@ -38,6 +38,7 @@ class GameMaster(object):
             'end_turn': [],
             'end_game': [],
         }
+        self.add_end_action_callback(GameMaster.check_player_elimination)
 
     
     ###########################################################################
@@ -148,9 +149,27 @@ class GameMaster(object):
         def function_with_callback(self, *args):
             result = function(self, *args)
             for callback in self.callbacks['end_action']:
-                callback(self, function, result)
+                callback(self, function.func_name, result, args)
             return result
         return function_with_callback
+
+    def check_player_elimination(self, function, result, args):
+        if function == 'player_attack':
+            if result == True:
+                for player in self.players:
+                    if len(self.player_territories(player)) == 0:
+                        self.eliminate_player(player)
+
+    # TODO fix select next player bug
+    def eliminate_player(self, player):
+        self.players.remove(player)
+        for _ in xrange(10):
+            print "%s eliminated!" % player.name
+
+        if len(self.players) <= 1:
+            for _ in xrange(100):
+                print "%s WINS!!!!" % self.current_player().name
+            self.end_game()
 
     ###########################################################################
     ## Game state queries

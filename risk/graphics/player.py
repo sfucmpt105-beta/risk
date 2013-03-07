@@ -11,4 +11,7 @@ class HumonGuiRiskPlayer(HumonRiskPlayer):
         HumonRiskPlayer.__init__(self, name)
 
     def take_turn(self, game_master):
+        #self.reserves = 0
+        #for territory in game_master.player_territories(self).values():
+        #    territory.armies = 100
         risk.graphics.input.handle_user_input(game_master)

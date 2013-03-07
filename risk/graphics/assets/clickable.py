@@ -1,5 +1,6 @@
 import pygame
 from pygame import Rect
+from pygame import mouse
 from pygame.font import Font
 
 import risk.graphics.assets
@@ -27,13 +28,14 @@ class ClickableAsset(PicassoAsset):
         else:
             return self._normal_surface()
 
-    def clicked(self):
-        return self.mouse_hovering() and pygame.mouse.get_pressed()[0]
-
-    def mouse_hovering(self):
+    def mouse_hovering(self, mouse_pos=None):
+        # pygame gets pissy if it's not initialized so we can't have x and
+        # y in the initializer
+        if not mouse_pos:
+            mouse_pos = mouse.get_pos()
         # srsly???
         return self.surface.get_rect().move(self.x, self.y).collidepoint(
-            pygame.mouse.get_pos())
+        mouse_pos)
 
     def _normal_surface(self):
         return self.normal
