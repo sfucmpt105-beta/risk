@@ -25,30 +25,30 @@ buttons = {}
 
 territory_coordinates = {
     'north_america': {
-        'alaska': (80, 171),
-        'northwest_territory': (201, 143),
-        'greenland': (428, 118),
-        'alberta': (168, 199),
-        'ontario': (278,210 ),
-        'eastern_canada': (353, 207),
-        'western_united_states': (213, 256),
-        'eastern_united_states': (301, 262),
-        'central_america': (251, 316)
+        'alaska': (21, 129),
+        'northwest_territory': (103, 112),
+        'greenland': (340, 57),
+        'alberta': (118, 172),
+        'ontario': (232, 173),
+        'eastern_canada': (311, 171),
+        'western_united_states': (169, 228),
+        'eastern_united_states': (250, 223),
+        'central_america': (187, 282)
     },
     'south_america': {
-        'venezuela': (356, 369),
-        'peru': (345, 428),
-        'brazil': (416, 419),
-        'argentina': (361, 506),
+        'venezuela': (297, 343),
+        'peru': (296, 386),
+        'brazil': (346, 359),
+        'argentina': (322, 452),
     },
     'europe': {
-        'iceland': (545, 150),
-        'scandinavia': (629, 166),
-        'russia': (711, 198),
-        'great_britain': (539, 201),
-        'northern_europe': (624, 213),
-        'western_europe': (568, 243),
-        'southern_europe': (638, 248)
+        'iceland': (519, 137),
+        'scandinavia': (585, 130),
+        'russia': (638, 136),
+        'great_britain': (513, 181),
+        'northern_europe': (583, 192),
+        'western_europe': (534, 218),
+        'southern_europe': (600, 222)
     },
     'africa': {
         'north_africa': (585, 320),

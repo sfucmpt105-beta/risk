@@ -69,8 +69,8 @@ def attack(origin, target):
     else:
         risk.logger.debug("Territory captured!")
         target.owner = origin.owner
-        target.armies = 1
-        origin.armies -= 1
+        target.armies = origin.armies - 1
+        origin.armies = 1
         return CAPTURED
 
 def _validate_attack_plan_or_fail(origin, target):
