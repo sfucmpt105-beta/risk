@@ -69,6 +69,19 @@ class HumonRiskPlayer(AbstractRiskPlayer):
             NoSuchTerritory) as e:
             risk.logger.error(str(e))
         return _FAILED
+
+    def move_after_attack(self, game_master, origin_name, target_name):
+        origin = game_master.player_territories(self)[origin_name]
+        armies_to_move = None
+        while armies_to_move < 1 or armies_to_move >= origin.armies:
+            if armies_to_move < 1 or armies_to_move >= origin.armies:
+                print "You can't move %s armies!" % armies_to_move
+            armies_to_move = input("How many armies will you move? >>> ")
+        origin_armies, destination_armies = game_master.player_move_armies(self, origin_name, target_name, int(armies_to_move))
+        risk.logger.debug("%s now has: %s armies" %(origin_name, origin_armies))
+        risk.logger.debug("%s now has: %s armies" %(target_name, destination_armies))
+
+
     
     @staticmethod
     def _no_more_reserves(player, game_master):
