@@ -25,58 +25,58 @@ buttons = {}
 
 territory_coordinates = {
     'north_america': {
-        'alaska': (80, 171),
-        'northwest_territory': (201, 143),
-        'greenland': (428, 118),
-        'alberta': (168, 199),
-        'ontario': (278,210 ),
-        'eastern_canada': (353, 207),
-        'western_united_states': (213, 256),
-        'eastern_united_states': (301, 262),
-        'central_america': (251, 316)
+        'alaska': (21, 129),
+        'northwest_territory': (103, 112),
+        'greenland': (340, 57),
+        'alberta': (118, 172),
+        'ontario': (232, 173),
+        'eastern_canada': (311, 171),
+        'western_united_states': (169, 228),
+        'eastern_united_states': (250, 223),
+        'central_america': (187, 282)
     },
     'south_america': {
-        'venezuela': (356, 369),
-        'peru': (345, 428),
-        'brazil': (416, 419),
-        'argentina': (361, 506),
+        'venezuela': (297, 343),
+        'peru': (296, 386),
+        'brazil': (346, 359),
+        'argentina': (322, 452),
     },
     'europe': {
-        'iceland': (545, 150),
-        'scandinavia': (629, 166),
-        'russia': (711, 198),
-        'great_britain': (539, 201),
-        'northern_europe': (624, 213),
-        'western_europe': (568, 243),
-        'southern_europe': (638, 248)
+        'iceland': (519, 137),
+        'scandinavia': (585, 130),
+        'russia': (638, 136),
+        'great_britain': (513, 181),
+        'northern_europe': (583, 192),
+        'western_europe': (534, 218),
+        'southern_europe': (600, 222)
     },
     'africa': {
-        'north_africa': (585, 320),
-        'egypt': (644, 299),
-        'central_africa': (638, 380),
-        'east_africa': (695, 373),
-        'south_africa': (651, 436),
-        'madagascar': (752, 432)
+        'north_africa': (511, 265),
+        'egypt': (604, 271),
+        'central_africa': (580, 342),
+        'east_africa': (653, 309),
+        'south_africa': (595, 388),
+        'madagascar': (697, 394)
     },
     'asia': {
-        'ural': (818, 182),
-        'siberia': (878, 166),
-        'yakutsk': (986, 152),
-        'kamchatka': (1062, 175),
-        'irkutsk': (936, 195),
-        'afghanistan': (769, 249),
-        'china': (883, 266),
-        'mongolia': (930, 243),
-        'japan': (1044, 274),
-        'middle_east': (718, 295),
-        'india': (822, 310),
-        'southern_asia': (884, 330)
+        'ural': (769, 113),
+        'siberia': (799, 91),
+        'yakutsk': (930, 116),
+        'kamchatka': (978, 131),
+        'irkutsk': (877, 163),
+        'afghanistan': (713, 212),
+        'china': (816, 218),
+        'mongolia': (877, 208),
+        'japan': (987, 219),
+        'middle_east': (635, 248),
+        'india': (775, 263),
+        'southern_asia': (852, 295)
     },
     'australia': {
-        'indonesia': (922, 413),
-        'new_guinea': (1040, 402),
-        'western_australia': (995, 474),
-        'eastern_australia': (1055, 467)
+        'indonesia': (857, 374),
+        'new_guinea': (1001, 370),
+        'western_australia': (948, 426),
+        'eastern_australia': (1006, 418)
     }
 }
 
