@@ -58,8 +58,10 @@ class Picasso(threading.Thread):
     def draw_canvas(self):
         pygame.event.pump()
         self.window.blit(self.background, (0, 0))
-        for level in sorted(self.canvas.keys()):
-            for asset in self.canvas[level]:
+        levels = sorted(self.canvas.keys())
+        for level in levels:
+            assets = self.canvas[level]
+            for asset in assets:
                 if isinstance(asset, PicassoAsset):
                     self.window.blit(asset.draw(), asset.get_coordinate())
                 else:
