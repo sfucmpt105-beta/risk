@@ -40,24 +40,20 @@ class Picasso(threading.Thread):
         self.canvas = {}
         self.ended = False
         self.game_master = None
+        
+        self.clock = pygame.time.Clock()
 
         threading.Thread.__init__(self)
 
     def run(self):
-        _sleep_time = 1.0 / self.fps
-        _sleep_delta = timedelta(0, _sleep_time)
-        # keep running until interrupted
         try:
             while not self.ended:
-                next_frame = datetime.now() + _sleep_delta
                 self.draw_canvas()
-                time_until_next_frame = \
-                    (next_frame - datetime.now()).total_seconds()
-                if time_until_next_frame > 0:
-                    time.sleep(time_until_next_frame)
+                self.clock.tick(self.fps)
         except Exception as e:
             risk.logger.critical(
                 "shit happened in the picasso subsystem! %s" % e)
+        pygame.quit()
 
     def draw_canvas(self):
         pygame.event.pump()
@@ -93,17 +89,6 @@ class Picasso(threading.Thread):
         self.ended = True
 
     def get_fps_asset(self):
-        if not hasattr(Picasso, '_fps_start_time'):
-            Picasso._fps_start_time = datetime.now()
-        if not hasattr(Picasso, '_fps_frames'):
-            Picasso._fps_frames = 0
-
-        Picasso._fps_frames += 1
-        total_elapsed = (datetime.now() - \
-            Picasso._fps_start_time).total_seconds()
-        if total_elapsed < 1:
-            total_elapsed = 1
-        average_fps = float(Picasso._fps_frames) / total_elapsed
-        asset = TextAsset(1050, 16, "%s FPS" % int(average_fps), 
+        asset = TextAsset(1050, 16, "%s FPS" % int(self.clock.get_fps()), 
                 (255, 255, 0), 32)
         return asset

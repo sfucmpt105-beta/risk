@@ -105,10 +105,12 @@ reinforce_commands = {
     'quit':         quit_game,
     }
 
-def prompt_user(player, game_master, available_commands):
+def prompt_user(player, game_master, available_commands, 
+        end_condition_callback=lambda _,__: False):
     prompt_user.available_commands = available_commands
     user_input = _INVALID_INITIAL_INPUT
-    while not user_input_finished(user_input):
+    while not user_input_finished(user_input) and not \
+            end_condition_callback(player, game_master):
         command = None
         user_input = None
         args = None

@@ -101,7 +101,7 @@ class ArmyCountAsset(PicassoAsset):
         self.count = None
         self.size = size
         self.colour = base.BLACK
-        x = territory_asset.x + territory_asset.surface.get_width() / 3
+        x = territory_asset.x + territory_asset.surface.get_width() / 2
         y = territory_asset.y + territory_asset.surface.get_height() / 3
         PicassoAsset.__init__(self, None, x, y)
         # kinda hacky, we have to rebuild the surface to centre the counter
