@@ -38,9 +38,11 @@ def attack_info(player, game_master, target_name, _, origin_name):
     attack [target] from [origin]   - attack [target] from [origin], "from" is
                                       needed in the command
     """
+    print player.name
     success = game_master.player_attack(player, origin_name, target_name)
     if success:
         print "successfully attacked %s!" % target_name
+        player.move_after_attack(game_master, origin_name, target_name)
     else:
         print "failed to attack %s... %s reduced to 1 army" % \
             (target_name, origin_name)
