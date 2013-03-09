@@ -36,7 +36,7 @@ def next_info(player, game_master):
 def attack_info(player, game_master, target_name, _, origin_name):
     """
     attack [target] from [origin]   - attack [target] from [origin], "from" is
-                                      needed in the command
+                                      needed in the command, player must own origin
     """
     print player.name
     success = game_master.player_attack(player, origin_name, target_name)
@@ -117,18 +117,19 @@ def prompt_user(player, game_master, available_commands,
         try:    # verifies that it is a valid command in the list
             user_input, args = risk_input('Please type a command')
             command = available_commands[user_input]
-            command(player, game_master, *args)
         except KeyError:
             risk.logger.error('%s is not a valid command in the ' \
                     'reinforcement stage' % user_input)
         
             risk.logger.debug(available_commands.keys())
             print 'invalid command'
-        except (RiskGameError, ValueError, TypeError, IndexError) as e:
+
+        try:
+            command(player, game_master, *args)
+            
+        except (RiskGameError, ValueError, TypeError, IndexError, KeyError) as e:
             risk.logger.error(str(e))
-            if not command:
-                help_info(player, game_master)
-            elif command.__doc__:
+            if command.__doc__:
                 print "usage: %s" % command.__doc__
             else:
                 print command
