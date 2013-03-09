@@ -58,7 +58,11 @@ class Picasso(threading.Thread):
     def draw_canvas(self):
         pygame.event.pump()
         self.window.blit(self.background, (0, 0))
-        levels = sorted(self.canvas.keys())
+        # make a deep copy of layers first to avoid race condition where dict
+        # size can change during iteration. try to do it lockless, if we're
+        # still having issues, fix with mutex
+        canvas_keys = self.canvas.keys()
+        levels = sorted(canvas_keys)
         for level in levels:
             assets = self.canvas[level]
             for asset in assets:

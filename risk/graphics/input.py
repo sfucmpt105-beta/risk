@@ -81,7 +81,13 @@ def attacking_mode(player, game_master, origin):
     picasso.add_asset(LAYER, feedback_asset)
     target = scan_pygame_event(player, game_master, choose_target)
     try:
-        game_master.player_attack(player, origin.name, target.name)
+        success = game_master.player_attack(player, origin.name, target.name)
+        if success:
+            # TODO allow user to pick, even split for now
+            movable = origin.armies - 2
+            to_move = 1 + movable / 2
+            game_master.player_move_armies(player, origin.name, target.name, 
+                    to_move)
     except (GameMasterError, RiskBattleError, KeyError):
         pass
     finally:
