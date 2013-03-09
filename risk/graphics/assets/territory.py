@@ -45,7 +45,7 @@ class TerritoryAsset(ClickableAsset):
         self.territory = territory
         self.last_known_owner = None
         self.highlighted = False
-        surface = pygame.image.load(image_path)
+        surface = pygame.image.load(image_path).convert_alpha()
         PicassoAsset.__init__(self, surface, x, y)
      
     def mouse_hovering(self, mouse_pos=None):
@@ -108,9 +108,10 @@ class ArmyCountAsset(PicassoAsset):
 
     def draw(self):
         if self.dirty():
+            self.count = self.territory_asset.territory.armies
             font = Font(None, self.size)
-            self.surface = font.render(str(
-                    self.territory_asset.territory.armies), False, self.colour)
+            self.surface = font.render(str(self.count), False, 
+                    self.colour).convert()
         return self.surface
 
     def dirty(self):
