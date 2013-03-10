@@ -58,7 +58,7 @@ def attack(origin, target):
         att_troop_num, def_troop_num = \
             dice_roll_sequence(att_troop_num, def_troop_num)
         risk.logger.debug("Attacker Troops: %s" % att_troop_num)
-            risk.logger.debug("Defender Troops: %s" % def_troop_num)
+        risk.logger.debug("Defender Troops: %s" % def_troop_num)
 
     origin.set_troops(att_troop_num)
     target.set_troops(def_troop_num)

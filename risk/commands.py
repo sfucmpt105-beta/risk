@@ -117,6 +117,7 @@ def prompt_user(player, game_master, available_commands,
         try:    # verifies that it is a valid command in the list
             user_input, args = risk_input('Please type a command')
             command = available_commands[user_input]
+            execute_command(command, player, game_master, *args)
         except KeyError:
             risk.logger.error('%s is not a valid command in the ' \
                     'reinforcement stage' % user_input)
@@ -124,20 +125,21 @@ def prompt_user(player, game_master, available_commands,
             risk.logger.debug(available_commands.keys())
             print 'invalid command'
 
-        try:
-            command(player, game_master, *args)
-            
-        except (RiskGameError, ValueError, TypeError, IndexError, KeyError) as e:
-            risk.logger.error(str(e))
-            if command.__doc__:
-                print "usage: %s" % command.__doc__
-            else:
-                print command
-                print user_input
-                print args
-                risk.logger.warn("%s syntax error and no usage. "\
-                    "User input: '%s', args: '%s'" % 
-                    (command, user_input, args))
+def execute_command(command, player, game_master, *args):
+    try:
+        command(player, game_master, *args)
+ 
+    except (RiskGameError, ValueError, TypeError, IndexError, KeyError) as e:
+        risk.logger.error(str(e))
+        if command.__doc__:
+            print "usage: %s" % command.__doc__
+        else:
+            print command
+            print user_input
+            print args
+            risk.logger.warn("%s syntax error and no usage. "\
+                "User input: '%s', args: '%s'" % 
+                (command, user_input, args))
             
 def prompt_choose_territory(availables):
     print "Available territories: "
