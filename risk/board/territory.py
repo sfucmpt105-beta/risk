@@ -27,6 +27,36 @@ class Territory(object):
         # TODO check for valid number of armies
         self.armies = number_of_armies
 
+    def closest_enemy_distance(self):
+        # Breadth first search
+        # note that each entry in the to_visit queue is (node_to_visit, path)
+        # so that we can measure distance when we find closest enemy territory
+        # -1 represents infinite distance
+        # n >= 0 means distance from this node
+        NOT_FOUND = -1
+        visited = Set()
+        to_visit = [(self, [])]
+        closest = None
+        while len(to_visit) > 0 and not closest:
+            visiting = to_visit.pop()
+            visited.add(visiting[0])
+            if visiting[0].owner != self.owner:
+                closest = visiting
+            else:
+                for neighbour in visiting[0].neighbours.values():
+                    if not neighbour in visited:
+                        to_visit.append(
+                                (neighbour, visiting[1] + [visiting[0]]))
+        if not closest:
+            return NOT_FOUND
+        else:
+            return len(closest[1])
+
+    def is_connected(self, target):
+        # naive depth first search
+        # warning, this operation is VERY expensive!
+        return Territory._graph_connection_search(self, target, Set([self]))
+
     def __str__(self):
         return  "[%s]\n" \
                 "Owner: %s\n" \
@@ -36,6 +66,22 @@ class Territory(object):
 
     def __repr__(self):
         return self.name
+
+    @staticmethod
+    def _graph_connection_search(current, target, visited):
+        if current == target:
+            return True
+        else:
+            found = False
+            neighbours = filter(lambda x: x.owner == current.owner and \
+                                not x in visited,
+                                current.neighbours.values())
+            while len(neighbours) > 0 and not found:
+                next_node = neighbours.pop()
+                visited.add(next_node)
+                found = Territory._graph_connection_search( \
+                        next_node, target, visited)
+            return found
 
 class ContinentBuilder(object):
     def __init__(self, tag):
