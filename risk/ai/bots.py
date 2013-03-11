@@ -66,8 +66,7 @@ class CurtisRiskBot(BasicRiskBot):
     def __init__(self, title):
         BasicRiskBot.__init__(self, "Curtis Bot[$s]" %title)
 
-    def take_turn(self, game_master)
+    def take_turn(self, game_master):
         self.deploy_reserves(game_master)
 
     def deploy_reserves(self, game_master):
-        
