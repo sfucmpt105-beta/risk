@@ -36,11 +36,13 @@ def next_info(player, game_master):
 def attack_info(player, game_master, target_name, _, origin_name):
     """
     attack [target] from [origin]   - attack [target] from [origin], "from" is
-                                      needed in the command
+                                      needed in the command, player must own origin
     """
+    print player.name
     success = game_master.player_attack(player, origin_name, target_name)
     if success:
         print "successfully attacked %s!" % target_name
+        player.move_after_attack(game_master, origin_name, target_name)
     else:
         print "failed to attack %s... %s reduced to 1 army" % \
             (target_name, origin_name)
@@ -115,26 +117,29 @@ def prompt_user(player, game_master, available_commands,
         try:    # verifies that it is a valid command in the list
             user_input, args = risk_input('Please type a command')
             command = available_commands[user_input]
-            command(player, game_master, *args)
+            execute_command(command, player, game_master, *args)
         except KeyError:
             risk.logger.error('%s is not a valid command in the ' \
                     'reinforcement stage' % user_input)
         
             risk.logger.debug(available_commands.keys())
             print 'invalid command'
-        except (RiskGameError, ValueError, TypeError, IndexError) as e:
-            risk.logger.error(str(e))
-            if not command:
-                help_info(player, game_master)
-            elif command.__doc__:
-                print "usage: %s" % command.__doc__
-            else:
-                print command
-                print user_input
-                print args
-                risk.logger.warn("%s syntax error and no usage. "\
-                    "User input: '%s', args: '%s'" % 
-                    (command, user_input, args))
+
+def execute_command(command, player, game_master, *args):
+    try:
+        command(player, game_master, *args)
+ 
+    except (RiskGameError, ValueError, TypeError, IndexError, KeyError) as e:
+        risk.logger.error(str(e))
+        if command.__doc__:
+            print "usage: %s" % command.__doc__
+        else:
+            print command
+            print user_input
+            print args
+            risk.logger.warn("%s syntax error and no usage. "\
+                "User input: '%s', args: '%s'" % 
+                (command, user_input, args))
             
 def prompt_choose_territory(availables):
     print "Available territories: "
