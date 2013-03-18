@@ -245,7 +245,8 @@ class GameMaster(object):
             raise TerritoryNotOwnedByPlayer(origin_territory, player)
         elif destination_territory.owner != player:
             raise TerritoryNotOwnedByPlayer(destination_territory, player)
-        elif number_of_armies >= origin_territory or number_of_armies < 1:
+        elif number_of_armies >= origin_territory.armies or \
+                number_of_armies < 1:
             raise MoveRangeError(number_of_armies)
         elif not origin_territory.is_connected(destination_territory):
             raise NotConnected(origin_territory, destination_territory)

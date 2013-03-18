@@ -20,9 +20,11 @@ from risk.graphics.datastore import Datastore
 from risk.graphics.picasso import get_picasso
 from risk.graphics.assets.player import *
 from risk.graphics.assets.territory import TerritoryAsset
+from risk.graphics.assets.dialog import BlockingNumericDialogAsset
 
 LAYER = '5_player_feedback'
 INPUT_POLL_SLEEP = 0.1
+MAX_INPUT_LENGTH = 3
 
 def get_clicked_territories(mouse_pos):
     return graphics.pressed_clickables(mouse_pos, 'territories')
@@ -119,7 +121,24 @@ def attack_choose_target(player, game_master, origin):
         picasso.remove_asset(LAYER, feedback_asset)
 
 def attack_success_move_armies(player, game_master, origin, target):
-    game_master.player_move_armies(player, origin.name, target.name, 1)
+    picasso = get_picasso()
+    dialog = BlockingNumericDialogAsset(400, 300, 
+            'Enter the number of armies to move')
+    picasso.add_asset(LAYER, dialog)
+    done = False
+    while not done:
+        number_to_move = dialog.get_user_key_input(INPUT_POLL_SLEEP, 1)
+        try:
+            game_master.player_move_armies(player, origin.name, target.name,
+                    number_to_move)
+            done = True
+        except GameMasterError as e:
+            print e
+            dialog.reset()
+        except ValueError:
+            # we really shouldn't get a parsing error from numeric dialog
+            raise 
+    picasso.remove_asset(LAYER, dialog)
 
 def attack_failed(player, game_master, origin, target):
     pass
@@ -143,10 +162,17 @@ def fortify_phase(player, game_master):
                 done = True
 
 def fortify_choose_target(player, game_master, origin):
+    picasso = get_picasso()
+    dialog = BlockingNumericDialogAsset(400, 300, 
+            'Enter the number of armies to move')
     try:
         target = wait_for_territory_click().territory
-        game_master.player_move_armies(player, origin.name, target.name, 1)
+        picasso.add_asset(LAYER, dialog)
+        armies_to_move = dialog.get_user_key_input(INPUT_POLL_SLEEP)
+        game_master.player_move_armies(player, origin.name,
+                target.name, armies_to_move)
+        done = True
     except GameMasterError:
         pass
-    finally:
-        pass
+    picasso.remove_asset(LAYER, dialog)
+
