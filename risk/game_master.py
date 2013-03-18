@@ -9,6 +9,7 @@ import risk.board
 
 from risk.ai import BasicRiskBot
 from risk.errors.game_master import *
+from risk.errors.battle import *
 from risk.player import HumonRiskPlayer
 
 class GameMaster(object):
@@ -246,8 +247,8 @@ class GameMaster(object):
             raise TerritoryNotOwnedByPlayer(destination_territory, player)
         elif number_of_armies >= origin_territory or number_of_armies < 1:
             raise MoveRangeError(number_of_armies)
-        elif not origin_territory.is_neighbour(destination_territory):
-            raise NotNeighbours(origin_territory, destination_territory)
+        elif not origin_territory.is_connected(destination_territory):
+            raise NotConnected(origin_territory, destination_territory)
         else:
             origin_territory.armies -= number_of_armies
             destination_territory.armies += number_of_armies
