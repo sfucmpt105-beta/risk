@@ -8,6 +8,7 @@ from risk.errors.game_master import *
 
 from risk.commands import reinforce_commands
 from risk.commands import attack_commands
+from risk.commands import fortify_commands
 
 class AbstractRiskPlayer(object):
     def __init__(self, name):
@@ -40,7 +41,10 @@ class HumonRiskPlayer(AbstractRiskPlayer):
                     game_master.player_territories(self))
             commands.prompt_user(self, game_master, 
                     reinforce_commands, HumonRiskPlayer._no_more_reserves)
+        print "Attack phase, next to enter fortification phase"
         commands.prompt_user(self, game_master, attack_commands)
+        print "Fortification phase, next to end turn"
+        commands.prompt_user(self, game_master, fortify_commands)
 
     def choose_territory(self, availables):
         print "%s's turn..." % self.name

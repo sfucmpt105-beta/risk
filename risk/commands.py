@@ -57,9 +57,6 @@ def fortify_info(player, game_master, destination_territory_name, _, armies, _2,
     print "%s now has: %s armies" %(origin_territory_name, origin_armies)
     print "%s now has: %s armies" %(destination_territory_name, destination_armies)
     
-def print_info(player, game_master):
-    print 'print'
-
 def map_info(player, game_master, continent=None):
     """
     map                             - print ascii map for entire board
@@ -91,10 +88,18 @@ attack_commands = {
     'next':         next_info,
     'attack':       attack_info,
     'fortify':      fortify_info,
-    'print':        print_info,
     'quit':         quit_game,
     'map':          map_info,
     }
+
+fortify_commands = {
+    'help':         help_info,
+    'status':       status_info,
+    'next':         next_info,
+    'fortify':      fortify_info,
+    'quit':         quit_game,
+    'map':          map_info,
+}
 
 reinforce_commands = {
     'help':         help_info,
