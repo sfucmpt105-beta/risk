@@ -10,6 +10,7 @@ import risk.graphics.picasso
 import risk.graphics.assets.text
 import risk.graphics.assets.clickable
 import risk.graphics.assets.territory
+import risk.graphics.assets.dialog
 from risk.logger import *
 from risk.graphics import assets
 from risk.graphics.datastore import Datastore
@@ -134,6 +135,9 @@ def initialize_other_graphic_assets(picasso, game_master):
     feedback_asset = assets.text.TextAsset(100, 650, 
             'choose territory to attack')
     datastore.add_entry('attack_feedback', feedback_asset)
+    
+    dialog_asset = assets.dialog.DialogAsset(200, 650, 'ADASDASD')
+    datastore.add_entry('fortify_dialog', dialog_asset)
     
 def add_buttons(picasso):
     datastore = Datastore()
