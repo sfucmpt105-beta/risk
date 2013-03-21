@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python2
 # std
 import argparse
@@ -21,7 +22,7 @@ def app_setup():
     parser.add_argument('--verbose', '-v', action='count',
                         help='extra output', default=risk.logger.LEVEL_DEBUG)
     parser.add_argument('--gui', '-g', action='store_true',
-                        help='gui version of game', default=False)
+                        help='gui version of game', default=True)
     settings = parser.parse_args()
     risk.logger.LOG_LEVEL = settings.verbose
     return settings
