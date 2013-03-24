@@ -46,6 +46,7 @@ class TerritoryAsset(ClickableAsset):
         self.last_known_owner = None
         self.highlighted = False
         surface = pygame.image.load(image_path).convert_alpha()
+        ClickableAsset.__init__(self, x, y, 0, 0, "")
         PicassoAsset.__init__(self, surface, x, y)
      
     def mouse_hovering(self, mouse_pos=None):

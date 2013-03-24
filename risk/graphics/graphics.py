@@ -136,9 +136,6 @@ def initialize_other_graphic_assets(picasso, game_master):
             'choose territory to attack')
     datastore.add_entry('attack_feedback', feedback_asset)
     
-    dialog_asset = assets.dialog.DialogAsset(200, 650, 'ADASDASD')
-    datastore.add_entry('fortify_dialog', dialog_asset)
-    
 def add_buttons(picasso):
     datastore = Datastore()
     next_button = assets.clickable.ClickableAsset(
