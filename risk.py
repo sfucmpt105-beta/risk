@@ -90,8 +90,6 @@ def run_game(game_master):
         game_master.end_game()
     risk.logger.debug('User quit the game!')
 
-    # im stupid
-
 def run_turn(game_master):
     risk.logger.debug('Current player is: %s' % 
                       game_master.current_player().name)

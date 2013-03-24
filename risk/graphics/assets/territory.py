@@ -21,12 +21,12 @@ def build_territory_asset(continent, territory, x, y):
 def build_player_colour_mapping(players):
     overflow_colour = base.BLACK
     colours = [
-        base.RED,
-        base.GREEN,
-        base.BLUE,
-        base.YELLOW,
+        base.BROWN,
         base.PURPLE,
         base.ORANGE,
+        base.YELLOW,
+        base.GREEN,
+        base.RED,
     ]
     risk.logger.debug("assigning player colours...")
     TerritoryAsset.mapping = {}
@@ -77,15 +77,12 @@ class TerritoryAsset(ClickableAsset):
         return self.surface
         
     def _highlighted_surface(self):
-        highlight_factor = 120
+        highlight_factor = 1.5
         if self.dirty():
             barray = pygame.surfarray.pixels3d(self._normal_surface())
-            if 255 - barray[:,:,0][0][0] >= highlight_factor:
-                barray[:,:,0] += highlight_factor
-            if 255 - barray[:,:,1][0][0] >= highlight_factor:
-                barray[:,:,1] += highlight_factor
-            if 255 - barray[:,:,2][0][0] >= highlight_factor:
-                barray[:,:,2] += highlight_factor
+            barray[:,:,0] = min(barray[:,:,0][0][0] * highlight_factor, 255)
+            barray[:,:,1] = min(barray[:,:,1][0][0] * highlight_factor, 255)
+            barray[:,:,2] = min(barray[:,:,2][0][0] * highlight_factor, 255)
             self.highlighted = True
         return self.surface
 

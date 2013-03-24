@@ -4,12 +4,12 @@ from pygame import Surface
 BLACK = (0, 0, 0)
 BROWN = (139, 69, 19)
 WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-YELLOW = (255, 255, 0)
-PURPLE = (128, 0, 128)
-ORANGE = (255, 165, 0)
+RED = (178, 34, 34)
+GREEN = (0, 51, 25)
+BLUE = (0, 51, 102)
+YELLOW = (204, 204, 0)
+PURPLE = (102, 0, 102)
+ORANGE = (204, 102, 0)
 
 class PicassoAsset(Surface):
     def __init__(self, surface, x, y):
