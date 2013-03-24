@@ -92,17 +92,17 @@ class GameMaster(object):
     def add_end_action_callback(self, callback):
         self.callbacks['end_action'].append(callback)
 
-    def generate_players(self, number_of_human_players, gui=False):
+    def generate_players(self, number_of_human_players, cli=False):
         risk.logger.debug("Generating %s human players" % \
             number_of_human_players)
 
         for i in xrange(number_of_human_players):
-            if gui:
+            if cli:
+                self.players.append(HumonRiskPlayer("Human %s" % i))
+            else:
                 from risk.graphics import player
                 self.players.append(
                     risk.graphics.player.HumonGuiRiskPlayer("GHuman %s" % i))
-            else:
-                self.players.append(HumonRiskPlayer("Human %s" % i))
 
         risk.logger.debug("Generating %s bots" % \
             (self._num_players - number_of_human_players))
