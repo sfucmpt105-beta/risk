@@ -2,12 +2,16 @@
 # std
 import argparse
 import sys
+import os
 # user
 import risk
 import risk.logger
 import risk.game_master
 from risk import board
 from risk.game_master import GameMaster
+
+# fixes the pathing so that the game doesn't need to be run from root
+os.path.join(os.path.dirname(__file__))
 
 # exit codes
 _EXIT_BAD_ARGS = -1

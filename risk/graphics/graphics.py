@@ -10,6 +10,7 @@ import risk.graphics.picasso
 import risk.graphics.assets.text
 import risk.graphics.assets.clickable
 import risk.graphics.assets.territory
+import risk.graphics.assets.dialog
 from risk.logger import *
 from risk.graphics import assets
 from risk.graphics.datastore import Datastore
