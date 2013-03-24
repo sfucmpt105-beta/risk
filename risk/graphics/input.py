@@ -16,6 +16,7 @@ from risk.errors.input import UserQuitInput
 from risk.errors.game_master import GameMasterError
 from risk.errors.battle import RiskBattleError
 
+from risk.graphics.event import wait_for_event, get_events
 from risk.graphics.datastore import Datastore
 from risk.graphics.picasso import get_picasso
 from risk.graphics.assets.player import *
@@ -24,7 +25,7 @@ from risk.graphics.assets.territory import TerritoryAsset
 from risk.graphics.assets.dialog import BlockingSliderDialogAsset
 
 LAYER = '5_player_feedback'
-INPUT_POLL_SLEEP = 0.1
+INPUT_POLL_SLEEP = 0.01
 MAX_INPUT_LENGTH = 3
 
 def slider_update(dialog, origin, target):
@@ -52,13 +53,11 @@ def handle_user_mouse_input(game_master, state_entry):
 
 def scan_pygame_mouse_event():
     _WAITING_FOR_INPUT = True
+    
     while _WAITING_FOR_INPUT:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                raise UserQuitInput()
-            elif event.type == pygame.MOUSEBUTTONUP:
-                return event
-        time.sleep(INPUT_POLL_SLEEP)
+        event = wait_for_event()
+        if event.type == pygame.MOUSEBUTTONUP:
+            return event
 
 def wait_for_territory_click():
     _NO_TERRITORY_CLICKED = True

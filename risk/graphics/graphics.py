@@ -11,8 +11,10 @@ import risk.graphics.assets.text
 import risk.graphics.assets.clickable
 import risk.graphics.assets.territory
 import risk.graphics.assets.dialog
+
 from risk.logger import *
 from risk.graphics import assets
+from risk.graphics.event import wait_for_event, get_events
 from risk.graphics.datastore import Datastore
 from risk.graphics.picasso import get_picasso
 from risk.graphics.assets.territory import build_territory_asset
@@ -171,7 +173,7 @@ def check_picasso_liveness(game_master):
 
 def check_gui_quit_event(game_master):
     if not is_human_player(game_master):
-        for event in pygame.event.get():
+        for event in get_events():
             if event.type == pygame.QUIT:
                 game_master.end_game()
 
