@@ -19,12 +19,25 @@ from risk.errors.battle import RiskBattleError
 from risk.graphics.datastore import Datastore
 from risk.graphics.picasso import get_picasso
 from risk.graphics.assets.player import *
+from risk.graphics.assets.text import TextAsset
 from risk.graphics.assets.territory import TerritoryAsset
-from risk.graphics.assets.dialog import BlockingNumericDialogAsset
+from risk.graphics.assets.dialog import BlockingSliderDialogAsset
 
 LAYER = '5_player_feedback'
 INPUT_POLL_SLEEP = 0.1
 MAX_INPUT_LENGTH = 3
+
+def slider_update(dialog, origin, target):
+    datastore = Datastore()
+    if not hasattr(dialog, 'show_origin_armies'):
+        dialog.show_origin_armies = dialog.add_text(40, 70, 'origin')
+        
+    if not hasattr(dialog, 'show_target_armies'):
+        dialog.show_target_armies = dialog.add_text(240, 70, 'target')
+
+    dialog.show_origin_armies.render_text("origin: %s" % 
+            (origin.armies - dialog.current))
+    dialog.show_target_armies.render_text("target: %s" % dialog.current)
 
 def get_clicked_territories(mouse_pos):
     return graphics.pressed_clickables(mouse_pos, 'territories')
@@ -36,7 +49,7 @@ def handle_user_mouse_input(game_master, state_entry):
     player = game_master.current_player()
     state_entry(player, game_master)
     #scan_pygame_mouse_event(player, game_master, state_entry)
-    
+
 def scan_pygame_mouse_event():
     _WAITING_FOR_INPUT = True
     while _WAITING_FOR_INPUT:
@@ -122,12 +135,14 @@ def attack_choose_target(player, game_master, origin):
 
 def attack_success_move_armies(player, game_master, origin, target):
     picasso = get_picasso()
-    dialog = BlockingNumericDialogAsset(400, 300, 
-            'Enter the number of armies to move')
+    dialog = BlockingSliderDialogAsset(400, 300, 'Attack Move', 1, 
+            origin.armies, slider_update, [origin, target])
+    dialog.add_text(16, 16, "Attack was successful!")
+    dialog.add_text(16, 32, "How many armies to move?")
     picasso.add_asset(LAYER, dialog)
     done = False
     while not done:
-        number_to_move = dialog.get_user_key_input(INPUT_POLL_SLEEP, 1)
+        number_to_move = dialog.get_result(INPUT_POLL_SLEEP)
         try:
             game_master.player_move_armies(player, origin.name, target.name,
                     number_to_move)
@@ -162,17 +177,23 @@ def fortify_phase(player, game_master):
                 done = True
 
 def fortify_choose_target(player, game_master, origin):
+    target = wait_for_territory_click().territory
+    if target.owner == player and origin.is_connected(target):
+        fortify_choose_armies_to_move(player, game_master, origin, target)
+    else:
+        pass
+
+def fortify_choose_armies_to_move(player, game_master, origin, target):
     picasso = get_picasso()
-    dialog = BlockingNumericDialogAsset(400, 300, 
-            'Enter the number of armies to move')
+    dialog = BlockingSliderDialogAsset(400, 300, 'Fortify', 0, origin.armies,
+            slider_update, [origin, target])
+    dialog.add_text(16, 16, "Fortifying...")
+    dialog.add_text(16, 35, "Select amount of armies to move")
     try:
-        target = wait_for_territory_click().territory
         picasso.add_asset(LAYER, dialog)
-        armies_to_move = dialog.get_user_key_input(INPUT_POLL_SLEEP)
-        game_master.player_move_armies(player, origin.name,
-                target.name, armies_to_move)
-        done = True
-    except GameMasterError:
+        number_to_move = dialog.get_result(INPUT_POLL_SLEEP)
+        game_master.player_move_armies(player, origin.name, 
+                target.name, number_to_move)
+    except GameMasterError as e:
         pass
     picasso.remove_asset(LAYER, dialog)
-
