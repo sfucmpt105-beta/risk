@@ -4,6 +4,8 @@ import pygame
 import risk
 import risk.graphics.assets
 
+from risk.graphics.event import wait_for_event
+from risk.graphics.event import pump
 from risk.graphics.assets.base import BLACK, BROWN, WHITE
 from risk.graphics.assets.base import PicassoAsset
 from risk.graphics.assets.text import TextAsset
@@ -120,14 +122,13 @@ class BlockingSliderDialogAsset(DialogAsset):
     def get_result(self, poll_sleep):
         done = False
         while not done:
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN and \
-                        self.slider.mouse_hovering(event.pos):
-                    self.drag_slider(poll_sleep)
-                elif event.type == pygame.MOUSEBUTTONUP and \
-                        self.finished_button.mouse_hovering(event.pos):
-                    done = True
-            time.sleep(poll_sleep)
+            event = wait_for_event()
+            if event.type == pygame.MOUSEBUTTONDOWN and \
+                    self.slider.mouse_hovering(event.pos):
+                self.drag_slider(poll_sleep)
+            elif event.type == pygame.MOUSEBUTTONUP and \
+                    self.finished_button.mouse_hovering(event.pos):
+                done = True
         return self.current
 
     def reset(self):
@@ -152,6 +153,7 @@ class BlockingSliderDialogAsset(DialogAsset):
         base = self.bar_start[0] - (self.SLIDER_WIDTH / 2)
         interval = (self.range_max - self.range_min - 1) / self.bar_width
         while pygame.mouse.get_pressed()[0]:
+            pump()
             new_x = pygame.mouse.get_pos()[0] - self.x
             new_x = max(new_x, base)
             new_x = min(new_x, base + self.bar_width)
@@ -159,4 +161,4 @@ class BlockingSliderDialogAsset(DialogAsset):
             self.slider.force_highlight = True
             self.current = self.range_min + int(((new_x - base) * interval))
             time.sleep(poll_sleep)
-        self.force_highlight = False
+        self.slider.force_highlight = False
