@@ -5,8 +5,10 @@ import risk
 import risk.logger
 from risk.graphics import assets
 from risk.graphics.assets.base import PicassoAsset
+_FONT = 'resources/Vera.ttf'
 
 class TextAsset(PicassoAsset):
+
     def __init__(self, x, y, msg, colour=assets.base.BLACK, size=32):
         self.colour = colour
         self.size = size
@@ -14,9 +16,9 @@ class TextAsset(PicassoAsset):
         self.render_text(msg)
 
     def render_text(self, msg):
-        font = Font(None, self.size)
+        font = Font(_FONT, self.size)
         self.surface = font.render(msg, False, self.colour)
-        
+
 class CurrentPlayerAsset(TextAsset):
     def __init__(self, x, y, game_master):
         self.game_master = game_master

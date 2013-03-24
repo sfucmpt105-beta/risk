@@ -4,67 +4,159 @@ import pygame
 import risk
 import risk.graphics.assets
 
-from risk.graphics.assets.base import BROWN
+from risk.graphics.assets.base import BLACK, BROWN, WHITE
 from risk.graphics.assets.base import PicassoAsset
 from risk.graphics.assets.text import TextAsset
+from risk.graphics.assets.clickable import ClickableAsset
 
 class DialogAsset(PicassoAsset):
-    def __init__(self, x, y, msg, width=400, height=200, colour=BROWN):
-        self.text_asset = TextAsset(0, 0, msg)
+    _BORDER_PIXELS = 5
+    _TITLE_HEIGHT_PIXELS = 25
+
+    def __init__(self, x, y, title, width=400, height=200, colour=BROWN):
         self.colour = colour
         self.background = pygame.Surface((width, height))
+        self.width = width
+        self.height = height
+        self.title = TextAsset(
+            self._BORDER_PIXELS + 5,
+            self._BORDER_PIXELS,
+            title,
+            size=18,
+        ) 
+        self.assets = []
         PicassoAsset.__init__(self, None, x, y)
 
     def draw(self):
-        self.background.fill(self.colour)
-        self.background.blit(self.text_asset.draw(), (10, 10))
+        self.background.fill(BLACK)
+        pygame.draw.rect(self.background, self.colour, pygame.Rect(
+            self._BORDER_PIXELS, self._BORDER_PIXELS, 
+            self.width - 2 * self._BORDER_PIXELS,
+            self.height - 2 * self._BORDER_PIXELS,
+        ))
+        pygame.draw.line(self.background, BLACK, 
+            (0, self._TITLE_HEIGHT_PIXELS),
+            (self.width, self._TITLE_HEIGHT_PIXELS),
+            self._BORDER_PIXELS,
+        )
+        self.background.blit(self.title.draw(), self.title.get_coordinate())
+        assets = list(self.assets)
+        for asset in assets:
+            self.background.blit(asset.draw(), (asset.x, 
+                self._TITLE_HEIGHT_PIXELS + asset.y
+            ))
         return self.background
 
-    def set_text(self, msg):
-        self.text_asset.render_text(msg)
+    def add_text(self, rel_x, rel_y, text, size=18):
+        new_asset = TextAsset(rel_x, rel_y, text, size=size)
+        self.assets.append(new_asset)
+        return new_asset
 
     def finished(self):
         return True
 
-class BlockingNumericDialogAsset(DialogAsset):
+# TODO we *might* have problems due to slider imprecesion, but should be 
+# fine for smaller numbers
+class BlockingSliderDialogAsset(DialogAsset):
     MAX_LENGTH = 3
+    BAR_REL_BOTTOM = 60
+    BAR_WIDTH_RATIO = 0.90
+    SLIDER_WIDTH = 10
+    SLIDER_HEIGHT = 20
+    FINISHED_WIDTH = 70
+    FINISHED_HEIGHT = 20
+    FINISHED_REL_BOTTOM = 50
 
-    def __init__(self, x, y, msg):
-        self.user_input_asset = TextAsset(0, 0, '')
+    def __init__(self, x, y, title, range_min, range_max, 
+            update_callback=None, callback_args=[]):
+        #self.user_input_asset = TextAsset(0, 0, '')
+        DialogAsset.__init__(self, x, y, title)
+
+        self.range_min = range_min
+        self.range_max = range_max
+        self.current = range_min
+        self.update_callback = update_callback
+        self.callback_args = callback_args
+
+        self.bar_width = self.width * self.BAR_WIDTH_RATIO
+        self.bar_start = (
+            ((self.width - self.bar_width) / 2, self.height -
+                self.BAR_REL_BOTTOM))
+
+        slider_x = self.bar_start[0] - (self.SLIDER_WIDTH / 2)
+        slider_y = self.bar_start[1] - (self.SLIDER_HEIGHT / 2)
+        self.slider = ClickableAsset(slider_x, slider_y, 
+            self.SLIDER_WIDTH, self.SLIDER_HEIGHT, "", bg_colour=BLACK, 
+            highlight_bg=WHITE)
+        self.slider.offset_x = self.x
+        self.slider.offset_y = self.y
+
+        button_x, button_y = self.calculate_finished_button_pos()
+        self.finished_button = ClickableAsset(button_x, button_y, 
+            self.FINISHED_WIDTH, self.FINISHED_HEIGHT, "DONE",
+            bg_colour=BLACK, highlight_bg=WHITE, text_colour=WHITE,
+            highlight_text=BLACK)
+        self.finished_button.offset_x = self.x
+        self.finished_button.offset_y = self.y
+
         self.reset()
-        DialogAsset.__init__(self, x, y, msg)
 
     def draw(self):
         background = DialogAsset.draw(self)
-        background.blit(self.user_input_asset.draw(), (150, 150))
+        pygame.draw.line(
+            background, BLACK,
+            self.bar_start,
+            (self.bar_start[0] + self.bar_width, self.bar_start[1]),
+            5,
+        )
+        background.blit(self.slider.draw(), self.slider.get_coordinate())
+        background.blit(self.finished_button.draw(), 
+            self.finished_button.get_coordinate())
+        if self.update_callback:
+            self.update_callback(self, *self.callback_args)
+        #background.blit(self.user_input_asset.draw(), (150, 150))
         return background
 
-    # TODO argh, clean this up!
-    def get_user_key_input(self, poll_sleep, default=0):
+    def get_result(self, poll_sleep):
         done = False
         while not done:
             for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    key = str(event.unicode)
-                    if self.is_numeric(key) and len(self.user_input) < \
-                            BlockingNumericDialogAsset.MAX_LENGTH:
-                        self.user_input += key
-                        self.user_input_asset.render_text(self.user_input)
-                    elif event.key == pygame.K_BACKSPACE and \
-                            len(self.user_input) > 0:
-                        self.user_input = self.user_input[:-1]
-                        self.user_input_asset.render_text(self.user_input)
-                    elif event.key == pygame.K_RETURN:
-                        done = True
+                if event.type == pygame.MOUSEBUTTONDOWN and \
+                        self.slider.mouse_hovering(event.pos):
+                    self.drag_slider(poll_sleep)
+                elif event.type == pygame.MOUSEBUTTONUP and \
+                        self.finished_button.mouse_hovering(event.pos):
+                    done = True
             time.sleep(poll_sleep)
-        if len(self.user_input) > 0:
-            return int(self.user_input)
-        else:
-            return 0
+        return self.current
 
     def reset(self):
         self.user_input = '' 
-        self.user_input_asset.render_text(self.user_input)
+        #self.user_input_asset.render_text(self.user_input)
         
     def is_numeric(self, char):
         return '0' <= char <= '9'
+
+    def calculate_slider_rect(self):
+        x = self.bar_start[0] + (self.current / self.bar_width) - \
+            (self.SLIDER_WIDTH / 2)
+        y = self.bar_start[1] - (self.SLIDER_HEIGHT / 2)
+        return pygame.Rect(x, y, self.SLIDER_WIDTH, self.SLIDER_HEIGHT)
+
+    def calculate_finished_button_pos(self):
+        x = (self.width - self.FINISHED_WIDTH) / 2
+        y = self.height - self.FINISHED_REL_BOTTOM + (self.FINISHED_HEIGHT / 2)
+        return x, y
+
+    def drag_slider(self, poll_sleep):
+        base = self.bar_start[0] - (self.SLIDER_WIDTH / 2)
+        interval = (self.range_max - self.range_min - 1) / self.bar_width
+        while pygame.mouse.get_pressed()[0]:
+            new_x = pygame.mouse.get_pos()[0] - self.x
+            new_x = max(new_x, base)
+            new_x = min(new_x, base + self.bar_width)
+            self.slider.x = new_x
+            self.slider.force_highlight = True
+            self.current = self.range_min + int(((new_x - base) * interval))
+            time.sleep(poll_sleep)
+        self.force_highlight = False
