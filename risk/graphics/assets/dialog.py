@@ -142,7 +142,7 @@ class BlockingSliderDialogAsset(DialogAsset):
                 if self.slider.mouse_hovering(event.pos):
                     self.drag_slider(poll_sleep)
                 elif self.title.mouse_hovering(event.pos):
-                    self.drag_dialog(poll_sleep)
+                    self.drag_dialog()
             elif event.type == pygame.MOUSEBUTTONUP and \
                     self.finished_button.mouse_hovering(event.pos):
                 done = True
@@ -187,8 +187,11 @@ class BlockingSliderDialogAsset(DialogAsset):
             pump()
         self.slider.force_highlight = False
 
-    def drag_dialog(self, poll_sleep):
+    def drag_dialog(self):
+        # pygame doesn't properly set relative position on first call for some
+        # reason...
         pygame.mouse.get_rel()
+        self.title.force_highlight = True
         while pygame.mouse.get_pressed()[0]:
             mouse_delta = pygame.mouse.get_rel()
             new_x = max(self.x + mouse_delta[0], 0)
@@ -198,6 +201,7 @@ class BlockingSliderDialogAsset(DialogAsset):
             new_y = min(new_y, get_picasso().get_height() - self.height)
 
             self.move_to(new_x, new_y)
-            time.sleep(poll_sleep)
+            time.sleep(0)
             pump()
+        self.title.force_highlight = False
 
