@@ -14,25 +14,32 @@ class ClickableAsset(PicassoAsset):
             highlight_text=base.WHITE, highlight_bg=base.BLACK,
             offset_x=0, offset_y=0):
 
-        font = Font(_FONT, size)
         self.normal = pygame.Surface((width, height))
         self.normal.fill(bg_colour)
-        self.normal.blit(font.render(msg, False, text_colour), (0, 0))
-    
+
+        font = Font(_FONT, size)
+        font_width, font_height = font.size(msg)
+        font_x = (width - font_width) / 2
+        font_y = (height - font_height) / 2
+
+        self.normal.blit(font.render(msg, False, text_colour), 
+                                    (font_x, font_y))
+
         self.highlighted = pygame.Surface((width, height))
         self.highlighted.fill(highlight_bg)
-        self.highlighted.blit(font.render(msg, False, highlight_text), (0, 0))
+        self.highlighted.blit(font.render(msg, False, highlight_text), 
+                                        (font_x, font_y))
 
         self.offset_x = offset_x
         self.offset_y = offset_y
         
         self.force_highlight = False
-        self.disable_highlight = False
+        self.disabled = False
         PicassoAsset.__init__(self, self.normal, x, y)
 
     def draw(self):
-        if (self.mouse_hovering() and not self.disable_highlight) or \
-                self.force_highlight:
+        if not self.disabled and (self.mouse_hovering() or \
+                self.force_highlight):
             return self._highlighted_surface()
         else:
             return self._normal_surface()
@@ -46,7 +53,7 @@ class ClickableAsset(PicassoAsset):
         return self.surface.get_rect().move(
             self.x + self.offset_x, 
             self.y + self.offset_y).collidepoint(
-                mouse_pos)
+                mouse_pos) and not self.disabled
 
     def _normal_surface(self):
         return self.normal
