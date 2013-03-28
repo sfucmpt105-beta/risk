@@ -99,3 +99,9 @@ class Picasso(threading.Thread):
         asset = TextAsset(1050, 16, "%s FPS" % int(self.clock.get_fps()), 
                 (255, 255, 0), 32)
         return asset
+
+    def get_width(self):
+        return self.window.get_width()
+
+    def get_height(self):
+        return self.window.get_height()

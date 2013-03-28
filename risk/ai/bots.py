@@ -61,3 +61,61 @@ class BasicRiskBot(AbstractRiskPlayer):
                     risk.logger.debug("nowhere to attack!")
             else:
                 risk.logger.debug("not enough armies in %s" % name)
+
+class CurtisRiskBot(BasicRiskBot):
+    def __init__(self, title):
+        BasicRiskBot.__init__(self, "Curtis Bot[$s]" %title)
+    
+    def number_of_turns(self):
+        number_of_turns += 1
+        return number_of_turns
+        
+    def take_turn(self, game_master):
+        number_of_turns = self.number_of_turns()
+        self.deploy_reserves(game_master, number_of_turns)
+
+    def deploy_reserves(self, game_master, number_of_turns):
+        self.deploy_order(game_master, number_of_turns, 'north_america')
+        self.deploy_order(game_master, number_of_turns, 'south_america')
+        self.deploy_order(game_master, number_of_turns, 'australia')
+        self.deploy_order(game_master, number_of_turns, 'africa')
+        self.deploy_order(game_master, number_of_turns, 'europe')
+        self.deploy_order(game_master, number_of_turns, 'asia')
+    
+    def number_to_deploy(self, game_master, territory):
+        if territory.armies > self.reserves and self.reserves > 0:
+            game_master.player_add_army(self, territory.name, self.reserves)
+        elif territory.armies <= self.reserves and self.reserves > 0:
+            to_add = 0
+            
+        return number_to_deploy
+        
+    def deploy_order(self, game_master, number_of_turns, continent):
+        continent_owned = 1
+        hit_list = []
+        for territory in game_master.board.continents[continent].values():
+            if self.reserves > 0 and territory.owner != self:
+                continent_owned = 0
+                return hit_list.append(territory.name)
+                    
+        while self.reserves > 0 and continent_owned == 1:
+            if continent == 'north_america':
+                territory = game_master.board.territory['venezuela']
+                if territory.owner != self:
+                    game_master.player_add_army(self, 'central_america', half_of_reserves)
+                territory = game_master.board.territory['iceland']
+                if territory.owner != self:
+                    to_add = 0
+                    
+            
+        if number_of_turns < 10:
+            for territory in game_master.board.continents[continent].values():
+                if self.reserves > 0:
+                    if territory.owner == self:
+                        print self.reserves
+                        game_master.player_add_army(self, territory.name, self.reserves)
+        if number_of_turns > 10:
+            for territory in game_master.board.continents[continent].values():
+                if self.reserves > 0:
+                    if territory.owner != self:
+                        break

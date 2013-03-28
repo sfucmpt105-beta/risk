@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python2
 # std
 import argparse
@@ -24,8 +25,8 @@ def app_setup():
     # dev build defaults to debug for now
     parser.add_argument('--verbose', '-v', action='count',
                         help='extra output', default=risk.logger.LEVEL_DEBUG)
-    parser.add_argument('--cli', '-c', action='store_true',
-                        help='commandline version of game', default=False)
+    parser.add_argument('--gui', '-g', action='store_true',
+                        help='gui version of game', default=True)
     settings = parser.parse_args()
     risk.logger.LOG_LEVEL = settings.verbose
     return settings
@@ -67,7 +68,7 @@ def game_setup(settings):
     game_board = board.generate_empty_board()
     #game_board = board.generate_mini_board()
     game_master = risk.game_master.GameMaster(game_board, settings)
-    game_master.generate_players(_DEV_HUMAN_PLAYERS, settings.cli)
+    game_master.generate_players(_DEV_HUMAN_PLAYERS, settings.gui)
     game_master.add_end_turn_callback(end_turn_debug_print)
     # dev
     board.dev_random_assign_owners(game_master)
@@ -103,7 +104,7 @@ if __name__ == '__main__':
     settings = app_setup()
     risk.logger.debug(settings)
     master = game_setup(settings)
-    if not settings.cli:
+    if settings.gui:
         import risk.graphics
         risk.graphics.init(master)
         master.add_end_game_callback(risk.graphics.shutdown)

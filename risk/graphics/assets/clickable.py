@@ -6,14 +6,15 @@ from pygame.font import Font
 import risk.graphics.assets
 from risk.graphics.assets import base
 from risk.graphics.assets.base import PicassoAsset
+_FONT = 'resources/Vera.ttf'
 
 class ClickableAsset(PicassoAsset):
-    def __init__(self, x, y, width, height, msg, size=32, 
+    def __init__(self, x, y, width, height, msg, size=16, 
             text_colour=base.BLACK, bg_colour=base.WHITE, 
             highlight_text=base.WHITE, highlight_bg=base.BLACK,
             offset_x=0, offset_y=0):
 
-        font = Font(None, size)
+        font = Font(_FONT, size)
         self.normal = pygame.Surface((width, height))
         self.normal.fill(bg_colour)
         self.normal.blit(font.render(msg, False, text_colour), (0, 0))

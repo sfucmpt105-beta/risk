@@ -67,6 +67,20 @@ def wait_for_territory_click():
             if isinstance(clickable, TerritoryAsset):
                 return clickable
 
+def disable_all_territories_and_buttons():
+    datastore = Datastore()
+    for button in datastore.get_storage('buttons').values():
+        button.disable_highlight = True
+    for button in datastore.get_storage('territories').values():
+        button.disable_highlight = True
+
+def enable_all_territories_and_buttons():
+    datastore = Datastore()
+    for button in datastore.get_storage('buttons').values():
+        button.disable_highlight = False
+    for button in datastore.get_storage('territories').values():
+        button.disable_highlight = False
+
 ###############################################################################
 ## Reinforce phase DFA
 #
@@ -138,6 +152,7 @@ def attack_success_move_armies(player, game_master, origin, target):
             origin.armies, slider_update, [origin, target])
     dialog.add_text(16, 16, "Attack was successful!")
     dialog.add_text(16, 32, "How many armies to move?")
+    disable_all_territories_and_buttons()
     picasso.add_asset(LAYER, dialog)
     done = False
     while not done:
@@ -152,6 +167,7 @@ def attack_success_move_armies(player, game_master, origin, target):
         except ValueError:
             # we really shouldn't get a parsing error from numeric dialog
             raise 
+    enable_all_territories_and_buttons()
     picasso.remove_asset(LAYER, dialog)
 
 def attack_failed(player, game_master, origin, target):
@@ -188,11 +204,13 @@ def fortify_choose_armies_to_move(player, game_master, origin, target):
             slider_update, [origin, target])
     dialog.add_text(16, 16, "Fortifying...")
     dialog.add_text(16, 35, "Select amount of armies to move")
+    disable_all_territories_and_buttons()
+    picasso.add_asset(LAYER, dialog)
     try:
-        picasso.add_asset(LAYER, dialog)
         number_to_move = dialog.get_result(INPUT_POLL_SLEEP)
         game_master.player_move_armies(player, origin.name, 
                 target.name, number_to_move)
     except GameMasterError as e:
         pass
+    enable_all_territories_and_buttons()
     picasso.remove_asset(LAYER, dialog)
