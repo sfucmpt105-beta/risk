@@ -12,7 +12,7 @@ from risk.game_master import GameMaster
 
 # fixes the pathing so that the game doesn't need to be run from root
 if '__file__' in globals():
-    root = os.path.dirname(__file__)
+    root = os.path.dirname(__file__) or './'
     os.path.join(root)
     os.chdir(root)
 
