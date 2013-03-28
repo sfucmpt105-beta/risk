@@ -4,6 +4,9 @@ import pygame
 import risk
 import risk.graphics.assets
 
+from risk.graphics.picasso import get_picasso
+from risk.graphics.event import wait_for_event
+from risk.graphics.event import pump
 from risk.graphics.assets.base import BLACK, BROWN, WHITE
 from risk.graphics.assets.base import PicassoAsset
 from risk.graphics.assets.text import TextAsset
@@ -18,12 +21,16 @@ class DialogAsset(PicassoAsset):
         self.background = pygame.Surface((width, height))
         self.width = width
         self.height = height
-        self.title = TextAsset(
-            self._BORDER_PIXELS + 5,
+        self.title = ClickableAsset(
             self._BORDER_PIXELS,
-            title,
-            size=18,
-        ) 
+            self._BORDER_PIXELS,
+            width - 2 * self._BORDER_PIXELS,
+            self._TITLE_HEIGHT_PIXELS - self._BORDER_PIXELS,
+            " == %s == " % title,
+            size=16,
+        )
+        self.title.offset_x = x
+        self.title.offset_y = y
         self.assets = []
         PicassoAsset.__init__(self, None, x, y)
 
@@ -51,6 +58,16 @@ class DialogAsset(PicassoAsset):
         new_asset = TextAsset(rel_x, rel_y, text, size=size)
         self.assets.append(new_asset)
         return new_asset
+
+    def move_to(self, x, y):
+        self.x = x
+        self.y = y
+        self.title.offset_x = x
+        self.title.offset_y = y
+        
+        for asset in self.assets:
+            asset.offset_x = x
+            asset.offset_y = y
 
     def finished(self):
         return True
@@ -120,14 +137,15 @@ class BlockingSliderDialogAsset(DialogAsset):
     def get_result(self, poll_sleep):
         done = False
         while not done:
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN and \
-                        self.slider.mouse_hovering(event.pos):
+            event = wait_for_event()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.slider.mouse_hovering(event.pos):
                     self.drag_slider(poll_sleep)
-                elif event.type == pygame.MOUSEBUTTONUP and \
-                        self.finished_button.mouse_hovering(event.pos):
-                    done = True
-            time.sleep(poll_sleep)
+                elif self.title.mouse_hovering(event.pos):
+                    self.drag_dialog()
+            elif event.type == pygame.MOUSEBUTTONUP and \
+                    self.finished_button.mouse_hovering(event.pos):
+                done = True
         return self.current
 
     def reset(self):
@@ -148,6 +166,13 @@ class BlockingSliderDialogAsset(DialogAsset):
         y = self.height - self.FINISHED_REL_BOTTOM + (self.FINISHED_HEIGHT / 2)
         return x, y
 
+    def move_to(self, x, y):
+        self.slider.offset_x = x
+        self.slider.offset_y = y
+        self.finished_button.offset_x = x
+        self.finished_button.offset_y = y
+        DialogAsset.move_to(self, x, y)
+
     def drag_slider(self, poll_sleep):
         base = self.bar_start[0] - (self.SLIDER_WIDTH / 2)
         interval = (self.range_max - self.range_min - 1) / self.bar_width
@@ -159,4 +184,24 @@ class BlockingSliderDialogAsset(DialogAsset):
             self.slider.force_highlight = True
             self.current = self.range_min + int(((new_x - base) * interval))
             time.sleep(poll_sleep)
-        self.force_highlight = False
+            pump()
+        self.slider.force_highlight = False
+
+    def drag_dialog(self):
+        # pygame doesn't properly set relative position on first call for some
+        # reason...
+        pygame.mouse.get_rel()
+        self.title.force_highlight = True
+        while pygame.mouse.get_pressed()[0]:
+            mouse_delta = pygame.mouse.get_rel()
+            new_x = max(self.x + mouse_delta[0], 0)
+            new_x = min(new_x, get_picasso().get_width() - self.width)
+    
+            new_y = max(self.y + mouse_delta[1], 0)
+            new_y = min(new_y, get_picasso().get_height() - self.height)
+
+            self.move_to(new_x, new_y)
+            time.sleep(0)
+            pump()
+        self.title.force_highlight = False
+

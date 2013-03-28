@@ -16,6 +16,7 @@ from risk.errors.input import UserQuitInput
 from risk.errors.game_master import GameMasterError
 from risk.errors.battle import RiskBattleError
 
+from risk.graphics.event import wait_for_event, get_events
 from risk.graphics.datastore import Datastore
 from risk.graphics.picasso import get_picasso
 from risk.graphics.assets.player import *
@@ -24,7 +25,7 @@ from risk.graphics.assets.territory import TerritoryAsset
 from risk.graphics.assets.dialog import BlockingSliderDialogAsset
 
 LAYER = '5_player_feedback'
-INPUT_POLL_SLEEP = 0.1
+INPUT_POLL_SLEEP = 0.01
 MAX_INPUT_LENGTH = 3
 
 def slider_update(dialog, origin, target):
@@ -52,13 +53,11 @@ def handle_user_mouse_input(game_master, state_entry):
 
 def scan_pygame_mouse_event():
     _WAITING_FOR_INPUT = True
+    
     while _WAITING_FOR_INPUT:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                raise UserQuitInput()
-            elif event.type == pygame.MOUSEBUTTONUP:
-                return event
-        time.sleep(INPUT_POLL_SLEEP)
+        event = wait_for_event()
+        if event.type == pygame.MOUSEBUTTONUP:
+            return event
 
 def wait_for_territory_click():
     _NO_TERRITORY_CLICKED = True
@@ -67,6 +66,20 @@ def wait_for_territory_click():
         for name, clickable in get_clicked_territories(event.pos):
             if isinstance(clickable, TerritoryAsset):
                 return clickable
+
+def disable_all_territories_and_buttons():
+    datastore = Datastore()
+    for button in datastore.get_storage('buttons').values():
+        button.disable_highlight = True
+    for button in datastore.get_storage('territories').values():
+        button.disable_highlight = True
+
+def enable_all_territories_and_buttons():
+    datastore = Datastore()
+    for button in datastore.get_storage('buttons').values():
+        button.disable_highlight = False
+    for button in datastore.get_storage('territories').values():
+        button.disable_highlight = False
 
 ###############################################################################
 ## Reinforce phase DFA
@@ -139,6 +152,7 @@ def attack_success_move_armies(player, game_master, origin, target):
             origin.armies, slider_update, [origin, target])
     dialog.add_text(16, 16, "Attack was successful!")
     dialog.add_text(16, 32, "How many armies to move?")
+    disable_all_territories_and_buttons()
     picasso.add_asset(LAYER, dialog)
     done = False
     while not done:
@@ -153,6 +167,7 @@ def attack_success_move_armies(player, game_master, origin, target):
         except ValueError:
             # we really shouldn't get a parsing error from numeric dialog
             raise 
+    enable_all_territories_and_buttons()
     picasso.remove_asset(LAYER, dialog)
 
 def attack_failed(player, game_master, origin, target):
@@ -189,11 +204,13 @@ def fortify_choose_armies_to_move(player, game_master, origin, target):
             slider_update, [origin, target])
     dialog.add_text(16, 16, "Fortifying...")
     dialog.add_text(16, 35, "Select amount of armies to move")
+    disable_all_territories_and_buttons()
+    picasso.add_asset(LAYER, dialog)
     try:
-        picasso.add_asset(LAYER, dialog)
         number_to_move = dialog.get_result(INPUT_POLL_SLEEP)
         game_master.player_move_armies(player, origin.name, 
                 target.name, number_to_move)
     except GameMasterError as e:
         pass
+    enable_all_territories_and_buttons()
     picasso.remove_asset(LAYER, dialog)
