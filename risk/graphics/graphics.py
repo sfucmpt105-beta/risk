@@ -11,6 +11,7 @@ import risk.graphics.assets.text
 import risk.graphics.assets.clickable
 import risk.graphics.assets.territory
 import risk.graphics.assets.dialog
+import risk.graphics.assets.image
 
 from risk.logger import *
 from risk.graphics import assets
@@ -23,6 +24,7 @@ from risk.graphics.assets.territory import build_player_colour_mapping
 DEFAULT_WIDTH  = 1152
 DEFAULT_HEIGHT = 720
 DEFAULT_BACKGROUND = 'resources/risk_board.png'
+DEFAULT_OVERLAY = 'assets/art/gui/main_borders.png'
 
 buttons = {}
 
@@ -97,6 +99,7 @@ def init(game_master):
     picasso.start()
     debug("picasso subsystem successfully launched!")
     debug("adding basic assets")
+    add_overlay(picasso)
     add_buttons(picasso)
     debug("returning control to main loop")
 
@@ -141,11 +144,17 @@ def initialize_other_graphic_assets(picasso, game_master):
 def add_buttons(picasso):
     datastore = Datastore()
     next_button = assets.clickable.ClickableAsset(
-        100, 500, 100, 100, 'NEXT')
+        1000, 500, 100, 100, 'NEXT')
     datastore.add_entry('next', next_button, 'buttons')
 
     for button in datastore.get_storage('buttons').values():
         picasso.add_asset('1_buttons', button)
+
+def add_overlay(picasso):
+    datastore = Datastore()
+    overlay = assets.image.ImageAsset(0, 0, DEFAULT_OVERLAY)
+    datastore.add_entry('overlay', overlay)
+    picasso.add_asset('999_overlay', overlay)
 
 def show_human_player(game_master):
     layer = 3

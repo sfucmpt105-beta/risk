@@ -25,3 +25,9 @@ class PicassoAsset(Surface):
 
     def _update(self):
         pass
+
+    def get_width(self):
+        return self.surface.get_width()
+
+    def get_height(self):
+        return self.surface.get_height()
