@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python2
 # std
 import argparse
@@ -12,7 +11,10 @@ from risk import board
 from risk.game_master import GameMaster
 
 # fixes the pathing so that the game doesn't need to be run from root
-os.path.join(os.path.dirname(__file__))
+if '__file__' in globals():
+    root = os.path.dirname(__file__) or './'
+    os.path.join(root)
+    os.chdir(root)
 
 # exit codes
 _EXIT_BAD_ARGS = -1
@@ -25,8 +27,8 @@ def app_setup():
     # dev build defaults to debug for now
     parser.add_argument('--verbose', '-v', action='count',
                         help='extra output', default=risk.logger.LEVEL_DEBUG)
-    parser.add_argument('--gui', '-g', action='store_true',
-                        help='gui version of game', default=True)
+    parser.add_argument('--cli', '-c', action='store_true',
+                        help='commandline version of game', default=False)
     settings = parser.parse_args()
     risk.logger.LOG_LEVEL = settings.verbose
     return settings
@@ -68,7 +70,7 @@ def game_setup(settings):
     game_board = board.generate_empty_board()
     #game_board = board.generate_mini_board()
     game_master = risk.game_master.GameMaster(game_board, settings)
-    game_master.generate_players(_DEV_HUMAN_PLAYERS, settings.gui)
+    game_master.generate_players(_DEV_HUMAN_PLAYERS, settings.cli)
     game_master.add_end_turn_callback(end_turn_debug_print)
     # dev
     board.dev_random_assign_owners(game_master)
@@ -91,8 +93,6 @@ def run_game(game_master):
         game_master.end_game()
     risk.logger.debug('User quit the game!')
 
-    # im stupid
-
 def run_turn(game_master):
     risk.logger.debug('Current player is: %s' % 
                       game_master.current_player().name)
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     settings = app_setup()
     risk.logger.debug(settings)
     master = game_setup(settings)
-    if settings.gui:
+    if not settings.cli:
         import risk.graphics
         risk.graphics.init(master)
         master.add_end_game_callback(risk.graphics.shutdown)
