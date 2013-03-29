@@ -119,3 +119,42 @@ class CurtisRiskBot(BasicRiskBot):
                 if self.reserves > 0:
                     if territory.owner != self:
                         break
+                        
+class IanRiskBot(BasicRiskBot):
+    def __init__(self, title):
+        BasicRiskBot.__init__(self, "group bot[%s]" % title)
+
+    def take_turn(self, game_master):
+        self.deploy_reserves(game_master)
+        self.attack_others(game_master)
+
+    def attack_others(self, game_master):
+        territories = game_master.player_territories(self).values()
+        for territory in territories:
+            neighbours = sorted(territory.neighbours.values(), key=lambda x: x.armies)
+            for neighbour in neighbours:
+                if territory.armies > 100:
+                    self._attack_all_possible_targets(game_master)
+                elif neighbour.owner != self and territory.armies <= 7 and float(territory.armies) / neighbour.armies >= 2:
+                    game_master.player_attack(self, territory.name, neighbour.name)
+                    break
+                elif neighbour.owner != self and territory.armies > 7 and float(territory.armies) / neighbour.armies >= 1.75:
+                    game_master.player_attack(self, territory.name, neighbour.name)
+                    break
+                elif float(territory.armies) / neighbour.armies < 2:
+                    break
+
+    def deploy_reserves(self, game_master):
+        self.deploy_all_to_continent(game_master, 'africa')
+        self.deploy_all_to_continent(game_master, 'asia')
+        self.deploy_all_to_continent(game_master, 'australia')
+        self.deploy_all_to_continent(game_master, 'europe')
+        self.deploy_all_to_continent(game_master, 'north_america')
+        self.deploy_all_to_continent(game_master, 'south_america')
+
+    def deploy_all_to_continent(self, game_master, continent):
+        for territory in game_master.board.continents[continent].values():
+            if self.reserves > 0:
+                if territory.owner == self:
+                    print self.reserves
+                    game_master.player_add_army(self, territory.name, self.reserves)
