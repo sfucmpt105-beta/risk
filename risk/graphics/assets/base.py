@@ -10,6 +10,7 @@ BLUE = (0, 51, 102)
 YELLOW = (204, 204, 0)
 PURPLE = (102, 0, 102)
 ORANGE = (204, 102, 0)
+LIGHT_BROWN = (238, 223, 204)
 
 class PicassoAsset(Surface):
     def __init__(self, surface, x, y):

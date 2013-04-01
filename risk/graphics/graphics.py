@@ -144,7 +144,7 @@ def initialize_other_graphic_assets(picasso, game_master):
 def add_buttons(picasso):
     datastore = Datastore()
     next_button = assets.clickable.ClickableAsset(
-        1000, 500, 100, 100, 'NEXT')
+        1000, 635, 120, 65, 'NEXT')
     datastore.add_entry('next', next_button, 'buttons')
 
     for button in datastore.get_storage('buttons').values():
@@ -154,7 +154,7 @@ def add_overlay(picasso):
     datastore = Datastore()
     overlay = assets.image.ImageAsset(0, 0, DEFAULT_OVERLAY)
     datastore.add_entry('overlay', overlay)
-    picasso.add_asset('999_overlay', overlay)
+    #picasso.add_asset('0_overlay', overlay)
 
 def show_human_player(game_master):
     layer = 3
