@@ -10,6 +10,8 @@ from risk.graphics.assets.base import PicassoAsset
 from risk.graphics.assets.clickable import ClickableAsset
 from risk.graphics.assets.text import TextAsset
 
+import math
+
 TERRITORY_ART_ASSET_PATH = './assets/art/territories/'
 NO_PLAYER_COLOUR = base.BLACK
 
@@ -99,7 +101,7 @@ class ArmyCountAsset(PicassoAsset):
         self.count = None
         self.size = size
         self.colour = base.BLACK
-        x = territory_asset.x + territory_asset.surface.get_width() / 2
+        x = territory_asset.x + territory_asset.surface.get_width() / 3
         y = territory_asset.y + territory_asset.surface.get_height() / 3
         PicassoAsset.__init__(self, None, x, y)
         # kinda hacky, we have to rebuild the surface to centre the counter
@@ -108,8 +110,22 @@ class ArmyCountAsset(PicassoAsset):
         if self.dirty():
             self.count = self.territory_asset.territory.armies
             font = Font(None, self.size)
-            self.surface = font.render(str(self.count), False, 
+            dimension = font.size(str(self.count) * 2)
+            text_diagonal_length = math.sqrt(math.pow(dimension[0] / 2, 2) + math.pow(dimension[1], 2))
+            circle_radius = int(math.ceil(text_diagonal_length / 2))
+            #print circle_radius
+            #print dimension [0]
+            self.surface = pygame.Surface([44, 44], pygame.SRCALPHA, 32)
+            self.surface = self.surface.convert_alpha()
+            pygame.draw.circle(self.surface, base.BLACK, 
+                    (circle_radius, circle_radius), 
+                    circle_radius)
+            pygame.draw.circle(self.surface, base.WHITE, 
+                    (circle_radius, circle_radius), 
+                    circle_radius - 2)
+            font_surface = font.render(str(self.count), False,
                     self.colour).convert()
+            self.surface.blit(font_surface, (circle_radius - dimension[0] / 4, circle_radius - dimension[1] / 2))
         return self.surface
 
     def dirty(self):
