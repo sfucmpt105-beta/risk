@@ -5,7 +5,7 @@ import risk
 import risk.graphics.assets
 
 from risk.graphics.picasso import get_picasso
-from risk.graphics.event import wait_for_event
+from risk.graphics.event import wait_for_event, wait_for_mouse_click
 from risk.graphics.event import pump
 from risk.graphics.assets.base import BLACK, BROWN, WHITE
 from risk.graphics.assets.base import PicassoAsset
@@ -168,15 +168,13 @@ class BlockingSliderDialogAsset(DialogAsset):
     def get_result(self, poll_sleep):
         done = False
         while not done:
-            event = wait_for_event()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.slider.mouse_hovering(event.pos):
-                    self.drag_slider(poll_sleep)
-                elif self.being_dragged(event.pos):
-                    self.drag_dialog()
-            elif event.type == pygame.MOUSEBUTTONUP and \
-                    self.finished_button.mouse_hovering(event.pos):
-                done = True
+            event = wait_for_mouse_click()
+            if self.slider.mouse_hovering(event.pos):
+                self.drag_slider(poll_sleep)
+            elif self.being_dragged(event.pos):
+                self.drag_dialog()
+            elif self.finished_button.mouse_hovering(event.pos):
+                done = self.finished_button.confirmed_click()
         return self.current
 
     def reset(self):

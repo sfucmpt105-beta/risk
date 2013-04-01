@@ -4,8 +4,10 @@ from pygame import mouse
 from pygame.font import Font
 
 import risk.graphics.assets
+import risk.graphics.event
 from risk.graphics.assets import base
 from risk.graphics.assets.base import PicassoAsset
+from risk.graphics.event import wait_for_mouse_release
 _FONT = 'resources/Vera.ttf'
 
 class ClickableAsset(PicassoAsset):
@@ -38,8 +40,8 @@ class ClickableAsset(PicassoAsset):
         PicassoAsset.__init__(self, self.normal, x, y)
 
     def draw(self):
-        if not self.disabled and (self.mouse_hovering() or \
-                self.force_highlight):
+        if self.force_highlight or (self.mouse_hovering() and \
+                not self.disabled):
             return self._highlighted_surface()
         else:
             return self._normal_surface()
@@ -54,6 +56,11 @@ class ClickableAsset(PicassoAsset):
             self.x + self.offset_x, 
             self.y + self.offset_y).collidepoint(
                 mouse_pos) and not self.disabled
+
+    # take control of main thread until mouse released
+    def confirmed_click(self):
+        release = wait_for_mouse_release()
+        return self.mouse_hovering(release.pos)
 
     def _normal_surface(self):
         return self.normal

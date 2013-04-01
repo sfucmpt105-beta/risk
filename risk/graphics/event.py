@@ -18,6 +18,9 @@ _BLOCK = True
 _NO_BLOCK = False
 mutex = threading.Semaphore()
 
+###############################################################################
+## Critical section functions
+#
 def wait_for_event():
     # this is a bit strange, but pygame will invoke pump internally so there's
     # really no reason to call pump when waiting for event
@@ -45,4 +48,19 @@ def pump():
     if acquired:
         pygame.event.pump()
         mutex.release()
+
+###############################################################################
+## Safe functions that don't touch CS
+#
+def wait_for_event_type(event_type):
+    event = wait_for_event()
+    while event.type != event_type:
+        event = wait_for_event()
+    return event
+
+def wait_for_mouse_release():
+    return wait_for_event_type(pygame.MOUSEBUTTONUP)
+
+def wait_for_mouse_click():
+    return wait_for_event_type(pygame.MOUSEBUTTONDOWN)
 

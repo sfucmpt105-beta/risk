@@ -196,5 +196,6 @@ def pressed_clickables(mouse_pos, storage='buttons'):
     clicked = []
     for name, button in storage.iteritems():
         if button.mouse_hovering(mouse_pos):
-            clicked.append((name, button))
+            if button.confirmed_click():
+                clicked.append((name, button))
     return clicked
