@@ -109,8 +109,8 @@ def reinforce_phase(player, game_master):
     # state init vector
     datastore = Datastore()
     picasso = get_picasso()
-    reserve_count_asset = ReserveCountAsset(player)
-    picasso.add_asset(LAYER, reserve_count_asset)
+    #reserve_count_asset = ReserveCountAsset(player)
+    #picasso.add_asset(LAYER, reserve_count_asset)
     # core state machine
     disable_enemy_territories(player)
     while player.reserves > 0:
@@ -126,7 +126,7 @@ def reinforce_phase(player, game_master):
                     reinforce_add_army_fail(player, game_master, territory)
     # exit state
     enable_all_clickables()
-    picasso.remove_asset(LAYER, reserve_count_asset)
+    #picasso.remove_asset(LAYER, reserve_count_asset)
 
 def reinforce_add_army(player, game_master, territory, number_of_armies=1):
     game_master.player_add_army(player, territory.name, number_of_armies)

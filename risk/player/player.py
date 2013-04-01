@@ -16,7 +16,13 @@ class AbstractRiskPlayer(object):
         self.is_bot = False
         self.reserves = 0
 
-    def take_turn(self, game_master):
+    def reinforce(self, game_master):
+        raise NotImplementedError
+
+    def attack(self, game_master):
+        raise NotImplementedError
+
+    def fortify(self, game_master):
         raise NotImplementedError
 
     def choose_territory(self, available):
@@ -31,7 +37,7 @@ class HumonRiskPlayer(AbstractRiskPlayer):
         # Python sucks at this, base refers to base class
         AbstractRiskPlayer.__init__(self, name)
 
-    def take_turn(self, game_master):
+    def reinforce(self, game_master):
         while self.reserves > 0:
             print 'player has armies to deploy'
             print "%s's territories: " % self.name
@@ -41,8 +47,11 @@ class HumonRiskPlayer(AbstractRiskPlayer):
                     game_master.player_territories(self))
             commands.prompt_user(self, game_master, 
                     reinforce_commands, HumonRiskPlayer._no_more_reserves)
+    def attack(self, game_master):
         print "Attack phase, next to enter fortification phase"
         commands.prompt_user(self, game_master, attack_commands)
+
+    def fortify(self, game_master):
         print "Fortification phase, next to end turn"
         commands.prompt_user(self, game_master, fortify_commands)
 

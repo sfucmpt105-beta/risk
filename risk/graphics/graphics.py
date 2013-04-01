@@ -111,7 +111,7 @@ def shutdown(*args):
 
 def add_graphic_hooks(game_master):
     game_master.add_start_turn_callback(check_picasso_liveness)
-    game_master.add_start_turn_callback(show_human_player)
+    #game_master.add_start_turn_callback(show_human_player)
     game_master.add_start_turn_callback(delay)
     game_master.add_start_turn_callback(check_gui_quit_event)
     game_master.add_end_turn_callback(check_gui_quit_event)
@@ -133,10 +133,10 @@ def initialize_territories(picasso, game_master):
 
 def initialize_other_graphic_assets(picasso, game_master):
     datastore = Datastore()
-    current_player_asset = assets.text.CurrentPlayerAsset(
-            100, 100, game_master)
-    picasso.add_asset('4_current_player', current_player_asset)
-    datastore.add_entry('current_player', current_player_asset)
+    #current_player_asset = assets.text.CurrentPlayerAsset(
+    #        100, 100, game_master)
+    #picasso.add_asset('4_current_player', current_player_asset)
+    #datastore.add_entry('current_player', current_player_asset)
     feedback_asset = assets.text.TextAsset(100, 650, 
             'choose territory to attack')
     datastore.add_entry('attack_feedback', feedback_asset)

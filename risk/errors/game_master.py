@@ -7,7 +7,8 @@ class GameMasterError(RiskGameError):
 
 class NoSuchPlayerError(GameMasterError):
     def __init__(self, attempted_player, number_of_players):
-        GameMasterError.__init__("attempted to access player: %s but only have" \
+        GameMasterError.__init__(self,
+            "attempted to access player: %s but only have" \
             " %s players" % (attempted_player, number_of_players))
 
 class NotEnoughReserves(GameMasterError):

@@ -10,9 +10,14 @@ class BasicRiskBot(AbstractRiskPlayer):
     def choose_territories(self, board):
         raise NotImplementedError
 
-    def take_turn(self, game_master):
+    def reinforce(self, game_master):
         self._deploy_reserves(game_master)
+
+    def attack(self, game_master):
         self._attack_all_possible_targets(game_master)
+
+    def fortify(self, game_master):
+        pass
 
     def deploy_reserves(self, game_master):
         # evenly distributes
@@ -40,8 +45,6 @@ class BasicRiskBot(AbstractRiskPlayer):
         origin_armies, destination_armies = game_master.player_move_armies(self, origin_name, target_name, int(armies_to_move))
         risk.logger.debug("%s now has: %s armies" %(origin_name, origin_armies))
         risk.logger.debug("%s now has: %s armies" %(target_name, destination_armies))
-
-               
 
     def _attack_all_possible_targets(self, game_master):
         territories = game_master.player_territories(self)
@@ -124,8 +127,10 @@ class IanRiskBot(BasicRiskBot):
     def __init__(self, title):
         BasicRiskBot.__init__(self, "group bot[%s]" % title)
 
-    def take_turn(self, game_master):
+    def reinforce(self, game_master):
         self.deploy_reserves(game_master)
+
+    def attack(self, game_master):
         self.attack_others(game_master)
 
     def attack_others(self, game_master):

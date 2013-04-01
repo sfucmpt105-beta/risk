@@ -12,6 +12,11 @@ from risk.errors.game_master import *
 from risk.errors.battle import *
 from risk.player import HumonRiskPlayer
 
+REINFORCE_PHASE = 0
+ATTACK_PHASE = 1
+FORTIFY_PHASE = 2
+UNDEFINED_PHASE = 3
+
 class GameMaster(object):
     _RISK_RULE_STARTING_RESERVES = 40
     _DEPLOYS_PER_TURN = 5
@@ -24,6 +29,7 @@ class GameMaster(object):
                 num_players)
  
         self.board = board
+        self.phase = UNDEFINED_PHASE
         # need to setup with settings later
         self.ended = False
         self.end_turn_callbacks = []
@@ -197,14 +203,21 @@ class GameMaster(object):
     ###########################################################################
     ## Player actions
     #
-    @event_action
+    #@event_action
     def player_take_turn(self):
         self.call_start_turn_callbacks()
+        self.phase = UNDEFINED_PHASE
         player = self._get_player_with_index(self._current_player)
         player.reserves += len(self.player_territories(player))
-        player.take_turn(self)
+        self.phase = REINFORCE_PHASE
+        player.reinforce(self)
+        self.phase = ATTACK_PHASE
+        player.attack(self)
+        self.phase = FORTIFY_PHASE
+        player.fortify(self)
+        self.phase = UNDEFINED_PHASE
     
-    @event_action
+    #@event_action
     def player_territories(self, player):
         # O(n) lookup
         player_territories = {}

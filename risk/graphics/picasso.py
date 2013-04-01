@@ -96,7 +96,7 @@ class Picasso(threading.Thread):
         self.ended = True
 
     def get_fps_asset(self):
-        asset = TextAsset(1050, 16, "%s FPS" % int(self.clock.get_fps()), 
+        asset = TextAsset(1000, 16, "%s FPS" % int(self.clock.get_fps()), 
                 (255, 255, 0), 32)
         return asset
 
