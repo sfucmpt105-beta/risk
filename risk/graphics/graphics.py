@@ -154,7 +154,7 @@ def add_overlay(picasso):
     datastore = Datastore()
     overlay = assets.image.ImageAsset(0, 0, DEFAULT_OVERLAY)
     datastore.add_entry('overlay', overlay)
-    #picasso.add_asset('0_overlay', overlay)
+    picasso.add_asset('0_overlay', overlay)
 
 def show_human_player(game_master):
     layer = 3
