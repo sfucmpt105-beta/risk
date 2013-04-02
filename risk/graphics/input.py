@@ -308,11 +308,11 @@ def attack_failed(player, game_master, origin, target):
 
 def fortify_phase(player, game_master):
     picasso = get_picasso()
-    disable_enemy_territories(player)
     hint_asset = build_hint_asset(FORTIFY_HINTS['initial'])
     done = False
     # TODO merge with attack phase block
     while not done:
+        disable_enemy_territories(player)
         picasso.add_asset(LAYER, hint_asset)
         event = wait_for_mouse_click()
         for name, clickable in get_clicked_territories(event.pos):
