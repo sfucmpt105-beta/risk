@@ -23,7 +23,7 @@ def build_territory_asset(continent, territory, x, y):
 def build_player_colour_mapping(players):
     overflow_colour = base.BLACK
     colours = [
-        base.BROWN,
+        base.BLUE,
         base.PURPLE,
         base.ORANGE,
         base.YELLOW,
@@ -120,7 +120,7 @@ class ArmyCountAsset(PicassoAsset):
             pygame.draw.circle(self.surface, base.BLACK, 
                     (circle_radius, circle_radius), 
                     circle_radius)
-            pygame.draw.circle(self.surface, base.WHITE, 
+            pygame.draw.circle(self.surface, base.LIGHT_BROWN, 
                     (circle_radius, circle_radius), 
                     circle_radius - 2)
             font_surface = font.render(str(self.count), False,

@@ -9,14 +9,17 @@ _FONT = 'resources/Vera.ttf'
 
 class TextAsset(PicassoAsset):
 
-    def __init__(self, x, y, msg, colour=assets.base.BLACK, size=32):
+    def __init__(self, x, y, msg, colour=assets.base.BLACK, size=32, 
+            bold=False):
         self.colour = colour
         self.size = size
+        self.bold = bold
         PicassoAsset.__init__(self, None, x, y)
         self.render_text(msg)
 
     def render_text(self, msg):
         font = Font(_FONT, self.size)
+        font.set_bold(self.bold)
         self.surface = font.render(msg, False, self.colour)
 
 class CurrentPlayerAsset(TextAsset):

@@ -67,3 +67,27 @@ class ClickableAsset(PicassoAsset):
 
     def _highlighted_surface(self):
         return self.highlighted
+
+class ImageButtonAsset(ClickableAsset):
+    def __init__(self, x, y, normal_image, pressed_image):
+        normal_image = pygame.image.load(normal_image).convert_alpha()
+        pressed_image = pygame.image.load(pressed_image).convert_alpha()
+        width, height = normal_image.get_size()
+
+        ClickableAsset.__init__(self, x, y, width, height, "")
+        self.normal = normal_image
+        self.pressed = pressed_image
+        self.current = self.normal
+
+    def confirmed_click(self):
+        self.current = self.pressed
+        result = ClickableAsset.confirmed_click(self)
+        self.current = self.normal
+        return result
+
+    def _normal_surface(self):
+        return self.current
+
+    def _highlighted_surface(self):
+        return self.current
+

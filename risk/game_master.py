@@ -21,7 +21,7 @@ class GameMaster(object):
     _RISK_RULE_STARTING_RESERVES = 40
     _DEPLOYS_PER_TURN = 5
 
-    def __init__(self, board, settings, num_players=5):
+    def __init__(self, board, settings, num_players=6):
         MIN_PLAYERS = 2
         MAX_PLAYERS = 6
         if not MIN_PLAYERS <= num_players <= MAX_PLAYERS:
@@ -162,10 +162,13 @@ class GameMaster(object):
 
     def check_player_elimination(self, function, result, args):
         if function == 'player_attack':
+            _PLAYER_ARG_INDEX = 0
             if result == True:
                 for player in self.players:
                     if len(self.player_territories(player)) == 0:
                         self.eliminate_player(player)
+                self._recalculate_current_player_index(
+                        args[_PLAYER_ARG_INDEX])
 
     # TODO fix select next player bug
     def eliminate_player(self, player):
@@ -197,8 +200,10 @@ class GameMaster(object):
         try:
             return self.players[index]
         except IndexError:
-            raise NoSuchPlayerError(index, self.number_of_players)
+            raise NoSuchPlayerError(index, self.number_of_players())
 
+    def _recalculate_current_player_index(self, current_player):
+        self._current_player = self.players.index(current_player)
 
     ###########################################################################
     ## Player actions
@@ -225,6 +230,12 @@ class GameMaster(object):
             if territory.owner == player:
                 player_territories[name] = territory
         return player_territories
+
+    def player_total_armies(self, player):
+        count = 0
+        for name, territory in self.player_territories(player).iteritems():
+            count += territory.armies
+        return count
 
     @event_action
     def player_attack(self, player, origin_name, target_name):

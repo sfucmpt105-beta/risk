@@ -12,6 +12,7 @@ import risk.graphics.assets.clickable
 import risk.graphics.assets.territory
 import risk.graphics.assets.dialog
 import risk.graphics.assets.image
+import risk.graphics.assets.gameplay
 
 from risk.logger import *
 from risk.graphics import assets
@@ -116,6 +117,9 @@ def add_graphic_hooks(game_master):
     game_master.add_start_turn_callback(check_gui_quit_event)
     game_master.add_end_turn_callback(check_gui_quit_event)
     game_master.add_end_action_callback(release_control)
+    game_master.add_start_turn_callback(update_game_info_panel)
+    game_master.add_end_action_callback(update_game_info_panel)
+    #game_master.add_end_action_callback(delay)
 
 def initialize_territories(picasso, game_master):
     datastore = Datastore()
@@ -132,6 +136,7 @@ def initialize_territories(picasso, game_master):
     build_player_colour_mapping(game_master.players)
 
 def initialize_other_graphic_assets(picasso, game_master):
+    picasso = get_picasso()
     datastore = Datastore()
     #current_player_asset = assets.text.CurrentPlayerAsset(
     #        100, 100, game_master)
@@ -140,11 +145,19 @@ def initialize_other_graphic_assets(picasso, game_master):
     feedback_asset = assets.text.TextAsset(100, 650, 
             'choose territory to attack')
     datastore.add_entry('attack_feedback', feedback_asset)
+    game_info_asset = assets.gameplay.PlayersAsset(30, 550, game_master)
+    picasso.add_asset('999_ontop', game_info_asset)
+    datastore.add_entry('game_info', game_info_asset)
     
 def add_buttons(picasso):
     datastore = Datastore()
-    next_button = assets.clickable.ClickableAsset(
-        1000, 635, 120, 65, 'NEXT')
+    #next_button = assets.clickable.ClickableAsset(
+    #    1000, 635, 120, 65, 'NEXT')
+    next_button = assets.clickable.ImageButtonAsset(
+        1000, 635,
+        'assets/art/gui/button_next_up.png',
+        'assets/art/gui/button_next_down.png'
+    )
     datastore.add_entry('next', next_button, 'buttons')
 
     for button in datastore.get_storage('buttons').values():
@@ -172,7 +185,7 @@ def is_human_player(game_master):
     return isinstance(game_master.current_player(), 
             risk.player.HumonRiskPlayer)
 
-def delay(game_master):
+def delay(game_master, *args):
     if not is_human_player(game_master):
         time.sleep(1)
 
@@ -185,6 +198,9 @@ def check_gui_quit_event(game_master):
         for event in get_events():
             if event.type == pygame.QUIT:
                 game_master.end_game()
+
+def update_game_info_panel(*args):
+    Datastore().get_entry('game_info').update()
 
 def release_control(game_master, *args):
     # release CPU for faster screen update
