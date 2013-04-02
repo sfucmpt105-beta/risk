@@ -28,7 +28,10 @@ DEFAULT_HEIGHT = 720
 DEFAULT_BACKGROUND = 'resources/risk_board.png'
 DEFAULT_OVERLAY = 'assets/art/gui/main_borders.png'
 
-buttons = {}
+INFO_PANEL_X = 370
+INFO_PANEL_Y = 585
+INFO_PANEL_WIDTH = 410
+INFO_PANEL_HEIGHT = 110
 
 territory_coordinates = {
     'north_america': {
@@ -113,6 +116,7 @@ def shutdown(*args):
 
 def add_graphic_hooks(game_master):
     game_master.add_start_turn_callback(check_picasso_liveness)
+    game_master.add_start_turn_callback(show_bot_player_hint)
     #game_master.add_start_turn_callback(show_human_player)
     game_master.add_start_turn_callback(delay)
     game_master.add_start_turn_callback(check_gui_quit_event)
@@ -222,6 +226,21 @@ def update_game_info_panel(*args):
 def update_current_phase(game_master, previous, current):
     for state, asset in Datastore().get_storage('states').iteritems():
         asset.set_state(state == current)
+
+def show_bot_player_hint(game_master):
+    datastore = Datastore()
+    picasso = get_picasso()
+    if not datastore.has_entry('bot_player_hint'):
+        hint_asset = assets.text.CentredTextAsset(INFO_PANEL_X, INFO_PANEL_Y, 
+                    INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 
+                    "AI TAKING TURNS...",
+                    bold=True)
+        datastore.add_entry('bot_player_hint', hint_asset)
+    hint_asset = datastore.get_entry('bot_player_hint')
+    if isinstance(game_master.current_player(), risk.ai.bots.BasicRiskBot):
+        picasso.add_asset('999', hint_asset)
+    else:
+        picasso.remove_asset('999', hint_asset)
 
 def release_control(game_master, *args):
     # release CPU for faster screen update
