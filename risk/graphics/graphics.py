@@ -15,6 +15,7 @@ import risk.graphics.assets.image
 import risk.graphics.assets.gameplay
 
 from risk.logger import *
+from risk.game_master import UNDEFINED, REINFORCE, ATTACK, FORTIFY
 from risk.graphics import assets
 from risk.graphics.event import wait_for_event, get_events
 from risk.graphics.datastore import Datastore
@@ -119,6 +120,7 @@ def add_graphic_hooks(game_master):
     game_master.add_end_action_callback(release_control)
     game_master.add_start_turn_callback(update_game_info_panel)
     game_master.add_end_action_callback(update_game_info_panel)
+    game_master.add_end_phase_callback(update_current_phase)
     #game_master.add_end_action_callback(delay)
 
 def initialize_territories(picasso, game_master):
@@ -148,7 +150,22 @@ def initialize_other_graphic_assets(picasso, game_master):
     game_info_asset = assets.gameplay.PlayersAsset(30, 550, game_master)
     picasso.add_asset('999_ontop', game_info_asset)
     datastore.add_entry('game_info', game_info_asset)
-    
+    add_state_indicators(picasso, game_master)
+
+def add_state_indicators(picasso, game_master):
+    datastore = Datastore()
+    pos_x = 867
+    state_indicators = {
+        'reinforce': (pos_x, 548),
+        'attack': (pos_x, 600),
+        'fortify': (pos_x, 652),
+    }
+    for state, coordinate in state_indicators.iteritems():
+        asset = assets.image.ToggleImageAsset(coordinate[0], coordinate[1],
+            "assets/art/gui/button_%s_highlight.png" % state)
+        datastore.add_entry(state, asset, 'states')
+        picasso.add_asset('999_ontop', asset)
+   
 def add_buttons(picasso):
     datastore = Datastore()
     #next_button = assets.clickable.ClickableAsset(
@@ -201,6 +218,10 @@ def check_gui_quit_event(game_master):
 
 def update_game_info_panel(*args):
     Datastore().get_entry('game_info').update()
+
+def update_current_phase(game_master, previous, current):
+    for state, asset in Datastore().get_storage('states').iteritems():
+        asset.set_state(state == current)
 
 def release_control(game_master, *args):
     # release CPU for faster screen update

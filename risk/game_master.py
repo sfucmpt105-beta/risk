@@ -12,10 +12,10 @@ from risk.errors.game_master import *
 from risk.errors.battle import *
 from risk.player import HumonRiskPlayer
 
-REINFORCE_PHASE = 0
-ATTACK_PHASE = 1
-FORTIFY_PHASE = 2
-UNDEFINED_PHASE = 3
+REINFORCE = 'reinforce'
+ATTACK = 'attack'
+FORTIFY = 'fortify'
+UNDEFINED = 'undefined'
 
 class GameMaster(object):
     _RISK_RULE_STARTING_RESERVES = 40
@@ -29,7 +29,7 @@ class GameMaster(object):
                 num_players)
  
         self.board = board
-        self.phase = UNDEFINED_PHASE
+        self.phase = UNDEFINED
         # need to setup with settings later
         self.ended = False
         self.end_turn_callbacks = []
@@ -43,6 +43,7 @@ class GameMaster(object):
             'start_turn': [],
             'end_action': [],
             'end_turn': [],
+            'end_phase': [],
             'end_game': [],
         }
         self.add_end_action_callback(GameMaster.check_player_elimination)
@@ -97,6 +98,9 @@ class GameMaster(object):
 
     def add_end_action_callback(self, callback):
         self.callbacks['end_action'].append(callback)
+
+    def add_end_phase_callback(self, callback):
+        self.callbacks['end_phase'].append(callback)
 
     def generate_players(self, number_of_human_players, cli=False):
         risk.logger.debug("Generating %s human players" % \
@@ -170,7 +174,6 @@ class GameMaster(object):
                 self._recalculate_current_player_index(
                         args[_PLAYER_ARG_INDEX])
 
-    # TODO fix select next player bug
     def eliminate_player(self, player):
         self.players.remove(player)
         for _ in xrange(10):
@@ -180,6 +183,12 @@ class GameMaster(object):
             for _ in xrange(100):
                 print "%s WINS!!!!" % self.current_player().name
             self.end_game()
+
+    def set_phase(self, new_phase):
+        previous = self.phase
+        self.phase = new_phase
+        for callback in self.callbacks['end_phase']:
+            callback(self, previous, new_phase)
 
     ###########################################################################
     ## Game state queries
@@ -211,16 +220,16 @@ class GameMaster(object):
     #@event_action
     def player_take_turn(self):
         self.call_start_turn_callbacks()
-        self.phase = UNDEFINED_PHASE
+        self.set_phase(UNDEFINED)
         player = self._get_player_with_index(self._current_player)
         player.reserves += len(self.player_territories(player))
-        self.phase = REINFORCE_PHASE
+        self.set_phase(REINFORCE)
         player.reinforce(self)
-        self.phase = ATTACK_PHASE
+        self.set_phase(ATTACK)
         player.attack(self)
-        self.phase = FORTIFY_PHASE
+        self.set_phase(FORTIFY)
         player.fortify(self)
-        self.phase = UNDEFINED_PHASE
+        self.set_phase(UNDEFINED)
     
     #@event_action
     def player_territories(self, player):
