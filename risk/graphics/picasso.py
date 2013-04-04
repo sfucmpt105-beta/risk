@@ -11,10 +11,14 @@ from pygame.locals import *
 
 import risk
 import risk.logger
+import risk.graphics.assets.image
 
 from risk.graphics.event import pump
 from risk.graphics.assets.base import PicassoAsset
 from risk.graphics.assets.text import TextAsset
+from risk.graphics import assets
+
+MOUSE_CURSOR_LOCATION = 'assets/art/cursor/mickey_mouse.png'
 
 def get_picasso(*args, **kwargs):
     if not hasattr(get_picasso, 'picasso_instance'):
@@ -48,6 +52,7 @@ class Picasso(threading.Thread):
 
     def run(self):
         try:
+            pygame.mouse.set_visible(False)
             while not self.ended:
                 self.draw_canvas()
                 self.clock.tick(self.fps)
@@ -59,6 +64,7 @@ class Picasso(threading.Thread):
     def draw_canvas(self):
         pump()
         self.window.blit(self.background, (0, 0))
+
         # make a deep copy of layers first to avoid race condition where dict
         # size can change during iteration. try to do it lockless, if we're
         # still having issues, fix with mutex
@@ -74,8 +80,11 @@ class Picasso(threading.Thread):
             risk.logger.error("ignoring dictionary size change...")
         fps_asset = self.get_fps_asset()
         self.window.blit(fps_asset.draw(), fps_asset.get_coordinate())
+        x,y = pygame.mouse.get_pos()
+        mouse_cursor = assets.image.ImageAsset(x - 12, y - 8, MOUSE_CURSOR_LOCATION)
+        self.window.blit(mouse_cursor.draw(), mouse_cursor.get_coordinate())
         pygame.display.flip()
-
+        
     def add_asset(self, layer, asset):
         try:
             self.canvas[layer].add(asset)
