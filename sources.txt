@@ -2,6 +2,8 @@ sources:
 
 risk map - http://shanjay.com/?p=114
 
-beige background - http://www.deluzions.net/blog/free-textures-worn-leather/
+beige map background - http://www.deluzions.net/blog/free-textures-worn-leather/
 
-GUI border - 
+GUI border background - psdgraphics.com/file/textured-paper.jpg
+
+mickey mouse - http://www.snazzyspace.com/cursorsfolder/mickey-big-pointer.png
