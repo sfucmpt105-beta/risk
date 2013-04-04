@@ -47,6 +47,7 @@ class Picasso(threading.Thread):
         self.game_master = None
         
         self.clock = pygame.time.Clock()
+        self.cursor = assets.image.ImageAsset(0, 0, MOUSE_CURSOR_LOCATION)
 
         threading.Thread.__init__(self)
 
@@ -80,11 +81,10 @@ class Picasso(threading.Thread):
             risk.logger.error("ignoring dictionary size change...")
         fps_asset = self.get_fps_asset()
         self.window.blit(fps_asset.draw(), fps_asset.get_coordinate())
-        x,y = pygame.mouse.get_pos()
-        mouse_cursor = assets.image.ImageAsset(x - 12, y - 8, MOUSE_CURSOR_LOCATION)
-        self.window.blit(mouse_cursor.draw(), mouse_cursor.get_coordinate())
+        self.cursor.x, self.cursor.y = pygame.mouse.get_pos()
+        self.window.blit(self.cursor.draw(), self.cursor.get_coordinate())
         pygame.display.flip()
-        
+
     def add_asset(self, layer, asset):
         try:
             self.canvas[layer].add(asset)
