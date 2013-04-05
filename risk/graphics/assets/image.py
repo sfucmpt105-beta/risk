@@ -16,6 +16,11 @@ class ImageAsset(PicassoAsset):
                 int(self.surface.get_height() * scale_y)))
         PicassoAsset.__init__(self, self.surface, x, y)
 
+class ScaledImageAsset(ImageAsset):
+    def __init__(self, x, y, width, height, path):
+        ImageAsset.__init__(self, x, y, path)
+        self.surface = pygame.transform.scale(self.surface, (width, height))
+
 class ToggleImageAsset(ImageAsset):
     def __init__(self, x, y, path, start_state=ON):
         ImageAsset.__init__(self, x, y, path)

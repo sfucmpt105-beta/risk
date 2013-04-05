@@ -1,6 +1,7 @@
 import pygame
 from pygame import Surface
 
+GREY = (190, 190, 190)
 BLACK = (0, 0, 0)
 BROWN = (139, 69, 19)
 WHITE = (255, 255, 255)
@@ -32,3 +33,12 @@ class PicassoAsset(Surface):
 
     def get_height(self):
         return self.surface.get_height()
+
+class ColourBlockAsset(PicassoAsset):
+    def __init__(self, x, y, width, height, colour):
+        surface = pygame.Surface((width, height))
+        surface.fill(colour)
+        PicassoAsset.__init__(self, surface, x, y)
+
+    def set_colour(self, colour):
+        self.surface.fill(colour)

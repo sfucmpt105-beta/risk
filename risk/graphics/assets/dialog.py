@@ -9,8 +9,12 @@ from risk.graphics.event import wait_for_event, wait_for_mouse_click
 from risk.graphics.event import pump
 from risk.graphics.assets.base import BLACK, BROWN, WHITE
 from risk.graphics.assets.base import PicassoAsset
-from risk.graphics.assets.text import TextAsset
+from risk.graphics.assets.text import TextAsset, CentredTextAsset
 from risk.graphics.assets.clickable import ClickableAsset
+from risk.graphics.assets.image import ScaledImageAsset
+
+BODY_BACKGROUND = 'assets/art/gui/dialog_body.png'
+TITLE_BACKGROUND = 'assets/art/gui/dialog_title.png'
 
 class DialogAsset(PicassoAsset):
     _BORDER_PIXELS = 5
@@ -26,9 +30,16 @@ class DialogAsset(PicassoAsset):
             self._BORDER_PIXELS,
             width - 2 * self._BORDER_PIXELS,
             self._TITLE_HEIGHT_PIXELS - self._BORDER_PIXELS,
-            " == %s == " % title,
-            size=16,
+            ''
         )
+        # HAX, fuck it, make go now
+        self.title_background = ScaledImageAsset(0, 0, width, 
+            self._TITLE_HEIGHT_PIXELS, TITLE_BACKGROUND)
+        self.title_text = CentredTextAsset(0, 2, width, 
+            self._TITLE_HEIGHT_PIXELS, "== %s ==" % title, size=16, bold=True)
+        self.body = ScaledImageAsset(
+            0, self._TITLE_HEIGHT_PIXELS, width, 
+            height - self._TITLE_HEIGHT_PIXELS, BODY_BACKGROUND)
         self.title.offset_x = x
         self.title.offset_y = y
         self.assets = []
@@ -36,17 +47,22 @@ class DialogAsset(PicassoAsset):
 
     def draw(self):
         self.background.fill(BLACK)
-        pygame.draw.rect(self.background, self.colour, pygame.Rect(
-            self._BORDER_PIXELS, self._BORDER_PIXELS, 
-            self.width - 2 * self._BORDER_PIXELS,
-            self.height - 2 * self._BORDER_PIXELS,
-        ))
-        pygame.draw.line(self.background, BLACK, 
-            (0, self._TITLE_HEIGHT_PIXELS),
-            (self.width, self._TITLE_HEIGHT_PIXELS),
-            self._BORDER_PIXELS,
-        )
+        #pygame.draw.rect(self.background, self.colour, pygame.Rect(
+        #    self._BORDER_PIXELS, self._BORDER_PIXELS, 
+        #    self.width - 2 * self._BORDER_PIXELS,
+        #    self.height - 2 * self._BORDER_PIXELS,
+        #))
+        #pygame.draw.line(self.background, BLACK, 
+        #    (0, self._TITLE_HEIGHT_PIXELS),
+        #    (self.width, self._TITLE_HEIGHT_PIXELS),
+        #    self._BORDER_PIXELS,
+        #)
         self.background.blit(self.title.draw(), self.title.get_coordinate())
+        self.background.blit(self.title_background.draw(), 
+            self.title_background.get_coordinate())
+        self.background.blit(self.title_text.draw(),
+            self.title_text.get_coordinate())
+        self.background.blit(self.body.draw(), self.body.get_coordinate())
         assets = list(self.assets)
         for asset in assets:
             self.background.blit(asset.draw(), (asset.x, 
@@ -143,7 +159,7 @@ class BlockingSliderDialogAsset(DialogAsset):
         self.finished_button = ClickableAsset(button_x, button_y, 
             self.FINISHED_WIDTH, self.FINISHED_HEIGHT, "DONE",
             bg_colour=BLACK, highlight_bg=WHITE, text_colour=WHITE,
-            highlight_text=BLACK)
+            highlight_text=BLACK, bold=True)
         self.finished_button.offset_x = self.x
         self.finished_button.offset_y = self.y
 

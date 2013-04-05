@@ -22,6 +22,7 @@ from risk.graphics.datastore import Datastore
 from risk.graphics.picasso import get_picasso
 from risk.graphics.assets.territory import build_territory_asset
 from risk.graphics.assets.territory import build_player_colour_mapping
+from risk.graphics.assets.territory import TerritoryAsset
 
 DEFAULT_WIDTH  = 1152
 DEFAULT_HEIGHT = 720
@@ -125,6 +126,7 @@ def add_graphic_hooks(game_master):
     game_master.add_start_turn_callback(update_game_info_panel)
     game_master.add_end_action_callback(update_game_info_panel)
     game_master.add_end_phase_callback(update_current_phase)
+    game_master.add_start_turn_callback(show_current_human_player)
     #game_master.add_end_action_callback(delay)
 
 def initialize_territories(picasso, game_master):
@@ -155,6 +157,10 @@ def initialize_other_graphic_assets(picasso, game_master):
     picasso.add_asset('999_ontop', game_info_asset)
     datastore.add_entry('game_info', game_info_asset)
     add_state_indicators(picasso, game_master)
+    human_player_asset = assets.base.ColourBlockAsset(
+        1000, 548, 123, 80, assets.base.GREY)
+    datastore.add_entry('player_colour', human_player_asset)
+    picasso.add_asset('999_ontop', human_player_asset)
 
 def add_state_indicators(picasso, game_master):
     datastore = Datastore()
@@ -201,6 +207,19 @@ def show_human_player(game_master):
         get_picasso().add_asset('1_text', asset)
     else:
         get_picasso().remove_asset('1_text', asset)
+
+def show_current_human_player(game_master):
+    datastore = Datastore()
+    asset = datastore.get_entry('player_colour')
+    player = game_master.current_player()
+    if isinstance(player, risk.player.HumonRiskPlayer):
+        try:
+            asset.set_colour(TerritoryAsset.mapping[player])
+        except KeyError:
+            error("couldn't find key entry for player: %s" % player.name)
+            asset.set_colour(assets.base.BLACK)
+    else:
+        asset.set_colour(assets.base.GREY)
 
 def is_human_player(game_master):
     return isinstance(game_master.current_player(), 

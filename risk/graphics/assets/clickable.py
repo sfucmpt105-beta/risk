@@ -14,12 +14,13 @@ class ClickableAsset(PicassoAsset):
     def __init__(self, x, y, width, height, msg, size=16, 
             text_colour=base.BLACK, bg_colour=base.WHITE, 
             highlight_text=base.WHITE, highlight_bg=base.BLACK,
-            offset_x=0, offset_y=0):
+            offset_x=0, offset_y=0, bold=False):
 
         self.normal = pygame.Surface((width, height))
         self.normal.fill(bg_colour)
 
         font = Font(_FONT, size)
+        font.set_bold(bold)
         font_width, font_height = font.size(msg)
         font_x = (width - font_width) / 2
         font_y = (height - font_height) / 2
@@ -90,4 +91,3 @@ class ImageButtonAsset(ClickableAsset):
 
     def _highlighted_surface(self):
         return self.current
-
