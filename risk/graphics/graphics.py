@@ -157,10 +157,13 @@ def initialize_other_graphic_assets(picasso, game_master):
     picasso.add_asset('999_ontop', game_info_asset)
     datastore.add_entry('game_info', game_info_asset)
     add_state_indicators(picasso, game_master)
+    player_background_asset = assets.base.ColourBlockAsset(
+        1000, 548, 123, 80, assets.base.BLACK)
     human_player_asset = assets.base.ColourBlockAsset(
-        1000, 548, 123, 80, assets.base.GREY)
+        1002, 550, 119, 76, assets.base.GREY)
     datastore.add_entry('player_colour', human_player_asset)
-    picasso.add_asset('999_ontop', human_player_asset)
+    picasso.add_asset('999_ontop', player_background_asset)
+    picasso.add_asset('999_ontop1', human_player_asset)
 
 def add_state_indicators(picasso, game_master):
     datastore = Datastore()
