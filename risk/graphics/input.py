@@ -84,7 +84,7 @@ FORTIFY_HINTS = {
 
 Click on your own territory to begin
 fortifying!
-Click on the 'next' bitton to end turn.
+Click on the 'next' button to end turn.
 """,
     'fortifying':
 """
