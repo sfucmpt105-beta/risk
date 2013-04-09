@@ -1,6 +1,8 @@
 ###############################################################################
 ## defines the board object as well as some board generation utilities
 #
+import random
+
 import territory
 
 import risk.logger
@@ -79,10 +81,13 @@ def generate_mini_board():
 #
 def dev_random_assign_owners(game_master):
     current = 0
-    for name, territory in game_master.board.territories().iteritems():
+    territories = game_master.board.territories().values()
+    for _ in xrange(0, len(territories)):
+        territory = territories[random.randint(0, len(territories) - 1)]
         territory.owner = game_master.players[current]
         territory.armies = 1
         current = (current + 1) % len(game_master.players)
+        territories.remove(territory)
     # evenly distributes troops
     game_master._assign_player_reserves()
     for player in game_master.players:
