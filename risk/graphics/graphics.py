@@ -34,6 +34,9 @@ INFO_PANEL_Y = 585
 INFO_PANEL_WIDTH = 410
 INFO_PANEL_HEIGHT = 110
 
+UI_OVERLAY_LEVEL0 = '2_ui'
+UI_OVERLAY_LEVEL1 = '3_ui'
+
 territory_coordinates = {
     'north_america': {
         'alaska': (29, 117),
@@ -154,7 +157,7 @@ def initialize_other_graphic_assets(picasso, game_master):
             'choose territory to attack')
     datastore.add_entry('attack_feedback', feedback_asset)
     game_info_asset = assets.gameplay.PlayersAsset(30, 550, game_master)
-    picasso.add_asset('999_ontop', game_info_asset)
+    picasso.add_asset(UI_OVERLAY_LEVEL0, game_info_asset)
     datastore.add_entry('game_info', game_info_asset)
     add_state_indicators(picasso, game_master)
     player_background_asset = assets.base.ColourBlockAsset(
@@ -162,8 +165,8 @@ def initialize_other_graphic_assets(picasso, game_master):
     human_player_asset = assets.base.ColourBlockAsset(
         1002, 550, 119, 76, assets.base.GREY)
     datastore.add_entry('player_colour', human_player_asset)
-    picasso.add_asset('999_ontop', player_background_asset)
-    picasso.add_asset('999_ontop1', human_player_asset)
+    picasso.add_asset(UI_OVERLAY_LEVEL0, player_background_asset)
+    picasso.add_asset(UI_OVERLAY_LEVEL1, human_player_asset)
 
 def add_state_indicators(picasso, game_master):
     datastore = Datastore()
@@ -177,7 +180,7 @@ def add_state_indicators(picasso, game_master):
         asset = assets.image.ToggleImageAsset(coordinate[0], coordinate[1],
             "assets/art/gui/button_%s_highlight.png" % state)
         datastore.add_entry(state, asset, 'states')
-        picasso.add_asset('999_ontop', asset)
+        picasso.add_asset(UI_OVERLAY_LEVEL0, asset)
    
 def add_buttons(picasso):
     datastore = Datastore()
@@ -260,9 +263,9 @@ def show_bot_player_hint(game_master):
         datastore.add_entry('bot_player_hint', hint_asset)
     hint_asset = datastore.get_entry('bot_player_hint')
     if isinstance(game_master.current_player(), risk.ai.bots.BasicRiskBot):
-        picasso.add_asset('999', hint_asset)
+        picasso.add_asset(UI_OVERLAY_LEVEL0, hint_asset)
     else:
-        picasso.remove_asset('999', hint_asset)
+        picasso.remove_asset(UI_OVERLAY_LEVEL0, hint_asset)
 
 def release_control(game_master, *args):
     # release CPU for faster screen update
