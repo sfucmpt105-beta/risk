@@ -10,12 +10,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="1052.3622"
+   height="744.09448"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="board_graph.svg">
   <defs
      id="defs4">
     <linearGradient
@@ -57,11 +57,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70490807"
-     inkscape:cx="638.8592"
-     inkscape:cy="486.233"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer4"
+     inkscape:zoom="0.99689055"
+     inkscape:cx="293.67263"
+     inkscape:cy="332.48853"
+     inkscape:document-units="cm"
+     inkscape:current-layer="layer5"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -71,13 +71,21 @@
      inkscape:window-y="-8"
      inkscape:window-maximized="1">
     <sodipodi:guide
-       orientation="0,1"
-       position="565.71429,64.285714"
-       id="guide6014" />
+       orientation="1,0"
+       position="762.37055,705.19276"
+       id="guide3048" />
     <sodipodi:guide
        orientation="0,1"
-       position="364.38303,74.481597"
-       id="guide6041" />
+       position="767.38615,616.91827"
+       id="guide3050" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="544.6937,30.093574"
+       id="guide3099" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="454.41297,502.56269"
+       id="guide3131" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -94,161 +102,167 @@
   <g
      inkscape:groupmode="layer"
      id="layer4"
-     inkscape:label="Layer#2">
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:7.59200001;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:60.736, 7.592;stroke-dashoffset:75.91996378"
-       id="rect5959"
-       width="597.14288"
-       height="594.28522"
-       x="68.571426"
-       y="319.50504" />
-    <flowRoot
-       xml:space="preserve"
-       id="flowRoot5979"
-       style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       transform="translate(13.543465,21.378838)"><flowRegion
-         id="flowRegion5981"><rect
-           id="rect5983"
-           width="256.71515"
-           height="37.152805"
-           x="445.71429"
-           y="265.21933" /></flowRegion><flowPara
-         id="flowPara5985">Australia Continent</flowPara></flowRoot>  </g>
+     inkscape:label="Layer#2"
+     transform="translate(0,-308.2677)" />
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Layer"
-     style="display:inline">
-    <path
-       style="fill:none;stroke:#000000;stroke-width:3.9000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:15.60000038, 15.60000038;stroke-dashoffset:38.9999919"
-       d="m 258.57143,478.07647 -90,311.42856 L 530,766.6479 l -30,-330 -232.85714,30 45.71428,-240"
-       id="path3819"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccc" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:3.9000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:15.60000038, 15.60000038;stroke-dashoffset:39.00000095"
-       d="M 171.42857,789.50504 497.14286,442.36218"
-       id="path4446"
-       inkscape:connector-curvature="0" />
-  </g>
+     style="display:inline"
+     transform="translate(0,-308.2677)" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline">
-    <path
-       sodipodi:type="arc"
-       style="fill:#e70000;fill-opacity:1;stroke:#000000;stroke-width:0.99212599;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:9.8999999;display:inline"
-       id="path2985-1-7-4"
-       sodipodi:cx="160"
-       sodipodi:cy="515.2193"
-       sodipodi:rx="90"
-       sodipodi:ry="90"
-       d="m 250,515.2193 a 90,90 0 1 1 -180,0 90,90 0 1 1 180,0 z"
-       transform="translate(95.714291,-44.285689)" />
-    <path
-       sodipodi:type="arc"
-       style="fill:#e70000;fill-opacity:1;stroke:#000000;stroke-width:0.99212599;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:9.8999999;display:inline"
-       id="path2985-1-7-4-9"
-       sodipodi:cx="160"
-       sodipodi:cy="515.2193"
-       sodipodi:rx="90"
-       sodipodi:ry="90"
-       d="m 250,515.2193 a 90,90 0 1 1 -180,0 90,90 0 1 1 180,0 z"
-       transform="translate(345.71429,-58.571403)" />
-    <path
-       sodipodi:type="arc"
-       style="fill:#e70000;fill-opacity:1;stroke:#000000;stroke-width:0.99212599;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:9.8999999;display:inline"
-       id="path2985-1-7-4-8"
-       sodipodi:cx="160"
-       sodipodi:cy="515.2193"
-       sodipodi:rx="90"
-       sodipodi:ry="90"
-       d="m 250,515.2193 a 90,90 0 1 1 -180,0 90,90 0 1 1 180,0 z"
-       transform="translate(27.142853,257.14288)" />
-    <path
-       sodipodi:type="arc"
-       style="fill:#e70000;fill-opacity:1;stroke:#000000;stroke-width:0.99212599;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:9.8999999;display:inline"
-       id="path2985-1-7-4-3"
-       sodipodi:cx="160"
-       sodipodi:cy="515.2193"
-       sodipodi:rx="90"
-       sodipodi:ry="90"
-       d="m 250,515.2193 a 90,90 0 1 1 -180,0 90,90 0 1 1 180,0 z"
-       transform="translate(372.85714,262.85717)" />
-  </g>
+     style="display:inline"
+     transform="translate(0,-308.2677)" />
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Layer#1"
-     style="display:inline">
-    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4330"
-       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
-       transform="translate(2.8571429,12.857143)"><flowRegion
-         id="flowRegion4332"><rect
-           id="rect4334"
-           width="132.85715"
-           height="68.571426"
-           x="115.71429"
-           y="735.2193"
-           style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Helvetica;-inkscape-font-specification:Helvetica" /></flowRegion><flowPara
-         id="flowPara4336">Western</flowPara><flowPara
-         id="flowPara4338">Australia</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4330-0"
-       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
-       transform="translate(352.29686,1.7702831)"><flowRegion
-         id="flowRegion4332-3"><rect
-           id="rect4334-6"
-           width="132.85715"
-           height="68.571426"
-           x="115.71429"
-           y="735.2193"
-           style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Helvetica;-inkscape-font-specification:Helvetica" /></flowRegion><flowPara
-         id="flowPara4336-2">Eastern</flowPara><flowPara
-         id="flowPara4338-4">Australia</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4330-0-5"
-       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
-       transform="translate(323.72543,-306.80114)"><flowRegion
-         id="flowRegion4332-3-8"><rect
-           id="rect4334-6-8"
-           width="132.85715"
-           height="68.571426"
-           x="115.71429"
-           y="735.2193"
-           style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Helvetica;-inkscape-font-specification:Helvetica" /></flowRegion><flowPara
-         id="flowPara4338-4-2">New </flowPara><flowPara
-         id="flowPara4402">Guinea</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4330-0-5-1"
-       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
-       transform="translate(69.070726,-278.2586)"><flowRegion
-         id="flowRegion4332-3-8-4"><rect
-           id="rect4334-6-8-9"
-           width="132.85715"
-           height="68.571426"
-           x="115.71429"
-           y="735.2193"
-           style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Helvetica;-inkscape-font-specification:Helvetica" /></flowRegion><flowPara
-         id="flowPara4402-2">Indonesia</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
-       id="flowRoot4436"
-       style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       transform="translate(160,21.428572)"><flowRegion
-         id="flowRegion4438"><rect
-           id="rect4440"
-           width="220"
-           height="51.42857"
-           x="70"
-           y="156.6479" /></flowRegion><flowPara
-         id="flowPara4442">[Southern Asia]</flowPara></flowRoot>  </g>
+     style="display:inline"
+     transform="translate(0,-308.2677)">
+    <g
+       id="g3063"
+       transform="matrix(0.86683765,0,0,0.86683765,58.006561,156.13861)">
+      <rect
+         y="460.28668"
+         x="284.33435"
+         height="498.14905"
+         width="500.54443"
+         id="rect5959"
+         style="fill:none;stroke:#000000;stroke-width:6.36385918;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:50.91087445, 6.36385931;stroke-dashoffset:63.6385627" />
+      <flowRoot
+         transform="matrix(0.83823226,0,0,0.83823226,238.20814,210.3877)"
+         style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         id="flowRoot5979"
+         xml:space="preserve"><flowRegion
+           id="flowRegion5981"><rect
+             y="265.21933"
+             x="445.71429"
+             height="37.152805"
+             width="256.71515"
+             id="rect5983" /></flowRegion><flowPara
+           id="flowPara5985">Australia Continent</flowPara></flowRoot>      <path
+         sodipodi:nodetypes="cccccc"
+         inkscape:connector-curvature="0"
+         id="path3819"
+         d="M 443.59848,593.20639 368.15758,854.25585 671.11867,835.09627 645.9717,558.47962 450.78333,583.62659 489.10252,382.45085"
+         style="fill:none;stroke:#000000;stroke-width:3.26910591;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:13.07642355, 13.07642355;stroke-dashoffset:32.69105129;display:inline" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4446"
+         d="M 370.55253,854.25586 643.57675,563.26952"
+         style="fill:none;stroke:#000000;stroke-width:3.26910591;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:13.07642355, 13.07642355;stroke-dashoffset:32.69105888;display:inline" />
+      <path
+         transform="matrix(0.83823226,0,0,0.83823226,307.08638,155.34558)"
+         d="m 250,515.2193 c 0,49.70563 -40.29437,90 -90,90 -49.70563,0 -90,-40.29437 -90,-90 0,-49.70563 40.29437,-90 90,-90 49.70563,0 90,40.29437 90,90 z"
+         sodipodi:ry="90"
+         sodipodi:rx="90"
+         sodipodi:cy="515.2193"
+         sodipodi:cx="160"
+         id="path2985-1-7-4"
+         style="fill:#e70000;fill-opacity:1;stroke:#000000;stroke-width:0.99212599;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:9.8999999;display:inline"
+         sodipodi:type="arc" />
+      <path
+         transform="matrix(0.83823226,0,0,0.83823226,516.64444,143.37083)"
+         d="m 250,515.2193 c 0,49.70563 -40.29437,90 -90,90 -49.70563,0 -90,-40.29437 -90,-90 0,-49.70563 40.29437,-90 90,-90 49.70563,0 90,40.29437 90,90 z"
+         sodipodi:ry="90"
+         sodipodi:rx="90"
+         sodipodi:cy="515.2193"
+         sodipodi:cx="160"
+         id="path2985-1-7-4-9"
+         style="fill:#e70000;fill-opacity:1;stroke:#000000;stroke-width:0.99212599;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:9.8999999;display:inline"
+         sodipodi:type="arc" />
+      <path
+         transform="matrix(0.83823226,0,0,0.83823226,249.60759,408.01273)"
+         d="m 250,515.2193 c 0,49.70563 -40.29437,90 -90,90 -49.70563,0 -90,-40.29437 -90,-90 0,-49.70563 40.29437,-90 90,-90 49.70563,0 90,40.29437 90,90 z"
+         sodipodi:ry="90"
+         sodipodi:rx="90"
+         sodipodi:cy="515.2193"
+         sodipodi:cx="160"
+         id="path2985-1-7-4-8"
+         style="fill:#e70000;fill-opacity:1;stroke:#000000;stroke-width:0.99212599;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:9.8999999;display:inline"
+         sodipodi:type="arc" />
+      <path
+         transform="matrix(0.83823226,0,0,0.83823226,539.39645,412.80263)"
+         d="m 250,515.2193 c 0,49.70563 -40.29437,90 -90,90 -49.70563,0 -90,-40.29437 -90,-90 0,-49.70563 40.29437,-90 90,-90 49.70563,0 90,40.29437 90,90 z"
+         sodipodi:ry="90"
+         sodipodi:rx="90"
+         sodipodi:cy="515.2193"
+         sodipodi:cx="160"
+         id="path2985-1-7-4-3"
+         style="fill:#e70000;fill-opacity:1;stroke:#000000;stroke-width:0.99212599;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:9.8999999;display:inline"
+         sodipodi:type="arc" />
+      <flowRoot
+         transform="matrix(0.83823226,0,0,0.83823226,229.25052,203.24454)"
+         style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+         id="flowRoot4330"
+         xml:space="preserve"><flowRegion
+           id="flowRegion4332"><rect
+             style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+             y="735.2193"
+             x="115.71429"
+             height="68.571426"
+             width="132.85715"
+             id="rect4334" /></flowRegion><flowPara
+           id="flowPara4336">Western</flowPara><flowPara
+           id="flowPara4338">Australia</flowPara></flowRoot>      <flowRoot
+         transform="matrix(0.83823226,0,0,0.83823226,522.16216,193.95118)"
+         style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+         id="flowRoot4330-0"
+         xml:space="preserve"><flowRegion
+           id="flowRegion4332-3"><rect
+             style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+             y="735.2193"
+             x="115.71429"
+             height="68.571426"
+             width="132.85715"
+             id="rect4334-6" /></flowRegion><flowPara
+           id="flowPara4336-2">Eastern</flowPara><flowPara
+           id="flowPara4338-4">Australia</flowPara></flowRoot>      <flowRoot
+         transform="matrix(0.83823226,0,0,0.83823226,498.21267,-64.703345)"
+         style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+         id="flowRoot4330-0-5"
+         xml:space="preserve"><flowRegion
+           id="flowRegion4332-3-8"><rect
+             style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+             y="735.2193"
+             x="115.71429"
+             height="68.571426"
+             width="132.85715"
+             id="rect4334-6-8" /></flowRegion><flowPara
+           id="flowPara4338-4-2">New </flowPara><flowPara
+           id="flowPara4402">Guinea</flowPara></flowRoot>      <flowRoot
+         transform="matrix(0.83823226,0,0,0.83823226,284.75288,-40.778067)"
+         style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+         id="flowRoot4330-0-5-1"
+         xml:space="preserve"><flowRegion
+           id="flowRegion4332-3-8-4"><rect
+             style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+             y="735.2193"
+             x="115.71429"
+             height="68.571426"
+             width="132.85715"
+             id="rect4334-6-8-9" /></flowRegion><flowPara
+           id="flowPara4402-2">Indonesia</flowPara></flowRoot>      <flowRoot
+         transform="matrix(0.83823226,0,0,0.83823226,360.97273,210.42939)"
+         style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         id="flowRoot4436"
+         xml:space="preserve"><flowRegion
+           id="flowRegion4438"><rect
+             y="156.6479"
+             x="70"
+             height="51.42857"
+             width="220"
+             id="rect4440" /></flowRegion><flowPara
+           id="flowPara4442">[Southern Asia]</flowPara></flowRoot>    </g>
+  </g>
   <g
      inkscape:groupmode="layer"
      id="layer5"
-     inkscape:label="Layer#3">
+     inkscape:label="Layer#3"
+     transform="translate(0,-308.2677)">
     <path
        sodipodi:type="arc"
        style="fill:#e70000;fill-opacity:1;stroke:#000000;stroke-width:0.99212599;stroke-miterlimit:0.10000045;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:9.8999999;display:inline"
@@ -258,12 +272,12 @@
        sodipodi:rx="14.285714"
        sodipodi:ry="14.285714"
        d="m 174.28571,515.2193 a 14.285714,14.285714 0 1 1 -28.57142,0 14.285714,14.285714 0 1 1 28.57142,0 z"
-       transform="translate(-54.285713,458.57146)" />
+       transform="matrix(0.83823226,0,0,0.83823226,212.66137,579.86602)" />
     <flowRoot
        xml:space="preserve"
        id="flowRoot6006"
        style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       transform="translate(-20,5.6477052)"><flowRegion
+       transform="matrix(0.83823226,0,0,0.83823226,238.3914,198.76513)"><flowRegion
          id="flowRegion6008"><rect
            id="rect6010"
            width="247.14285"
@@ -271,8 +285,8 @@
            x="155.71428"
            y="962.36218" /></flowRegion><flowPara
          id="flowPara6012">Territory Node</flowPara></flowRoot>    <path
-       style="fill:none;stroke:#000000;stroke-width:3.9000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:15.60000038, 15.60000038;stroke-dashoffset:39.00000095;display:inline"
-       d="m 413.62695,977.88059 68.04367,0"
+       style="fill:none;stroke:#000000;stroke-width:3.26910591;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:13.07642355, 13.07642355;stroke-dashoffset:32.69105888;display:inline"
+       d="m 537.67187,1013.1614 57.0364,0"
        id="path4446-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -280,12 +294,37 @@
        xml:space="preserve"
        id="flowRoot6006-2"
        style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       transform="translate(338.74254,5.6477052)"><flowRegion
+       transform="matrix(0.83823226,0,0,0.83823226,472.8951,198.76513)"><flowRegion
          id="flowRegion6008-3"><rect
            id="rect6010-8"
            width="247.14285"
            height="44.285713"
            x="155.71428"
            y="962.36218" /></flowRegion><flowPara
-         id="flowPara6012-2">Territory Edge</flowPara></flowRoot>  </g>
+         id="flowPara6012-2">Territory Edge</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3111"
+       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+       transform="translate(-38.118528,354.41119)"><flowRegion
+         id="flowRegion3113"><rect
+           id="rect3115"
+           width="250.77979"
+           height="458.42545"
+           x="60.187149"
+           y="195.38831"
+           style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Helvetica;-inkscape-font-specification:Helvetica" /></flowRegion><flowPara
+         id="flowPara3117"
+         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Helvetica;-inkscape-font-specification:Helvetica">The Risk board is represented by a graph of territory nodes.</flowPara><flowPara
+         id="flowPara3119"
+         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Helvetica;-inkscape-font-specification:Helvetica" /><flowPara
+         id="flowPara3121"
+         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Helvetica;-inkscape-font-specification:Helvetica">Each territory node contains information about its:</flowPara><flowPara
+         id="flowPara3123"
+         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Helvetica;-inkscape-font-specification:Helvetica">    - Name</flowPara><flowPara
+         id="flowPara3125"
+         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Helvetica;-inkscape-font-specification:Helvetica">    - Owner</flowPara><flowPara
+         id="flowPara3127"
+         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Helvetica;-inkscape-font-specification:Helvetica">    - Army Count</flowPara><flowPara
+         id="flowPara3129"
+         style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Helvetica;-inkscape-font-specification:Helvetica">    - Neighbours</flowPara></flowRoot>  </g>
 </svg>
