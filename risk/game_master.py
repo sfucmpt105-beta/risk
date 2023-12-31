@@ -1,5 +1,3 @@
-from sets import Set
-
 import risk
 import risk.logger
 import risk.commands
@@ -17,6 +15,7 @@ ATTACK = 'attack'
 FORTIFY = 'fortify'
 UNDEFINED = 'undefined'
 
+
 class GameMaster(object):
     _RISK_RULE_STARTING_RESERVES = 40
     _DEPLOYS_PER_TURN = 5
@@ -26,8 +25,8 @@ class GameMaster(object):
         MAX_PLAYERS = 6
         if not MIN_PLAYERS <= num_players <= MAX_PLAYERS:
             raise risk.errors.RiskGameError('Invalid number of players: %s' %
-                num_players)
- 
+                                            num_players)
+
         self.board = board
         self.phase = UNDEFINED
         # need to setup with settings later
@@ -48,16 +47,16 @@ class GameMaster(object):
         }
         self.add_end_action_callback(GameMaster.check_player_elimination)
 
-    
     ###########################################################################
-    ## Internal actions
+    # Internal actions
     #
+
     def _select_next_player(self):
         self._current_player += 1
         self._current_player %= len(self.players)
 
     ###########################################################################
-    ## Setup actions
+    # Setup actions
     #
     def choose_territories(self):
         risk.logger.debug('Starting territory pick phase...')
@@ -70,7 +69,7 @@ class GameMaster(object):
                 choice = player.choose_territory(availables)
                 availables[choice].owner = player
                 availables[choice].armies = 1
-                del(availables[choice])
+                del (availables[choice])
                 self._select_next_player()
             except KeyError:
                 if len(choice) > 0:
@@ -81,7 +80,7 @@ class GameMaster(object):
 
     def deploy_troops(self):
         risk.logger.debug('Starting troop deploy phase...')
-        for _ in xrange(starting_reserves / self._DEPLOYS_PER_TURN):
+        for _ in range(starting_reserves / self._DEPLOYS_PER_TURN):
             for player in self.players:
                 if player.reserves > 0:
                     player.deploy_reserve(self, self._DEPLOYS_PER_TURN)
@@ -103,10 +102,10 @@ class GameMaster(object):
         self.callbacks['end_phase'].append(callback)
 
     def generate_players(self, number_of_human_players, cli=False):
-        risk.logger.debug("Generating %s human players" % \
-            number_of_human_players)
+        risk.logger.debug("Generating %s human players" %
+                          number_of_human_players)
 
-        for i in xrange(number_of_human_players):
+        for i in range(number_of_human_players):
             if cli:
                 self.players.append(HumonRiskPlayer("Human %s" % i))
             else:
@@ -114,10 +113,10 @@ class GameMaster(object):
                 self.players.append(
                     risk.graphics.player.HumonGuiRiskPlayer("GHuman %s" % i))
 
-        risk.logger.debug("Generating %s bots" % \
-            (self._num_players - number_of_human_players))
+        risk.logger.debug("Generating %s bots" %
+                          (self._num_players - number_of_human_players))
 
-        for i in xrange(self._num_players - number_of_human_players):
+        for i in range(self._num_players - number_of_human_players):
             self.players.append(BasicRiskBot(str(i)))
 
     def _print_available_territories(self):
@@ -135,10 +134,10 @@ class GameMaster(object):
             risk.logger.debug(
                 'Gave [%s] %s reserves' % (player.name, player.reserves))
 
-    
     ###########################################################################
-    ## Run time events/hooks
+    # Run time events/hooks
     #
+
     def call_end_turn_callbacks(self):
         risk.logger.debug('Calling end of turn callbacks')
         if not self.ended:
@@ -157,10 +156,11 @@ class GameMaster(object):
 
     def event_action(function):
         risk.logger.debug('Calling end action %s callback' % function)
+
         def function_with_callback(self, *args):
             result = function(self, *args)
             for callback in self.callbacks['end_action']:
-                callback(self, function.func_name, result, args)
+                callback(self, function.__name__, result, args)
             return result
         return function_with_callback
 
@@ -172,16 +172,16 @@ class GameMaster(object):
                     if len(self.player_territories(player)) == 0:
                         self.eliminate_player(player)
                 self._recalculate_current_player_index(
-                        args[_PLAYER_ARG_INDEX])
+                    args[_PLAYER_ARG_INDEX])
 
     def eliminate_player(self, player):
         self.players.remove(player)
-        for _ in xrange(10):
-            print "%s eliminated!" % player.name
+        for _ in range(10):
+            print("%s eliminated!" % player.name)
 
         if len(self.players) <= 1:
-            for _ in xrange(100):
-                print "%s WINS!!!!" % self.current_player().name
+            for _ in range(100):
+                print("%s WINS!!!!" % self.current_player().name)
             self.end_game()
 
     def set_phase(self, new_phase):
@@ -191,7 +191,7 @@ class GameMaster(object):
             callback(self, previous, new_phase)
 
     ###########################################################################
-    ## Game state queries
+    # Game state queries
     #
     def number_of_players(self):
         return len(self.players)
@@ -215,9 +215,9 @@ class GameMaster(object):
         self._current_player = self.players.index(current_player)
 
     ###########################################################################
-    ## Player actions
+    # Player actions
     #
-    #@event_action
+    # @event_action
     def player_take_turn(self):
         self.call_start_turn_callbacks()
         self.set_phase(UNDEFINED)
@@ -230,19 +230,19 @@ class GameMaster(object):
         self.set_phase(FORTIFY)
         player.fortify(self)
         self.set_phase(UNDEFINED)
-    
-    #@event_action
+
+    # @event_action
     def player_territories(self, player):
         # O(n) lookup
         player_territories = {}
-        for name, territory in self.board.territories().iteritems():
+        for name, territory in self.board.territories().items():
             if territory.owner == player:
                 player_territories[name] = territory
         return player_territories
 
     def player_total_armies(self, player):
         count = 0
-        for name, territory in self.player_territories(player).iteritems():
+        for name, territory in self.player_territories(player).items():
             count += territory.armies
         return count
 

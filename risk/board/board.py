@@ -3,7 +3,7 @@
 #
 import random
 
-import territory
+from . import territory
 
 import risk.logger
 from risk.errors.board import *
@@ -13,8 +13,8 @@ class RiskBoard(object):
         self.continents = continents
 
     def territories(self):
-        return dict([territory for continent in self.continents.values() 
-                for territory in continent.items()])
+        return dict([territory for continent in list(self.continents.values()) 
+                for territory in list(continent.items())])
 
     def __getitem__(self, territory_name):
         try:
@@ -81,8 +81,8 @@ def generate_mini_board():
 #
 def dev_random_assign_owners(game_master):
     current = 0
-    territories = game_master.board.territories().values()
-    for _ in xrange(0, len(territories)):
+    territories = list(game_master.board.territories().values())
+    for _ in range(0, len(territories)):
         territory = territories[random.randint(0, len(territories) - 1)]
         territory.owner = game_master.players[current]
         territory.armies = 1
@@ -91,7 +91,7 @@ def dev_random_assign_owners(game_master):
     # evenly distributes troops
     game_master._assign_player_reserves()
     for player in game_master.players:
-        territories = game_master.player_territories(player).values()
+        territories = list(game_master.player_territories(player).values())
         while player.reserves > 0:
             for territory in territories:
                 territory.armies += 1

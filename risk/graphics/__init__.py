@@ -1,1 +1,1 @@
-from graphics import *
+from .graphics import *

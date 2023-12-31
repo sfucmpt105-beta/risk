@@ -1,1 +1,1 @@
-from board import *
+from .board import *
