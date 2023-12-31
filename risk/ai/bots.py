@@ -29,7 +29,7 @@ class BasicRiskBot(AbstractRiskPlayer):
 
     def _deploy_reserves(self, game_master):
         # simple uniform distribution of armies
-        territories = game_master.player_territories(self).values()
+        territories = list(game_master.player_territories(self).values())
         while self.reserves > 0:
             for territory in territories:
                 if self.reserves > 0:
@@ -48,12 +48,12 @@ class BasicRiskBot(AbstractRiskPlayer):
 
     def _attack_all_possible_targets(self, game_master):
         territories = game_master.player_territories(self)
-        for name, territory in territories.iteritems():
+        for name, territory in territories.items():
             if territory.armies > 2:
                 risk.logger.debug("%s going to attack from %s" % 
                     (self.name, name))
-                targets = territory.neighbours.values()
-                targets = filter(lambda x: x.owner != self, targets)
+                targets = list(territory.neighbours.values())
+                targets = [x for x in targets if x.owner != self]
                 targets = [t.name for t in targets]
                 if len(targets) > 0:
                     choice = random.randint(0, len(targets) - 1)
@@ -96,7 +96,7 @@ class CurtisRiskBot(BasicRiskBot):
     def deploy_order(self, game_master, number_of_turns, continent):
         continent_owned = 1
         hit_list = []
-        for territory in game_master.board.continents[continent].values():
+        for territory in list(game_master.board.continents[continent].values()):
             if self.reserves > 0 and territory.owner != self:
                 continent_owned = 0
                 return hit_list.append(territory.name)
@@ -112,13 +112,13 @@ class CurtisRiskBot(BasicRiskBot):
                     
             
         if number_of_turns < 10:
-            for territory in game_master.board.continents[continent].values():
+            for territory in list(game_master.board.continents[continent].values()):
                 if self.reserves > 0:
                     if territory.owner == self:
-                        print self.reserves
+                        print(self.reserves)
                         game_master.player_add_army(self, territory.name, self.reserves)
         if number_of_turns > 10:
-            for territory in game_master.board.continents[continent].values():
+            for territory in list(game_master.board.continents[continent].values()):
                 if self.reserves > 0:
                     if territory.owner != self:
                         break
@@ -134,9 +134,9 @@ class IanRiskBot(BasicRiskBot):
         self.attack_others(game_master)
 
     def attack_others(self, game_master):
-        territories = game_master.player_territories(self).values()
+        territories = list(game_master.player_territories(self).values())
         for territory in territories:
-            neighbours = sorted(territory.neighbours.values(), key=lambda x: x.armies)
+            neighbours = sorted(list(territory.neighbours.values()), key=lambda x: x.armies)
             for neighbour in neighbours:
                 if territory.armies > 100:
                     self._attack_all_possible_targets(game_master)
@@ -158,8 +158,8 @@ class IanRiskBot(BasicRiskBot):
         self.deploy_all_to_continent(game_master, 'south_america')
 
     def deploy_all_to_continent(self, game_master, continent):
-        for territory in game_master.board.continents[continent].values():
+        for territory in list(game_master.board.continents[continent].values()):
             if self.reserves > 0:
                 if territory.owner == self:
-                    print self.reserves
+                    print(self.reserves)
                     game_master.player_add_army(self, territory.name, self.reserves)

@@ -1,7 +1,7 @@
 import random
 
 import risk
-import board.territory as Territory
+from .board import territory as Territory
 
 from risk.errors.battle import *
 
@@ -9,30 +9,32 @@ _MIN_ATTACK_ARMIES = 2
 
 CAPTURED = True
 
+
 def dice_roll_sequence(att_troop_num, def_troop_num):
     att_dice_num, def_dice_num = \
-        _get_attack_and_defend_rolls(att_troop_num, def_troop_num)       
-    #roll
-    attacker_rolls = [random.randint(1,6) for _ in range(att_dice_num)]
-    defender_rolls = [random.randint(1,6) for _ in range(def_dice_num)]
+        _get_attack_and_defend_rolls(att_troop_num, def_troop_num)
+    # roll
+    attacker_rolls = [random.randint(1, 6) for _ in range(att_dice_num)]
+    defender_rolls = [random.randint(1, 6) for _ in range(def_dice_num)]
     attacker_rolls.sort(reverse=True)
     defender_rolls.sort(reverse=True)
-    
+
     risk.logger.debug("Attacker Rolls: %s" % attacker_rolls)
     risk.logger.debug("Defenders Tolls: %s" % defender_rolls)
-    
-    #--calculate losses--
-    #find number of pairs of dice to compare (lowest of choices to roll)
+
+    # --calculate losses--
+    # find number of pairs of dice to compare (lowest of choices to roll)
     pairs_to_compare = min(att_dice_num, def_dice_num)
 
-    #subtract troops
-    for j in xrange(pairs_to_compare):
+    # subtract troops
+    for j in range(pairs_to_compare):
         if attacker_rolls[j] <= defender_rolls[j]:
             att_troop_num -= 1
         else:
             def_troop_num -= 1
 
     return att_troop_num, def_troop_num
+
 
 def _get_attack_and_defend_rolls(attack_armies, defend_armies):
     attack_dice_rolls, defend_dice_rolls = 1, 1
@@ -47,13 +49,13 @@ def _get_attack_and_defend_rolls(attack_armies, defend_armies):
 
 
 def attack(origin, target):
-    risk.logger.debug("Attempting to attack %s from %s" % \
-        (target.name, origin.name))
+    risk.logger.debug("Attempting to attack %s from %s" %
+                      (target.name, origin.name))
     _validate_attack_plan_or_fail(origin, target)
     att_troop_num = origin.armies
     def_troop_num = target.armies
-    
-    #battle to the death version
+
+    # battle to the death version
     while _have_sufficient_armies(att_troop_num, def_troop_num):
         att_troop_num, def_troop_num = \
             dice_roll_sequence(att_troop_num, def_troop_num)
@@ -62,16 +64,17 @@ def attack(origin, target):
 
     origin.set_troops(att_troop_num)
     target.set_troops(def_troop_num)
-    
+
     if def_troop_num > 0:
         risk.logger.debug("Attack failed!")
         return not CAPTURED
     else:
         risk.logger.debug("Territory captured!")
         target.owner = origin.owner
-        #target.armies = 1
-        #origin.armies -= 1
+        # target.armies = 1
+        # origin.armies -= 1
         return CAPTURED
+
 
 def _validate_attack_plan_or_fail(origin, target):
     if not origin.is_neighbour(target):
@@ -84,8 +87,10 @@ def _validate_attack_plan_or_fail(origin, target):
         risk.logger.error("You don't have enough troops to attack!")
         raise InsufficientAttackingArmies(origin)
 
+
 def _have_sufficient_armies(attacker_armies, defender_armies):
     return attacker_armies >= _MIN_ATTACK_ARMIES and defender_armies > 0
+
 
 if __name__ == '__main__':
     import risk
@@ -111,9 +116,9 @@ if __name__ == '__main__':
         pass
     else:
         raise RuntimeError('Expected error here...')
-    
+
     attack(t2, t1)
-    
+
     t1.armies = 1
     t1.owner = test_player1
     t2.artmies = 10
